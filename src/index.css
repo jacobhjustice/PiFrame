@@ -1,0 +1,44 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+#clock {
+    margin: 25px;
+    z-index: 89;
+}
+
+#clock .header {
+    font-size: 2em;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+#clock .subtitle {
+    font-size: 1.25em;
+    color: #bfbfbf;
+}
+
+#verse {
+    position: absolute;
+    bottom: 30px;
+    width: 99%;
+    z-index: 89;
+}
+
+#verse .wrapper {
+    width: 50%;
+    margin: 0 auto;
+    position: relative;
+}
+
+#verse .wrapper .quote {
+    width: 100%;
+    text-align: center;
+}
+
+#verse .wrapper .reference {
+    max-width: 90%;
+    text-align: right;
+    float: right;
+}
