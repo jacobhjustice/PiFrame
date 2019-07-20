@@ -57,8 +57,6 @@ def getAlbums(userSettings):
         for photo in flickr.walk_set(album.id):
             name = photo.get('title')
             downloadURL = "http://farm%s.staticflickr.com/%s/%s_%s_b.jpg" % (photo.get('farm'), photo.get('server'), photo.get('id'), photo.get('secret'))
-            print(localAlbumURL)
-            print(name)
             localURL = localAlbumURL + name + ".jpg"
 
             r = requests.get(downloadURL)      

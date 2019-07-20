@@ -18,6 +18,7 @@ class Settings:
         def toJSON(self):
                 jsonStr = json.dumps(self, default=lambda settings: settings.__dict__, ensure_ascii=False, indent=4)
                 return jsonStr
+
         def isAlbumEnabled(self, albumID):
                 # If album exists in settings, return its enabled status
                 for a in self.albums:
@@ -28,7 +29,7 @@ class Settings:
                 return True
 
         def setAlbums(self, albumSet):
-                self.albums = albumSet
+                self.albums = albumSet.albums
                 self.write()
 
         # __write serves as a utility for writing information into the .json file
