@@ -1,17 +1,22 @@
-from flask import Flask, render_template
-import settings, extensions
+from flask import Flask, session, make_response, request, current_app, jsonify
+from flask_cors import CORS
+# from flask_cors import CORS
+import settings, extensions, verse
 
-app = Flask(__name__, static_url_path='/static', template_folder='./templates')
 
+app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def init():
-    # settings.write()
     settings.read()
-    # settings.setExtensions([extensions.Extensions.picture, extensions.Extensions.clock])
-    return ""#render_template('templates/index.html')
+    print("1")
+    return "9"
 
-
+@app.route('/verse/', methods=["GET"])
+def getVerse():
+    json = verse.get()
+    return json
 
 if __name__ == '__main__':
     app.run()

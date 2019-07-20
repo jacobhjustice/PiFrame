@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+var server = "http://127.0.0.1:5000/"
+
 class Timer extends React.Component {
     constructor() {
         super()
@@ -10,12 +12,16 @@ class Timer extends React.Component {
         }
 
         this.months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
-
-
+        
         // Update the clock every second
-        setInterval(() => this.setState({
-            time: new Date(),
-        }), 1000)
+        setInterval(this.tick, 1000)
+    }
+
+    // tick is called each second to update the state
+    tick() {
+        this.setState({
+            time: new Date()
+        })
     }
 
     render() {
@@ -42,26 +48,38 @@ class Timer extends React.Component {
 class Verse extends React.Component {
     constructor() {
         super()
-
         this.getVerse()
         this.state = {
-            quote: "Humble yourselves, therefore, under the mighty hand of God, so that at the proper time he may exult you, casting all your anxieties on him because he cares for you",
-            reference: "1 Peter 5: 6-7"
+            isLoaded: false,
+            quote: "",
+            reference: ""
         }
     }
 
     getVerse() {
-        // Server request to scrape here
-        // Update State
+        // Fetch the verse from the server and update the state once loaded
+        fetch(server +"verse")
+        .then(res => res.json()) 
+        .then(
+            (result) => {
+                this.setState({
+                    isLoaded: true,
+                    quote: result.QUOTE,
+                    reference: result.REFERENCE
+                });
+            },
+            (error) => {
+                console.log(error)
+            }
+      )
     }
-
 
     render() {
         return (
             <div id="verse">
                 <div class="wrapper">
-                    <div class="quote">"{this.state.quote}"</div>
-                    <div class="reference">-  {this.state.reference}</div>
+                    <div class="quote">{this.state.isLoaded ? '"' + this.state.quote + '"' : "Loading..." }</div>
+                    <div class="reference">{this.state.isLoaded ? "-" + this.state.reference : ""}</div>
                 </div>
             </div>
         );
