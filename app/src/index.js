@@ -14,14 +14,14 @@ class Timer extends React.Component {
         this.months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
         
         // Update the clock every second
-        setInterval(this.tick, 1000)
+        setInterval(this.setState({
+            time: new Date()
+        }), 1000)
     }
 
     // tick is called each second to update the state
     tick() {
-        this.setState({
-            time: new Date()
-        })
+        
     }
 
     render() {
@@ -71,7 +71,7 @@ class Verse extends React.Component {
             (error) => {
                 console.log(error)
             }
-      )
+        )
     }
 
     render() {
@@ -95,6 +95,33 @@ class Frame extends React.Component {
             </div>
         
         ); 
+    }
+    constructor() {
+        super()
+        fetch(server + "settings")
+        .then(res => res.json()) 
+        .then(
+            (result) => {
+               console.log(result)
+               this.getImages()
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
+    }
+
+    getImages() {
+        fetch(server + "images")
+        .then(res => res.json()) 
+        .then(
+            (result) => {
+               console.log(result)
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
     }
   }
 
