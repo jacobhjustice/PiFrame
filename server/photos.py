@@ -67,5 +67,3 @@ def getAlbums(userSettings):
             album.addPhoto(Photo(name, localURL))
         albums.addAlbum(album)
     return albums
-
-# TODO add functionality to not get populate photos for specific albums based on user settings

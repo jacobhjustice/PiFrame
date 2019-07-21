@@ -19,11 +19,6 @@ class Timer extends React.Component {
         }), 1000)
     }
 
-    // tick is called each second to update the state
-    tick() {
-        
-    }
-
     render() {
         return (
             <div id="clock">

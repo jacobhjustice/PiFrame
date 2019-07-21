@@ -1,6 +1,6 @@
 # PiFrame settings.py
 # Manages writing/reading the .json file backing user settings for the app.
-# This informs the application of user settingsfor enabled extensions, and further settings used by extensions
+# This informs the application of user settings for enabled extensions, and further settings and persisted data used by extensions
 
 import extensions, photos
 import json
@@ -9,16 +9,19 @@ import json
 FILE_NAME = "settings.json"
 
 # Settings is the state of the current user's settings within the application
-# 
 class Settings:
+        # Can either append settings directly here, or keep the structure from classes within the appropriate extension
         def __init__(self, extensions, albumSet):
                 self.extensions = extensions
                 self.albums = albumSet.albums
 
+        # toJSON returns the JSON output to write to the .json file
         def toJSON(self):
                 jsonStr = json.dumps(self, default=lambda settings: settings.__dict__, ensure_ascii=False, indent=4)
                 return jsonStr
 
+        # isAlbumEnabled checks the current settings to check if a given albumID is enabled
+        # Pertains to extensions.Extensions.picture
         def isAlbumEnabled(self, albumID):
                 # If album exists in settings, return its enabled status
                 for a in self.albums:
@@ -28,6 +31,8 @@ class Settings:
                 # Return true by default if not found
                 return True
 
+        # setAlbums updates the settings to use the provided album set
+        # Pertains to extensions.Extensions.picture
         def setAlbums(self, albumSet):
                 self.albums = albumSet.albums
                 self.write()
@@ -56,6 +61,8 @@ def read():
     except IOError:
         return __initialSetup()
 
+# __initialSetup is called if the .json file does not exist.
+# It sets up the .json file with default values for all expected data.
 def __initialSetup():
     data = {}
 
