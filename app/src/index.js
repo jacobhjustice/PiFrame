@@ -157,10 +157,13 @@ class Frame extends React.Component {
         }
         var album = !!this.settings["albums"] ? this.settings["albums"][this.currentAlbum] : undefined
         if(album == undefined) {
+            this.currentAlbum = 0
             return undefined 
         }
         var photo = !!album["photos"] ? album["photos"][this.currentPhoto] : undefined
         if(photo == undefined) {
+            this.currentAlbum = (this.currentAlbum + 1) % this.settings["albums"].length
+            this.currentPhoto = 0
             return undefined
         }
 
