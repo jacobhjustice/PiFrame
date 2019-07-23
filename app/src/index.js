@@ -1,10 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import Img from 'react-image'
+const images = require.context('../public/img/', true);
+
 
 var server = "http://127.0.0.1:5000/"
 
 class Timer extends React.Component {
+    componentDidMount() {
+        this.interval = setInterval(() => this.setState({ time: new Date() }), 1000);
+    }
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
     constructor() {
         super()
         this.state = {
@@ -12,11 +21,6 @@ class Timer extends React.Component {
         }
 
         this.months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
-        
-        // Update the clock every second
-        setInterval(this.setState({
-            time: new Date()
-        }), 1000)
     }
 
     render() {
@@ -53,7 +57,7 @@ class Verse extends React.Component {
 
     getVerse() {
         // Fetch the verse from the server and update the state once loaded
-        fetch(server +"verse")
+        fetch(server + "verse")
         .then(res => res.json()) 
         .then(
             (result) => {
@@ -81,29 +85,90 @@ class Verse extends React.Component {
     }
 }
 
+class Photo extends React.Component {
+    render() {
+        return (
+            <div id="photo">
+                <div class="wrapper"><img src={this.props.url} /></div>
+            </div>
+        
+        ); 
+    }
+}
+
 class Frame extends React.Component {
     render() {
         return (
             <div id="frame">
                 <Timer />
                 <Verse />
+                <Photo url={this.state.photo}/>
             </div>
         
         ); 
     }
+
+    componentDidMount() {
+        this.interval = setInterval(() => {
+            // TODO make so that this happens quicker on load
+            this.setState({
+                isLoaded: true,
+                photo: this.state.isLoaded ? this.getPhoto() : undefined
+            })}, 6000)
+    }
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
     constructor() {
         super()
+
+        this.currentPhoto = 0
+        this.currentAlbum = 0
+        this.settings = undefined
+        this.state = {
+            isLoaded: false,
+            photo: undefined
+        } 
+
         fetch(server + "settings")
         .then(res => res.json()) 
         .then(
-            (result) => {
-               console.log(result)
-               this.getImages()
+            (result) => {               
+               this.settings = JSON.parse(result)
+                this.state = {
+                    isLoaded: true,
+                } 
             },
             (error) => {
                 console.log(error)
             }
         )
+    }
+
+    afterLoad() {
+        
+    }
+
+    // TODO Add empty/loading screen
+    getPhoto() {
+        if(this.settings == undefined) {
+            return undefined
+        }
+        var album = !!this.settings["albums"] ? this.settings["albums"][this.currentAlbum] : undefined
+        if(album == undefined) {
+            return undefined 
+        }
+        var photo = !!album["photos"] ? album["photos"][this.currentPhoto] : undefined
+        if(photo == undefined) {
+            return undefined
+        }
+
+        this.currentAlbum = (this.currentAlbum + 1) % this.settings["albums"].length
+        this.currentPhoto = (this.currentPhoto + 1) % album["photos"].length
+        var photo = album.path + "/" + photo.name + ".jpg"
+        console.log(photo)
+        return images(`./` + photo)
     }
 
     getImages() {

@@ -8,12 +8,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'super secret'
 CORS(app)
 
-@app.route('/')
-def init():
-    settings.read()
-    print("1")
-    return "9"
-
 @app.route('/settings/', methods=["GET"])
 def getSettings():
     userSettings = settings.read()

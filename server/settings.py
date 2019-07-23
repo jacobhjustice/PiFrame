@@ -56,7 +56,10 @@ def read():
             extensions = jsonValue["extensions"]
             albums = photos.AlbumSet() # Load in base information about albums... will load photos in seperately only when needed
             for a in jsonValue["albums"]:
-                albums.addAlbum(photos.Album(a["name"], a["id"], a["isEnabled"]))
+                album = photos.Album(a["name"], a["id"], a["isEnabled"], a["path"])
+                for p in a["photos"]:
+                        album.addPhoto(photos.Photo(p["name"]))
+                albums.addAlbum(album)
             return Settings(extensions, albums)
     except IOError:
         return __initialSetup()

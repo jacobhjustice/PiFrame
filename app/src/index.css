@@ -4,7 +4,9 @@ body {
 }
 
 #clock {
-    margin: 25px;
+    position: absolute;
+    top: 25px;
+    left: 25px;
     z-index: 89;
 }
 
@@ -41,4 +43,39 @@ body {
     max-width: 90%;
     text-align: right;
     float: right;
+}
+
+#photo {
+    z-index: 5;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+#photo .dimmer {
+    /* position: absolute; */
+    height: 100%;
+    width: 100%;
+    background-color: rgba(50, 50, 50, .3);
+    z-index: 5;
+}
+
+#photo .wrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+#photo  img {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    position: absolute;
+    filter: brightness(70%);
+    max-width: 100%;
+    max-height: 100%;
 }
