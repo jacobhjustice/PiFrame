@@ -1,36 +1,56 @@
 # PiFrame weather.py
 # Manages weather data as well as forecast for the "Weather" Extension
 # Uses Open Weather API https://openweathermap.org/api
-import requests, secret, settings, json
+import requests, secret, settings, json, datetime
 
 # Request URLS for weather
 currentWeatherRequestURL = lambda zip, apiKey : ("http://api.openweathermap.org/data/2.5/weather?zip=%s&appid=%s&units=imperial" % (zip, apiKey))
-forecastWeatherRequestURL = lambda zip, apiKey : ("api.openweathermap.org/data/2.5/forecast?zip=%s&appid=%s&units=imperial" % (zip, apiKey))
+forecastWeatherRequestURL = lambda zip, apiKey : ("http://api.openweathermap.org/data/2.5/forecast?zip=%s&appid=%s&units=imperial" % (zip, apiKey))
 weatherIconURL = lambda iconCode : "http://openweathermap.org/img/%s/10d@2x.png" % (iconCode)
 
-# Class to package the useful information from the weather request
+# WeatherResponse is a serializable response containing requested weather information
 class WeatherResponse:
-    def __init__(self, location, currentResponse):
+    def __init__(self, location, sunrise, sunset, currentResponse, todayForecast, upcomingForecast):
         self.location = location
+        self.sunrise = sunrise
+        self.sunset = sunset
         self.currentResponse = currentResponse
+        self.todaysForecast = todayForecast
+        self.upcomingForecasts = upcomingForecast
 
     def toJSON(self):
         return json.dumps(self, default=lambda weather: weather.__dict__)
     
-# Class to package weather information about the current weather
-class CurrentWeatherResponse:
-    def __init__(self, iconURL, temperature, minTemperature, maxTemperature, sunset, sunrise, humidity):
+# WeatherResponseItem represents a single weather log
+class WeatherResponseItem:
+    def __init__(self, iconURL, epochTime, temperature, minTemperature, maxTemperature, humidity):
         self.iconURL = iconURL
         self.temperature = temperature
         self.minTemperature = minTemperature
         self.maxTemperature = maxTemperature
-        self.sunset = sunset 
-        self.sunrise = sunrise
         self.humidity = humidity
+        self.time = epochTime
 
+# getWeatherResponseItemFromData is used to create a WeatherResponseItem object from a dictionary of weather data
+# param :data: a dictionary of information from the API call
+# param :timeStamp: the datetime that the weather information corresponds to
+# return :WeatherResponseItem: the response item created with data
+def getWeatherResponseItemFromData(data, timeStamp):
+    iconURL = weatherIconURL(data["weather"][0]["icon"])
+    temperature = data["main"]["temp"]
+    maxTemp = data["main"]["temp_max"]
+    minTemp = data["main"]["temp_min"]
+    humidity = data["main"]["humidity"]
+    time = int(timeStamp.timestamp())
+    return WeatherResponseItem(iconURL, time, temperature, minTemp, maxTemp, humidity)
+
+# getWeather queries the weather API for the client. By default, the current data is retrieved.
+# param :includeForecast: a boolean value that indicates if forecast data should be included in the request
+# return :WeatherResponse: the results of the weather query/parse
 def getWeather(includeForecast):
     url = currentWeatherRequestURL("36830", secret.weather_api_key)
     response = requests.get(url)
+
     # Make sure request was completed
     if response.status_code != 200:
         return
@@ -38,26 +58,62 @@ def getWeather(includeForecast):
     data = response.json()
 
     location = data["name"]
-
-    iconURL = weatherIconURL(data["weather"][0]["icon"])
-    temperature = data["main"]["temp"]
-    maxTemp = data["main"]["temp_max"]
-    minTemp = data["main"]["temp_min"]
-    humidity = data["main"]["humidity"]
     sunset = data["sys"]["sunset"]
     sunrise = data["sys"]["sunrise"]
-    current = CurrentWeatherResponse(iconURL, temperature, minTemp, maxTemp, sunset, sunrise, humidity)
-    returnObj = WeatherResponse(location, current)
+    timeStamp = datetime.datetime.now()
 
+    current = getWeatherResponseItemFromData(data, timeStamp)
+
+    todayForecast = []
+    upcomingForecast = []
     if includeForecast:
         url = forecastWeatherRequestURL("36830", secret.weather_api_key)
         response = requests.get(url)
+
         # If request wasn't completed, skip to end and return what we have
         if response.status_code == 200:
-            print("continue")
-            # Add logic to collect info for every 3 hours for current day, and then one for the next few days
-            
+            data = response.json()
+            currentDay = timeStamp.day
+            entriesForCurrentDay = []
+            for update in data["list"]:
+                dt = datetime.datetime.fromtimestamp(update["dt"])
+                dataDay = dt.day
+                responseItem = getWeatherResponseItemFromData(update, dt)
 
-    print(returnObj.toJSON())
+                # Keep a list of weather for a given day
+                entriesForCurrentDay.append(responseItem)
 
-getWeather(True)
+                # Should record forecasts for the next 24 hours
+                if len(todayForecast) <= 8:
+                    todayForecast.append(responseItem)
+
+                # Once we move to a new day add the normalized information to our upcomingForecast list 
+                # Note, only the next 4 full days are recorded, not including the current day
+                if currentDay < dataDay and len(upcomingForecast) < 5:
+                    if len(entriesForCurrentDay) == 8:
+                        entryFromDaysForecast = parseAveragesForDaysForecast(entriesForCurrentDay)
+                        upcomingForecast.append(entryFromDaysForecast)
+                    entriesForCurrentDay = []
+                    currentDay = dataDay
+
+    # Return our results
+    returnObj = WeatherResponse(location, sunrise, sunset, current, todayForecast, upcomingForecast)
+    return returnObj
+
+# parseAveragesForDaysForecast goes over all 8 weather entries for a given day and creates one entry for the full day.
+# This means taking the over all max and min temperatures, as well as the average temperature and humidity
+# return :WeatherResponseItem: The consolidated response item
+def parseAveragesForDaysForecast(entriesForCurrentDay):
+    temp = 0
+    humidity = 0
+    max_temp = -1000
+    min_temp = 1000
+    time = entriesForCurrentDay[0].time
+    for entry in entriesForCurrentDay:
+        temp += entry.temperature
+        humidity += entry.humidity
+        max_temp = entry.maxTemperature if entry.maxTemperature > max_temp else max_temp
+        min_temp = entry.minTemperature if entry.minTemperature < min_temp else min_temp
+    temp = round(temp / 8, 2)
+    humidity = round(humidity / 8, 2)
+    return WeatherResponseItem("", time, temp, min_temp, max_temp, humidity)
