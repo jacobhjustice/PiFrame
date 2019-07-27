@@ -26,6 +26,6 @@ yarn-error.log*
 
 __pycache__
 secret.py
-app/public/img/
+app/public/img/flickr
 
 settings.json
