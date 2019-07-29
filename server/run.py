@@ -1,7 +1,7 @@
 from flask import Flask, session, make_response, request, current_app, jsonify
 from flask_cors import CORS
 # from flask_cors import CORS
-import settings, extensions, verse, photos, json
+import settings, extensions, verse, photos, json, weather
 
 
 app = Flask(__name__)
@@ -24,6 +24,12 @@ def getVerse():
 def getImages():
     userSettings = settings.read()
     json = photos.getAlbumsForClient(userSettings)
+    return json
+
+@app.route('/weather/<int:includeForecast>', methods=["GET"])
+def getWeather(includeForecast):
+    userSettings = settings.read()
+    json = weather.getWeather(includeForecast, userSettings.Weather.zip)
     return json
 
 if __name__ == '__main__':

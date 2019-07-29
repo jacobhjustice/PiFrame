@@ -49,8 +49,8 @@ def getWeatherResponseItemFromData(data, timeStamp):
 # getWeather queries the weather API for the client. By default, the current data is retrieved.
 # param :includeForecast: a boolean value that indicates if forecast data should be included in the request
 # return :WeatherResponse: the results of the weather query/parse
-def getWeather(includeForecast):
-    url = currentWeatherRequestURL("36830", secret.weather_api_key)
+def getWeather(includeForecast, zip):
+    url = currentWeatherRequestURL(zip, secret.weather_api_key)
     response = requests.get(url)
 
     # Make sure request was completed
@@ -69,7 +69,7 @@ def getWeather(includeForecast):
     todayForecast = []
     upcomingForecast = []
     if includeForecast:
-        url = forecastWeatherRequestURL("36830", secret.weather_api_key)
+        url = forecastWeatherRequestURL(zip, secret.weather_api_key)
         response = requests.get(url)
 
         # If request wasn't completed, skip to end and return what we have
@@ -86,12 +86,12 @@ def getWeather(includeForecast):
                 entriesForCurrentDay.append(responseItem)
 
                 # Should record forecasts for the next 24 hours
-                if len(todayForecast) <= 8:
+                if len(todayForecast) < 8:
                     todayForecast.append(responseItem)
 
                 # Once we move to a new day add the normalized information to our upcomingForecast list 
                 # Note, only the next 4 full days are recorded, not including the current day
-                if currentDay < dataDay and len(upcomingForecast) < 5:
+                if currentDay != dataDay and len(upcomingForecast) < 5:
                     if len(entriesForCurrentDay) == 8:
                         entryFromDaysForecast = parseAveragesForDaysForecast(entriesForCurrentDay)
                         upcomingForecast.append(entryFromDaysForecast)
@@ -100,7 +100,7 @@ def getWeather(includeForecast):
 
     # Return our results
     returnObj = WeatherResponse(location, sunrise, sunset, current, todayForecast, upcomingForecast)
-    return returnObj
+    return returnObj.toJSON()
 
 # parseAveragesForDaysForecast goes over all 8 weather entries for a given day and creates one entry for the full day.
 # This means taking the over all max and min temperatures, as well as the average temperature and humidity

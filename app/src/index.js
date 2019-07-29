@@ -96,6 +96,29 @@ class Photo extends React.Component {
     }
 }
 
+class Weather extends React.Component {
+    render () {
+        return (
+            <div></div>
+        )
+    }
+
+    constructor() {
+        super()
+        
+        fetch(server + "weather/1")
+        .then(res => res.json()) 
+        .then(
+            (result) => {               
+               console.log(result)
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
+    }
+}
+
 class Frame extends React.Component {
     render() {
         return (
@@ -103,6 +126,7 @@ class Frame extends React.Component {
                 <Timer />
                 <Verse />
                 <Photo url={this.state.photo}/>
+                <Weather />
             </div>
         
         ); 

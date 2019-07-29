@@ -22,7 +22,7 @@ class Album:
 
     def addPhoto(self, photo):
         self.photos.append(photo)
-        
+
 
 
 
@@ -35,7 +35,7 @@ def getAlbumsForClient(userSettings):
     albums = getAlbums(userSettings)
 
     # Save the current album information to settings
-    userSettings.setAlbums(albums)
+    userSettings.Photos.setAlbums(albums)
 
     # Format the album JSON 
     jsonString = json.dumps(albums.toJSON())
@@ -49,7 +49,7 @@ def getAlbums(userSettings):
     for a in jsonAlbums:
         albumID = a['id']
         albumTitle = a['title']['_content']
-        isEnabled = userSettings.isAlbumEnabled(albumID)
+        isEnabled = userSettings.Photos.isAlbumEnabled(albumID)
         pathFromImg = "flickr/%s" % (albumTitle)
         album = Album(albumTitle, albumID, isEnabled, pathFromImg)
 
