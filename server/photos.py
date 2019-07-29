@@ -22,6 +22,7 @@ class Album:
 
     def addPhoto(self, photo):
         self.photos.append(photo)
+        
 
 
 

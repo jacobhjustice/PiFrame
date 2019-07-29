@@ -23,3 +23,10 @@ Every extension has three things in common: they are organized, persistent, and 
 - *Organized*:
 - *Persistent*:
 - *On time*:
+
+To add an extension...
+- Implement the {*extension_name*}Settings class within /server/extensions.py
+- Add the new {*extension_name*}Settings class to the ALL_EXTENSIONS array and the `Settings` constructor in /server/settings.py 
+- Add a new file for any utility functions if needed in /server/{*extension_name*}.py
+- Add a new route for a REST endpoint in /server/run.py
+- Implement client-side code in /app/src/index.js
