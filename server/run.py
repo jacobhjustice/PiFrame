@@ -23,7 +23,8 @@ def getVerse():
 @app.route('/images/', methods=["GET"])
 def getImages():
     userSettings = settings.read()
-    json = photos.getAlbumsForClient(userSettings)
+    json = photos.getAlbumsForClient(userSettings.Photos)
+    userSettings.write()
     return json
 
 @app.route('/weather/<int:includeForecast>', methods=["GET"])

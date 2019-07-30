@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import  { CurrentWeather, CurrentWeatherProperties } from './CurrentWeather'
 import Img from 'react-image'
 const images = require.context('../public/img/', true);
 
@@ -55,6 +56,7 @@ class Verse extends React.Component {
         }
     }
 
+
     getVerse() {
         // Fetch the verse from the server and update the state once loaded
         fetch(server + "verse")
@@ -106,16 +108,7 @@ class Weather extends React.Component {
     constructor() {
         super()
         
-        fetch(server + "weather/1")
-        .then(res => res.json()) 
-        .then(
-            (result) => {               
-               console.log(result)
-            },
-            (error) => {
-                console.log(error)
-            }
-        )
+        
     }
 }
 
@@ -123,10 +116,13 @@ class Frame extends React.Component {
     render() {
         return (
             <div id="frame">
-                <Timer />
+                <div id ="currentDetails">
+                    <Timer />
+                    <CurrentWeather temperature={this.state.CurrentWeather.temperature}/>
+                </div>
                 <Verse />
                 <Photo url={this.state.photo}/>
-                <Weather />
+                <Weather isEnabled={true}   />
             </div>
         
         ); 
@@ -139,6 +135,12 @@ class Frame extends React.Component {
                 isLoaded: true,
                 photo: this.state.isLoaded ? this.getPhoto() : undefined
             })}, 6000)
+        
+        this.interval = setInterval(() => {
+            this.setState({
+
+            })
+        }, 60000) 
     }
     componentWillUnmount() {
         clearInterval(this.interval);
@@ -152,8 +154,10 @@ class Frame extends React.Component {
         this.settings = undefined
         this.state = {
             isLoaded: false,
-            photo: undefined
+            photo: undefined,
+            CurrentWeather: new CurrentWeatherProperties()
         } 
+        this.getWeather()
 
         fetch(server + "settings")
         .then(res => res.json()) 
@@ -179,19 +183,20 @@ class Frame extends React.Component {
         if(this.settings == undefined) {
             return undefined
         }
-        var album = !!this.settings["albums"] ? this.settings["albums"][this.currentAlbum] : undefined
+        var albums = this.settings["Photos"]["albumSet"]["albums"]
+        var album = !!albums ? albums[this.currentAlbum] : undefined
         if(album == undefined) {
             this.currentAlbum = 0
             return undefined 
         }
         var photo = !!album["photos"] ? album["photos"][this.currentPhoto] : undefined
         if(photo == undefined) {
-            this.currentAlbum = (this.currentAlbum + 1) % this.settings["albums"].length
+            this.currentAlbum = (this.currentAlbum + 1) % albums.length
             this.currentPhoto = 0
             return undefined
         }
 
-        this.currentAlbum = (this.currentAlbum + 1) % this.settings["albums"].length
+        this.currentAlbum = (this.currentAlbum + 1) % albums.length
         this.currentPhoto = (this.currentPhoto + 1) % album["photos"].length
         var photo = album.path + "/" + photo.name + ".jpg"
         console.log(photo)
@@ -209,6 +214,23 @@ class Frame extends React.Component {
                 console.log(error)
             }
         )
+    }
+
+    getWeather(includeForecast) {
+        fetch(server + "weather/" + (includeForecast ? "1" : "0"))
+            .then(res => res.json()) 
+            .then(
+                (result) => {               
+                console.log(result)
+                let currentWeather = new CurrentWeatherProperties(
+                    result.currentResponse.temperature,
+                )
+                this.setState({ CurrentWeather: currentWeather });
+                },
+                (error) => {
+                    console.log(error)
+                }
+            )
     }
   }
 

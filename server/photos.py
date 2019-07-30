@@ -44,7 +44,7 @@ def getAlbumsForClient(userSettings):
     albums = getAlbums(userSettings)
 
     # Save the current album information to settings
-    userSettings.Photos.setAlbums(albums)
+    userSettings.setAlbums(albums)
 
     # Format the album JSON 
     jsonString = json.dumps(albums.toJSON())
@@ -54,12 +54,15 @@ def getAlbumsForClient(userSettings):
 def getAlbums(userSettings):
     flickr = flickrapi.FlickrAPI(flickr_key, secret.flickr_key_secret)
     result = flickr.photosets.getList(user_id='182761952@N05', format='parsed-json')
+    print(result)
+    print(result['photosets'])
+    print(result['photosets']['photoset'])
     jsonAlbums = result['photosets']['photoset']
     albums =  AlbumSet()
     for a in jsonAlbums:
         albumID = a['id']
         albumTitle = a['title']['_content']
-        isEnabled = userSettings.Photos.isAlbumEnabled(albumID)
+        isEnabled = userSettings.isAlbumEnabled(albumID)
         pathFromImg = "flickr/%s" % (albumTitle)
         album = Album(albumTitle, albumID, isEnabled, pathFromImg)
 

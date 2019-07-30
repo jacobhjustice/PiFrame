@@ -3,11 +3,18 @@ body {
     color: white;
 }
 
-#clock {
+#currentDetails {
     position: absolute;
     top: 25px;
     left: 25px;
     z-index: 89;
+    height: 50px;
+    width: 200px;
+}
+
+#clock {
+    position: relative;
+    margin: 10px;
 }
 
 #clock .header {

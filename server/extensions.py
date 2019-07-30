@@ -45,16 +45,16 @@ class ExtensionSetting(ABC):
 # PhotosSettings contains all settings relevant to the Photos feature. 
 # Related code and documentation can be found within /server/photos.py.
 class PhotosSettings(ExtensionSetting):
-    def __init__(self, isEnabled, albums):
+    def __init__(self, isEnabled, albumSet):
         self.isEnabled = isEnabled
-        self.albums = albums
+        self.albumSet = albumSet
 
     # isAlbumEnabled checks the current settings to check if a given albumID is enabled
     # Pertains to extensions.Extensions.picture
     # :albumID: the string ID that is the photos.Album.id being searched for
     def isAlbumEnabled(self, albumID):
             # If album exists in settings, return its enabled status
-            for a in self.albums:
+            for a in self.albumSet.albums:
                     if a.id == albumID:
                             return a.isEnabled
 
@@ -65,7 +65,7 @@ class PhotosSettings(ExtensionSetting):
     # Pertains to extensions.Extensions.picture
     # :albumSet: the current photos.AlbumSet value after any sort of data retrival from flickr
     def setAlbums(self, albumSet):
-        self.albums = albumSet.albums
+        self.albumSet = albumSet
 
     @staticmethod
     def type():
@@ -73,12 +73,12 @@ class PhotosSettings(ExtensionSetting):
 
     @staticmethod
     def createDefault():
-        return PhotosSettings(True, [])
+        return PhotosSettings(True, photos.AlbumSet())
 
     @staticmethod  
     def createFromDict(data):
         albums = photos.AlbumSet() # Load in base information about albums... will load photos in seperately only when needed
-        for a in data["albums"]:
+        for a in data["albumSet"]["albums"]:
             album = photos.Album(a["name"], a["id"], a["isEnabled"], a["path"])
             for p in a["photos"]:
                     album.addPhoto(photos.Photo(p["name"]))
