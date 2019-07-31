@@ -27,7 +27,7 @@ def getImages():
     userSettings.write()
     return json
 
-@app.route('/weather/<int:includeForecast>', methods=["GET"])
+@app.route('/weather/<int:includeForecast>/', methods=["GET"])
 def getWeather(includeForecast):
     userSettings = settings.read()
     json = weather.getWeather(includeForecast, userSettings.Weather.zip)

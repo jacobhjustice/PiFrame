@@ -1,31 +1,65 @@
 body {
-    background-color: black;
-    color: white;
+    background-color: #19181a;  
+    color: #b19f9e;
 }
+
+/* a16e83 */
+/* cebc81 */
 
 #currentDetails {
     position: absolute;
     top: 25px;
     left: 25px;
     z-index: 89;
-    height: 50px;
-    width: 200px;
+    width: 300px;
+    height: 60px;
+}
+
+.currentDetailsContent {
+    position: relative;
+    display: inline-block;
+    vertical-align: top
+}
+
+#currentWeather {
+  
+}
+
+.currentWeatherContents { 
+    display: inline-block;
+
 }
 
 #clock {
-    position: relative;
-    margin: 10px;
+    margin-right: 20px;
+}
+
+
+#currentWeather .header {
+    font-size: 1.5em;
+    line-height: 100px;
+    vertical-align: top;
 }
 
 #clock .header {
     font-size: 2em;
     font-weight: bold;
-    color: #ffffff;
+    color: #479761;
+    /* 61892f */
+
+}
+
+#clock .header .hidden {
+    visibility: hidden;
+}
+
+#clock .header div {
+    display: inline;
 }
 
 #clock .subtitle {
     font-size: 1.25em;
-    color: #bfbfbf;
+    color: #cebc81;
 }
 
 #verse {
@@ -44,6 +78,7 @@ body {
 #verse .wrapper .quote {
     width: 100%;
     text-align: center;
+    font-weight: bold;
 }
 
 #verse .wrapper .reference {
@@ -82,7 +117,7 @@ body {
     bottom: 0;
     margin: auto;
     position: absolute;
-    filter: brightness(70%);
+    filter: brightness(55%);
     max-width: 100%;
     max-height: 100%;
 }

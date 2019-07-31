@@ -8,7 +8,7 @@ import requests, secret, settings, json, datetime
 # Request URLS for weather
 currentWeatherRequestURL = lambda zip, apiKey : ("http://api.openweathermap.org/data/2.5/weather?zip=%s&appid=%s&units=imperial" % (zip, apiKey))
 forecastWeatherRequestURL = lambda zip, apiKey : ("http://api.openweathermap.org/data/2.5/forecast?zip=%s&appid=%s&units=imperial" % (zip, apiKey))
-weatherIconURL = lambda iconCode : "http://openweathermap.org/img/%s/10d@2x.png" % (iconCode)
+weatherIconURL = lambda iconCode : "http://openweathermap.org/img/wn/%s@2x.png" % (iconCode)
 
 # WeatherResponse is a serializable response containing requested weather information
 class WeatherResponse:
@@ -27,9 +27,9 @@ class WeatherResponse:
 class WeatherResponseItem:
     def __init__(self, iconURL, epochTime, temperature, minTemperature, maxTemperature, humidity):
         self.iconURL = iconURL
-        self.temperature = temperature
-        self.minTemperature = minTemperature
-        self.maxTemperature = maxTemperature
+        self.temperature = round(temperature, 0)
+        self.minTemperature = round(minTemperature, 0)
+        self.maxTemperature = round(maxTemperature, 0)
         self.humidity = humidity
         self.time = epochTime
 
@@ -55,7 +55,7 @@ def getWeather(includeForecast, zip):
 
     # Make sure request was completed
     if response.status_code != 200:
-        return
+        return "ERROR"
     
     data = response.json()
 
@@ -116,6 +116,6 @@ def parseAveragesForDaysForecast(entriesForCurrentDay):
         humidity += entry.humidity
         max_temp = entry.maxTemperature if entry.maxTemperature > max_temp else max_temp
         min_temp = entry.minTemperature if entry.minTemperature < min_temp else min_temp
-    temp = round(temp / 8, 2)
-    humidity = round(humidity / 8, 2)
+    temp = temp / 8
+    humidity = humidity / 8
     return WeatherResponseItem("", time, temp, min_temp, max_temp, humidity)

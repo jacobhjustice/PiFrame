@@ -4,8 +4,9 @@ import ReactDOM from 'react-dom';
 export { CurrentWeather, CurrentWeatherProperties }
 
 class CurrentWeatherProperties {
-    constructor(temperature) {
+    constructor(temperature, icon) {
         this.temperature = temperature
+        this.icon = icon
     }
 
 }
@@ -20,8 +21,9 @@ class CurrentWeather extends React.Component {
 
     render() {
         return (
-            <div id="currentWeather">
-                <h4>{this.props.temperature}</h4>
+            <div id="currentWeather" class="currentDetailsContent">
+                <img class="currentWeatherContents" img src={this.props.icon} />
+                <div class="header currentWeatherContents">{this.props.temperature}&deg; F</div>
             </div>
         );
     }

@@ -26,8 +26,14 @@ class Timer extends React.Component {
 
     render() {
         return (
-            <div id="clock">
-                <div class="header">{this.parseTime()}</div>
+            <div id="clock" class="currentDetailsContent">
+                {/* <div class="header">{this.parseTime()}</div> */}
+                <div class="header">
+                    {((this.state.time.getHours() + 11) % 12 + 1 < 10 ? "0" : "") + ((this.state.time.getHours() + 11) % 12 + 1)}
+                    <div class={(this.state.time.getSeconds() % 2 == 0 ? "" : "hidden")}>:</div>
+                    {(this.state.time.getMinutes() < 10 ? "0" : "") + this.state.time.getMinutes()}
+                    {this.state.time.getHours() >= 12 ? " PM" : " AM"}
+                </div>
                 <div class="subtitle">{this.months[this.state.time.getMonth()]} {this.state.time.getDate()}, {this.state.time.getFullYear()}</div>
             </div>
         );
@@ -38,9 +44,11 @@ class Timer extends React.Component {
         var isPM = time.getHours() >= 12
         var hours =  (time.getHours() + 11) % 12 + 1
         var minutes = time.getMinutes()
+        var seconds = time.getSeconds()
 
         return  (hours < 10 ? "0" : "") + hours  
-        + ":" + (minutes < 10 ? "0" : "") + minutes 
+        + ":" 
+        + (minutes < 10 ? "0" : "") + minutes 
         + " " + (isPM ? "PM" : "AM")
     }
 }
@@ -118,7 +126,7 @@ class Frame extends React.Component {
             <div id="frame">
                 <div id ="currentDetails">
                     <Timer />
-                    <CurrentWeather temperature={this.state.CurrentWeather.temperature}/>
+                    <CurrentWeather temperature={this.state.CurrentWeather.temperature} icon={this.state.CurrentWeather.icon}/>
                 </div>
                 <Verse />
                 <Photo url={this.state.photo}/>
@@ -157,7 +165,7 @@ class Frame extends React.Component {
             photo: undefined,
             CurrentWeather: new CurrentWeatherProperties()
         } 
-        this.getWeather()
+        this.getWeather(true)
 
         fetch(server + "settings")
         .then(res => res.json()) 
@@ -224,6 +232,7 @@ class Frame extends React.Component {
                 console.log(result)
                 let currentWeather = new CurrentWeatherProperties(
                     result.currentResponse.temperature,
+                    result.currentResponse.iconURL,
                 )
                 this.setState({ CurrentWeather: currentWeather });
                 },
