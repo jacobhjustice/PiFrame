@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import  { CurrentWeather, CurrentWeatherProperties } from './CurrentWeather'
+import { getDisplayTime } from './shared'
 import Img from 'react-image'
 const images = require.context('../public/img/', true);
 
@@ -29,10 +30,7 @@ class Timer extends React.Component {
             <div id="clock" class="currentDetailsContent">
                 {/* <div class="header">{this.parseTime()}</div> */}
                 <div class="header">
-                    {((this.state.time.getHours() + 11) % 12 + 1 < 10 ? "0" : "") + ((this.state.time.getHours() + 11) % 12 + 1)}
-                    <div class={(this.state.time.getSeconds() % 2 == 0 ? "" : "hidden")}>:</div>
-                    {(this.state.time.getMinutes() < 10 ? "0" : "") + this.state.time.getMinutes()}
-                    {this.state.time.getHours() >= 12 ? " PM" : " AM"}
+                    {getDisplayTime(this.state.time, true)}
                 </div>
                 <div class="subtitle">{this.months[this.state.time.getMonth()]} {this.state.time.getDate()}, {this.state.time.getFullYear()}</div>
             </div>
@@ -126,7 +124,7 @@ class Frame extends React.Component {
             <div id="frame">
                 <div id ="currentDetails">
                     <Timer />
-                    <CurrentWeather temperature={this.state.CurrentWeather.temperature} icon={this.state.CurrentWeather.icon}/>
+                    <CurrentWeather sunrise={this.state.CurrentWeather.sunrise} sunset={this.state.CurrentWeather.sunset} location={this.state.CurrentWeather.location} temperature={this.state.CurrentWeather.temperature} icon={this.state.CurrentWeather.icon}/>
                 </div>
                 <Verse />
                 <Photo url={this.state.photo}/>
@@ -148,7 +146,7 @@ class Frame extends React.Component {
             this.setState({
 
             })
-        }, 60000) 
+        }, 20000) 
     }
     componentWillUnmount() {
         clearInterval(this.interval);
@@ -231,6 +229,9 @@ class Frame extends React.Component {
                 (result) => {               
                 console.log(result)
                 let currentWeather = new CurrentWeatherProperties(
+                    result.location,
+                    result.sunrise,
+                    result.sunset,
                     result.currentResponse.temperature,
                     result.currentResponse.iconURL,
                 )

@@ -6,7 +6,6 @@ def get():
 
 def scrapeBibleGateway():
     doc = requests.get("https://www.biblegateway.com/")
-    # print(doc.text)
     soup = BeautifulSoup(doc.text)
     votd = soup.findAll("div", {"class": "votd-box"})[0]
     quote = votd.findAll("p")[0].text

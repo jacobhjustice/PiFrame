@@ -6,39 +6,64 @@ body {
 /* a16e83 */
 /* cebc81 */
 
+.lineWrapper {
+    width: 100%;
+}
+
 #currentDetails {
     position: absolute;
     top: 25px;
-    left: 25px;
+    left: 0px;
     z-index: 89;
-    width: 300px;
+    /* width: 300px; */
     height: 60px;
 }
 
 .currentDetailsContent {
     position: relative;
     display: inline-block;
-    vertical-align: top
+    vertical-align: top;
 }
 
 #currentWeather {
-  
+    width: 100%;
 }
 
-.currentWeatherContents { 
+.inline { 
     display: inline-block;
-
 }
 
 #clock {
-    margin-right: 20px;
+    width: 100%;
+    margin-left: 30px;
 }
 
-
 #currentWeather .header {
+    font-size: 2em;
+    line-height: 0px;
+    margin: 40px 0 5px 30px;
+    color: #cebc81;
+
+}
+
+#currentWeather .weatherIcon {
+    margin: 0 30px 20px 30px; 
+    height: 40px;
+    width: 40px; 
+}
+
+#currentWeather .subtitle {
     font-size: 1.5em;
     line-height: 100px;
     vertical-align: top;
+    /* color: #a16e83; */
+}
+
+#currentWeather .subtitle2 {
+    font-size: 1em;
+    line-height: 40px;
+    vertical-align: top;
+    /* color: #a16e83; */
 }
 
 #clock .header {
