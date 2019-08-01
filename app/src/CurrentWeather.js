@@ -6,11 +6,13 @@ const images = require.context('../public/img/icon', true);
 export { CurrentWeather, CurrentWeatherProperties }
 
 class CurrentWeatherProperties {
-    constructor(location, sunriseEpoch, sunsetEpoch, temperature, icon) {
+    constructor(location, sunriseEpoch, sunsetEpoch, temperature, humidity, icon) {
+        this.isLoaded = !(temperature == undefined)
         this.location = location
         this.sunrise = new Date(sunriseEpoch*1000)
         this.sunset = new Date(sunsetEpoch*1000)
         this.temperature = temperature
+        this.humidity = humidity
         this.icon = icon
     }
 
@@ -26,7 +28,7 @@ class CurrentWeather extends React.Component {
 
     render() {
         return (
-            <div id="currentWeather" class="currentDetailsContent">
+            <div id="currentWeather" class={(this.props.isLoaded ? "" : "hidden") + " currentDetailsContent"}>
                 <div class="lineWrapper">
                     <div class ="header">{this.props.location}</div>
                 </div>
@@ -41,7 +43,10 @@ class CurrentWeather extends React.Component {
                 <div class="lineWrapper">
                     <img class ="inline weatherIcon" src={images(`./sunset.png`)} />
                     <div class="subtitle2 inline">{getDisplayTime(this.props.sunset, false)}</div>
-
+                </div>
+                <div class="lineWrapper">
+                    <img class ="inline weatherIcon" src={images(`./humidity.png`)} />
+                    <div class="subtitle2 inline">{this.props.humidity}%</div>
                 </div>
             </div>
         );

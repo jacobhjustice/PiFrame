@@ -124,7 +124,7 @@ class Frame extends React.Component {
             <div id="frame">
                 <div id ="currentDetails">
                     <Timer />
-                    <CurrentWeather sunrise={this.state.CurrentWeather.sunrise} sunset={this.state.CurrentWeather.sunset} location={this.state.CurrentWeather.location} temperature={this.state.CurrentWeather.temperature} icon={this.state.CurrentWeather.icon}/>
+                    <CurrentWeather isLoaded={this.state.CurrentWeather.isLoaded} humidity={this.state.CurrentWeather.humidity} sunrise={this.state.CurrentWeather.sunrise} sunset={this.state.CurrentWeather.sunset} location={this.state.CurrentWeather.location} temperature={this.state.CurrentWeather.temperature} icon={this.state.CurrentWeather.icon}/>
                 </div>
                 <Verse />
                 <Photo url={this.state.photo}/>
@@ -140,13 +140,13 @@ class Frame extends React.Component {
             this.setState({
                 isLoaded: true,
                 photo: this.state.isLoaded ? this.getPhoto() : undefined
-            })}, 6000)
+            })}, 2000)
         
         this.interval = setInterval(() => {
             this.setState({
 
             })
-        }, 20000) 
+        }, 200) 
     }
     componentWillUnmount() {
         clearInterval(this.interval);
@@ -233,6 +233,7 @@ class Frame extends React.Component {
                     result.sunrise,
                     result.sunset,
                     result.currentResponse.temperature,
+                    result.currentResponse.humidity,
                     result.currentResponse.iconURL,
                 )
                 this.setState({ CurrentWeather: currentWeather });
