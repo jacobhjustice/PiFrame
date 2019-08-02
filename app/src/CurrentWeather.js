@@ -7,7 +7,7 @@ export { CurrentWeather, CurrentWeatherProperties }
 
 class CurrentWeatherProperties {
     constructor(location, sunriseEpoch, sunsetEpoch, temperature, humidity, icon) {
-        this.isLoaded = !(temperature == undefined)
+        this.isLoaded = temperature != undefined
         this.location = location
         this.sunrise = new Date(sunriseEpoch*1000)
         this.sunset = new Date(sunsetEpoch*1000)
@@ -15,15 +15,11 @@ class CurrentWeatherProperties {
         this.humidity = humidity
         this.icon = icon
     }
-
 }
 
 class CurrentWeather extends React.Component {
     constructor(props) {
         super(props)
-        // let gt = new CurrentWeatherProperties()
-        // console.log(gt)
-        // this.props.current = propsa
     }
 
     render() {

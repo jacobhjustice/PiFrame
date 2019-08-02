@@ -2,54 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import  { CurrentWeather, CurrentWeatherProperties } from './CurrentWeather'
-import { getDisplayTime } from './shared'
+import  { Clock, ClockProperties } from './Clock'
+
 import Img from 'react-image'
 const images = require.context('../public/img/', true);
 
 
 var server = "http://127.0.0.1:5000/"
-
-class Timer extends React.Component {
-    componentDidMount() {
-        this.interval = setInterval(() => this.setState({ time: new Date() }), 1000);
-    }
-    componentWillUnmount() {
-        clearInterval(this.interval);
-    }
-    constructor() {
-        super()
-        this.state = {
-            time: new Date(),
-        }
-
-        this.months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    }
-
-    render() {
-        return (
-            <div id="clock" class="currentDetailsContent">
-                {/* <div class="header">{this.parseTime()}</div> */}
-                <div class="header">
-                    {getDisplayTime(this.state.time, true)}
-                </div>
-                <div class="subtitle">{this.months[this.state.time.getMonth()]} {this.state.time.getDate()}, {this.state.time.getFullYear()}</div>
-            </div>
-        );
-    }
-
-    parseTime() {
-        var time = this.state.time
-        var isPM = time.getHours() >= 12
-        var hours =  (time.getHours() + 11) % 12 + 1
-        var minutes = time.getMinutes()
-        var seconds = time.getSeconds()
-
-        return  (hours < 10 ? "0" : "") + hours  
-        + ":" 
-        + (minutes < 10 ? "0" : "") + minutes 
-        + " " + (isPM ? "PM" : "AM")
-    }
-}
 
 class Verse extends React.Component {
     constructor() {
@@ -123,7 +82,7 @@ class Frame extends React.Component {
         return (
             <div id="frame">
                 <div id ="currentDetails">
-                    <Timer />
+                    <Clock  isLoaded={this.state.Clock.isLoaded} time={this.state.Clock.time}/>
                     <CurrentWeather isLoaded={this.state.CurrentWeather.isLoaded} humidity={this.state.CurrentWeather.humidity} sunrise={this.state.CurrentWeather.sunrise} sunset={this.state.CurrentWeather.sunset} location={this.state.CurrentWeather.location} temperature={this.state.CurrentWeather.temperature} icon={this.state.CurrentWeather.icon}/>
                 </div>
                 <Verse />
@@ -144,9 +103,9 @@ class Frame extends React.Component {
         
         this.interval = setInterval(() => {
             this.setState({
-
+                Clock: new ClockProperties(new Date()),
             })
-        }, 200) 
+        }, 1000) 
     }
     componentWillUnmount() {
         clearInterval(this.interval);
@@ -155,13 +114,17 @@ class Frame extends React.Component {
     constructor() {
         super()
 
+        let defaultWeatherProps = new CurrentWeatherProperties()
+        let defaultClockProps = new ClockProperties(new Date())
+
         this.currentPhoto = 0
         this.currentAlbum = 0
         this.settings = undefined
         this.state = {
             isLoaded: false,
             photo: undefined,
-            CurrentWeather: new CurrentWeatherProperties()
+            CurrentWeather: defaultWeatherProps, 
+            Clock: defaultClockProps,
         } 
         this.getWeather(true)
 
@@ -170,9 +133,9 @@ class Frame extends React.Component {
         .then(
             (result) => {               
                this.settings = JSON.parse(result)
-                this.state = {
-                    isLoaded: true,
-                } 
+               this.setState({
+                    isLoaded: true
+                })
             },
             (error) => {
                 console.log(error)
