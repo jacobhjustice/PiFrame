@@ -77,11 +77,16 @@ class Weather extends React.Component {
     }
 }
 
+// Frame is the top level element within the application.
+// It has two responsibilities: to maintain each extension's state, and to implement settings/results from the server.
+// By letting Frame maintain/update each extension individually, we can drive the entire app from one timer.
+// This allows us to sync up updates, and also control the flow of requests better.
+// Since Frame is in charge of Settings, it can also keep each extension independent of each other by keeping secret other extension's settings.
 class Frame extends React.Component {
     render() {
         return (
             <div id="frame">
-                <div id ="currentDetails">
+            <   div id ="currentDetails">
                     <Clock  isLoaded={this.state.Clock.isLoaded} time={this.state.Clock.time}/>
                     <CurrentWeather isLoaded={this.state.CurrentWeather.isLoaded} humidity={this.state.CurrentWeather.humidity} sunrise={this.state.CurrentWeather.sunrise} sunset={this.state.CurrentWeather.sunset} location={this.state.CurrentWeather.location} temperature={this.state.CurrentWeather.temperature} icon={this.state.CurrentWeather.icon}/>
                 </div>
@@ -94,16 +99,24 @@ class Frame extends React.Component {
     }
 
     componentDidMount() {
+
+        // Each second, extensions in the frame can be updated.
+        // This global timer drives all events that happen, whether ever second, hour, or day.
+        // There are two options that can be used to update:
+        // 1) Use some "lastUpdated" value within an extension's properties.
+        //    This could be a time checked against the current time. 
+        //    If a sufficient amount of time has passed, then update the extension accordingly.
+        // 2) Update the extension at a given time.
+        //    This could be each second update, on the minute, at midnight, etc.
+        // Either option is equally viable, and really depends on the extension that is being used.
+        // State should only be set once at the end of this intereval block.
+        // If properties are being update, set the new properties, otherwise use the current ones
         this.interval = setInterval(() => {
-            // TODO make so that this happens quicker on load
+            let currentTime = new Date()
+            let clockProps = new ClockProperties(currentTime)
             this.setState({
-                isLoaded: true,
-                photo: this.state.isLoaded ? this.getPhoto() : undefined
-            })}, 2000)
-        
-        this.interval = setInterval(() => {
-            this.setState({
-                Clock: new ClockProperties(new Date()),
+                Clock: clockProps,
+                photo: currentTime.getSeconds() % 2 == 0 ? this.getPhoto() : this.state.photo
             })
         }, 1000) 
     }
@@ -114,12 +127,11 @@ class Frame extends React.Component {
     constructor() {
         super()
 
+        this.settings = undefined
         let defaultWeatherProps = new CurrentWeatherProperties()
         let defaultClockProps = new ClockProperties(new Date())
-
         this.currentPhoto = 0
         this.currentAlbum = 0
-        this.settings = undefined
         this.state = {
             isLoaded: false,
             photo: undefined,
