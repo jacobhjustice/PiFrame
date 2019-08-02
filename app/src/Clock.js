@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { getDisplayTime } from './shared'
 
-
-
 export { Clock, ClockProperties }
 
 class ClockProperties {

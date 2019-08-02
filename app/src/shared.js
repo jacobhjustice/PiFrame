@@ -13,3 +13,11 @@ export function getDisplayTime(date, isBlinkingOnSecond) {
         {date.getHours() >= 12 ? " PM" : " AM"}
     </div>)
 }
+
+
+export function evaluateIfUpdateRequired(nowTime, currentTimeOnProp, maxTimeBeforeUpdate) {
+    if (currentTimeOnProp == undefined) {
+        return true
+    }
+    return nowTime - currentTimeOnProp > maxTimeBeforeUpdate
+}

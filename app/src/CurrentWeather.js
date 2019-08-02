@@ -8,12 +8,14 @@ export { CurrentWeather, CurrentWeatherProperties }
 class CurrentWeatherProperties {
     constructor(location, sunriseEpoch, sunsetEpoch, temperature, humidity, icon) {
         this.isLoaded = temperature != undefined
-        this.location = location
-        this.sunrise = new Date(sunriseEpoch*1000)
-        this.sunset = new Date(sunsetEpoch*1000)
-        this.temperature = temperature
-        this.humidity = humidity
-        this.icon = icon
+        if (this.isLoaded) {
+            this.location = location
+            this.sunrise = new Date(sunriseEpoch*1000)
+            this.sunset = new Date(sunsetEpoch*1000)
+            this.temperature = temperature
+            this.humidity = humidity
+            this.icon = icon
+        }
     }
 }
 

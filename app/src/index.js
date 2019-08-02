@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import  { CurrentWeather, CurrentWeatherProperties } from './CurrentWeather'
 import  { Clock, ClockProperties } from './Clock'
+import  { Photos, PhotosProperties } from './Photos'
+import { evaluateIfUpdateRequired } from './shared'
 
-import Img from 'react-image'
+
 const images = require.context('../public/img/', true);
 
 
@@ -52,16 +54,7 @@ class Verse extends React.Component {
     }
 }
 
-class Photo extends React.Component {
-    render() {
-        return (
-            <div id="photo">
-                <div class="wrapper"><img src={this.props.url} /></div>
-            </div>
-        
-        ); 
-    }
-}
+
 
 class Weather extends React.Component {
     render () {
@@ -86,15 +79,14 @@ class Frame extends React.Component {
     render() {
         return (
             <div id="frame">
-            <   div id ="currentDetails">
+                <div id ="currentDetails">
                     <Clock  isLoaded={this.state.Clock.isLoaded} time={this.state.Clock.time}/>
                     <CurrentWeather isLoaded={this.state.CurrentWeather.isLoaded} humidity={this.state.CurrentWeather.humidity} sunrise={this.state.CurrentWeather.sunrise} sunset={this.state.CurrentWeather.sunset} location={this.state.CurrentWeather.location} temperature={this.state.CurrentWeather.temperature} icon={this.state.CurrentWeather.icon}/>
                 </div>
                 <Verse />
-                <Photo url={this.state.photo}/>
+                <Photos photo={this.state.Photos.photo}/>
                 <Weather isEnabled={true}   />
             </div>
-        
         ); 
     }
 
@@ -113,10 +105,20 @@ class Frame extends React.Component {
         // If properties are being update, set the new properties, otherwise use the current ones
         this.interval = setInterval(() => {
             let currentTime = new Date()
+
+            // Clock
             let clockProps = new ClockProperties(currentTime)
+
+            // Photos
+            let photosProps = this.state.Photos
+            if (evaluateIfUpdateRequired(new Date(), photosProps.timeOfInstantiation, 6000)) {
+                photosProps = new PhotosProperties(this.getPhoto())
+            }
+
+            // Update renderings
             this.setState({
                 Clock: clockProps,
-                photo: currentTime.getSeconds() % 2 == 0 ? this.getPhoto() : this.state.photo
+                Photos: photosProps
             })
         }, 1000) 
     }
@@ -130,6 +132,7 @@ class Frame extends React.Component {
         this.settings = undefined
         let defaultWeatherProps = new CurrentWeatherProperties()
         let defaultClockProps = new ClockProperties(new Date())
+        let photosProps = new PhotosProperties()
         this.currentPhoto = 0
         this.currentAlbum = 0
         this.state = {
@@ -137,6 +140,7 @@ class Frame extends React.Component {
             photo: undefined,
             CurrentWeather: defaultWeatherProps, 
             Clock: defaultClockProps,
+            Photos: photosProps
         } 
         this.getWeather(true)
 
@@ -155,11 +159,8 @@ class Frame extends React.Component {
         )
     }
 
-    afterLoad() {
-        
-    }
-
     // TODO Add empty/loading screen
+    // TODO refactor this to photos.js (how should data be sent to this? util function? Photo Manager class?)
     getPhoto() {
         if(this.settings == undefined) {
             return undefined
