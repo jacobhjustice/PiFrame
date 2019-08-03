@@ -4,6 +4,8 @@ import './index.css';
 import  { CurrentWeather, CurrentWeatherProperties } from './CurrentWeather'
 import  { Clock, ClockProperties } from './Clock'
 import  { Photos, PhotosProperties } from './Photos'
+import  { Verse, VerseProperties } from './Verse'
+
 import { evaluateIfUpdateRequired } from './shared'
 
 
@@ -11,50 +13,6 @@ const images = require.context('../public/img/', true);
 
 
 var server = "http://127.0.0.1:5000/"
-
-class Verse extends React.Component {
-    constructor() {
-        super()
-        this.getVerse()
-        this.state = {
-            isLoaded: false,
-            quote: "",
-            reference: ""
-        }
-    }
-
-
-    getVerse() {
-        // Fetch the verse from the server and update the state once loaded
-        fetch(server + "verse")
-        .then(res => res.json()) 
-        .then(
-            (result) => {
-                this.setState({
-                    isLoaded: true,
-                    quote: result.QUOTE,
-                    reference: result.REFERENCE
-                });
-            },
-            (error) => {
-                console.log(error)
-            }
-        )
-    }
-
-    render() {
-        return (
-            <div id="verse">
-                <div class="wrapper">
-                    <div class="quote">{this.state.isLoaded ? '"' + this.state.quote + '"' : "Loading..." }</div>
-                    <div class="reference">{this.state.isLoaded ? "-" + this.state.reference : ""}</div>
-                </div>
-            </div>
-        );
-    }
-}
-
-
 
 class Weather extends React.Component {
     render () {
@@ -83,7 +41,7 @@ class Frame extends React.Component {
                     <Clock  isLoaded={this.state.Clock.isLoaded} time={this.state.Clock.time}/>
                     <CurrentWeather isLoaded={this.state.CurrentWeather.isLoaded} humidity={this.state.CurrentWeather.humidity} sunrise={this.state.CurrentWeather.sunrise} sunset={this.state.CurrentWeather.sunset} location={this.state.CurrentWeather.location} temperature={this.state.CurrentWeather.temperature} icon={this.state.CurrentWeather.icon}/>
                 </div>
-                <Verse />
+                <Verse isLoaded={this.state.Verse.isLoaded} quote={this.state.Verse.quote} reference={this.state.Verse.reference} />
                 <Photos photo={this.state.Photos.photo}/>
                 <Weather isEnabled={true}   />
             </div>
@@ -111,6 +69,7 @@ class Frame extends React.Component {
 
             // Photos
             let photosProps = this.state.Photos
+            // TODO trigger reload at midnight(?)
             if (evaluateIfUpdateRequired(new Date(), photosProps.timeOfInstantiation, 6000)) {
                 photosProps = new PhotosProperties(this.getPhoto())
             }
@@ -133,6 +92,7 @@ class Frame extends React.Component {
         let defaultWeatherProps = new CurrentWeatherProperties()
         let defaultClockProps = new ClockProperties(new Date())
         let photosProps = new PhotosProperties()
+        let verseProps = new VerseProperties()
         this.currentPhoto = 0
         this.currentAlbum = 0
         this.state = {
@@ -140,9 +100,11 @@ class Frame extends React.Component {
             photo: undefined,
             CurrentWeather: defaultWeatherProps, 
             Clock: defaultClockProps,
-            Photos: photosProps
+            Photos: photosProps,
+            Verse: verseProps,
         } 
         this.getWeather(true)
+        this.getVerse()
 
         fetch(server + "settings")
         .then(res => res.json()) 
@@ -173,7 +135,7 @@ class Frame extends React.Component {
         }
         var photo = !!album["photos"] ? album["photos"][this.currentPhoto] : undefined
         if(photo == undefined) {
-            this.currentAlbum = (this.currentAlbum + 1) % albums.length
+            this.currentAlbum  = (this.currentAlbum + 1) % albums.length
             this.currentPhoto = 0
             return undefined
         }
@@ -218,6 +180,24 @@ class Frame extends React.Component {
                     console.log(error)
                 }
             )
+    }
+
+    getVerse() {
+        // Fetch the verse from the server and update the state once loaded
+        fetch(server + "verse")
+        .then(res => res.json()) 
+        .then(
+            (result) => {
+                let verse = new VerseProperties(
+                    result.quote,
+                    result.reference
+                )
+                this.setState({ Verse: verse })
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
     }
   }
 

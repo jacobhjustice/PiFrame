@@ -22,7 +22,7 @@ class Photos extends React.Component {
     render() {
         return (
             <div id="photo">
-                <div class="wrapper"><Img src={this.props.photo} /></div>
+                <div class="wrapper"><img src={this.props.photo} /></div>
             </div>
         ); 
     }

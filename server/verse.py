@@ -11,8 +11,8 @@ def scrapeBibleGateway():
     quote = votd.findAll("p")[0].text
     reference = votd.findAll("a")[0].text
     data = {
-        "QUOTE": quote,
-        "REFERENCE": reference
+        "quote": quote,
+        "reference": reference
     }
     jsonString = json.dumps(data)
     return jsonString
