@@ -43,7 +43,20 @@ class SettingsProperties {
     }
 }
 
+class ModalProperties {
+    constructor(settingsProperties, isOpen, closeCallback) {
+        this.settingsProperties = settingsProperties
+        this.isOpen = isOpen
+        this.closeCallback = closeCallback
+    }
+}
+
+// TODO rename settings" and treat contents as "SettingsButton" and "SettingsModal"
 class SettingsButton extends React.Component {
+    getModalProps() {
+        return new ModalProperties(this.props, this.state.isOpen, this.closeModal)
+    }
+
     constructor(props) {
         super(props)
 
@@ -53,40 +66,44 @@ class SettingsButton extends React.Component {
     }
 
     render() {
-        let modal = new SettingsModal(this.props, this.state.isOpen)
+        let modal = new SettingsModal(this.getModalProps())
         return(
-            <div id="settingsButton"  onClick={this.openModal}>
-                <img src={images('./settings.svg') }/>
-                <div className="header">Settings</div>
+            <div id="settingsButton"  >
+                <div id="buttonElement"onClick={this.openModal}>
+                    <img src={images('./settings.svg') }/>
+                    <div className="header">Settings</div>                
+                </div>
                 {modal.render()}
             </div>
         );
     }
 
-    openModal = () =>{
-        console.log(this)
+    openModal = () => {
         this.setState({
             isOpen: true
         });
     }
+
+    closeModal = () => {
+        this.setState({
+            isOpen: false
+        })
+    }
 }
 
 class SettingsModal extends React.Component {
-    constructor(props, isOpen) {
+    constructor(props) {
         super(props)
-        console.log(isOpen)
-        this.state = {isOpen: isOpen}
     }
 
     render() {
-        if (!this.state.isOpen) {
+        if (!this.props.isOpen) {
             return null
         }
-        console.log("OPEN")
 
         return(
             <div id="settingsModal">
-
+                <div id="closeSettings" onClick={this.props.closeCallback}></div>
             </div>
         );
         

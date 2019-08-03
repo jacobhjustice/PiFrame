@@ -206,7 +206,7 @@ body {
 }
 
 
-#settingsButton {
+#settingsButton #buttonElement {
     position: absolute;
     bottom: 20px;
     left: 20px;
@@ -219,13 +219,13 @@ body {
     z-index: 200;
 }
 
-#settingsButton img {
+#settingsButton #buttonElement img {
     width: 16px;
     height: 20px;
     margin-top: 5px;
 }
 
-#settingsButton .header {
+#settingsButton #buttonElement .header {
     vertical-align: top;
     display: inline-block;
     color: #19181a;
