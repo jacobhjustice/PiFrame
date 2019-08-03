@@ -185,7 +185,7 @@ class Frame extends React.Component {
                     result.currentResponse.humidity,
                     result.currentResponse.iconURL,
                 )
-                let forecastWeather = this.state.ForecastWeather
+                let forecastWeather = this.state.WeatherForecast
                 if (includeForecast) {
                    let  forecasts = []
                     result.todaysForecast.forEach((data) => {
