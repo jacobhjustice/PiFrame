@@ -29,6 +29,48 @@ body {
     width: 100%;
 }
 
+.buttonWrapper {
+    position: fixed;
+    height: 75px;
+    bottom: 0;
+    width: 100vw;
+    left: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.button {
+    height: 30px;
+    border-radius: 7px;
+    padding: 0 10px;
+    cursor: pointer;
+    background-color: #b19f9e;
+    color: #19181a;
+    line-height: 30px;
+    font-weight: bold;
+    display: inline-block;
+    margin: 0 20px;
+}
+
+.button.big {
+    min-width: 200px;
+    height: 40px;
+    margin: 0 15px;
+    font-size: 20px;
+    line-height: 40px;
+}
+
+.button.approval {
+    background-color: #479761;
+}
+
+.button .header {
+    vertical-align: top;
+    display: inline-block;
+}
+
+
 .inline { 
     display: inline-block;
 }
@@ -210,12 +252,8 @@ body {
     position: absolute;
     bottom: 20px;
     left: 20px;
-    background-color: #b19f9e;
     /* width: 100px; */
-    height: 30px;
-    border-radius: 7px;
-    padding: 0 10px;
-    cursor: pointer;
+
     z-index: 200;
 }
 
@@ -223,16 +261,10 @@ body {
     width: 16px;
     height: 20px;
     margin-top: 5px;
+    margin-right: 5px;
+
 }
 
-#settingsButton #buttonElement .header {
-    vertical-align: top;
-    display: inline-block;
-    color: #19181a;
-    line-height: 30px;
-    margin-left: 5px;
-    font-weight: bold;
-}
 
 #settingsModal {
     width: 100vw;
@@ -243,5 +275,5 @@ body {
     right: 0;
     bottom: 0;
     z-index: 300;
-    background-color: black;
+    background-color: #19181a;
 }

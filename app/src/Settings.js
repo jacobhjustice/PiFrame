@@ -69,7 +69,7 @@ class SettingsButton extends React.Component {
         let modal = new SettingsModal(this.getModalProps())
         return(
             <div id="settingsButton"  >
-                <div id="buttonElement"onClick={this.openModal}>
+                <div id="buttonElement" class="button" onClick={this.openModal}>
                     <img src={images('./settings.svg') }/>
                     <div className="header">Settings</div>                
                 </div>
@@ -103,9 +103,22 @@ class SettingsModal extends React.Component {
 
         return(
             <div id="settingsModal">
-                <div id="closeSettings" onClick={this.props.closeCallback}></div>
+
+                <div class="buttonWrapper">
+                    <div class ="button big" onClick={this.props.closeCallback}>
+                        <div className="header">Cancel</div>               
+                    </div>
+                    <div class ="button approval big" onClick={this.saveSettings}>
+                        <div className="header">Save</div>               
+                    </div>
+                </div>
+
             </div>
         );
         
+    }
+
+    saveSettings = () => {
+
     }
 }
