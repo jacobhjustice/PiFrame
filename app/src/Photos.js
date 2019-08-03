@@ -20,12 +20,12 @@ class Photos extends React.Component {
 
     render() {
         if (!this.props.isLoaded) {
-            return ""
+            return null
         }
 
         return (
             <div id="photo">
-                <div class="wrapper"><img src={this.props.photo} /></div>
+                <div className="wrapper"><img src={this.props.photo} /></div>
             </div>
         ); 
     }

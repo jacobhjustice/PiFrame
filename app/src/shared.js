@@ -10,7 +10,7 @@ export function getDisplayTime(date, isBlinkingOnSecond) {
     return (
     <div>
         {((date.getHours() + 11) % 12 + 1 < 10 ? "0" : "") + ((date.getHours() + 11) % 12 + 1)}
-        <div class={(isBlinkingOnSecond && date.getSeconds() % 2 == 0 ? "hidden" : "") + " inline"}>:</div>
+        <div className={(isBlinkingOnSecond && date.getSeconds() % 2 == 0 ? "hidden" : "") + " inline"}>:</div>
         {(date.getMinutes() < 10 ? "0" : "") + date.getMinutes()}
         {date.getHours() >= 12 ? " PM" : " AM"}
     </div>)

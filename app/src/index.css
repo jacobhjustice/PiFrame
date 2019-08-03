@@ -204,3 +204,32 @@ body {
     max-width: 72.5%;
     max-height: 97.5%;
 }
+
+
+#settingsButton {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background-color: #b19f9e;
+    /* width: 100px; */
+    height: 30px;
+    border-radius: 7px;
+    padding: 0 10px;
+    cursor: pointer;
+    z-index: 200;
+}
+
+#settingsButton img {
+    width: 16px;
+    height: 20px;
+    margin-top: 5px;
+}
+
+#settingsButton .header {
+    vertical-align: top;
+    display: inline-block;
+    color: #19181a;
+    line-height: 30px;
+    margin-left: 5px;
+    font-weight: bold;
+}

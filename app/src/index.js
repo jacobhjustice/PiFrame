@@ -5,7 +5,7 @@ import  { CurrentWeather, CurrentWeatherProperties, WeatherForecast, WeatherFore
 import  { Clock, ClockProperties } from './Clock'
 import  { Photos, PhotosProperties } from './Photos'
 import  { Verse, VerseProperties } from './Verse'
-
+import  { SettingsButton } from './Settings'
 import { evaluateIfUpdateRequired } from './shared'
 
 
@@ -26,6 +26,7 @@ class Frame extends React.Component {
         let photos = new Photos(this.state.Photos)
         let verse = new Verse(this.state.Verse)
         let clock = new Clock(this.state.Clock)
+        let settings = new SettingsButton(this.state.Settings)
         return (
             <div id="frame">
                 <div id ="currentDetails">
@@ -35,6 +36,7 @@ class Frame extends React.Component {
                 {verse.render()}
                 {photos.render()}
                 {weatherForecast.render()}
+                {settings.render()}
             </div>
         ); 
     }
@@ -103,6 +105,7 @@ class Frame extends React.Component {
         let defaultClockProps = new ClockProperties(new Date())
         let photosProps = new PhotosProperties()
         let verseProps = new VerseProperties()
+        let settings = new SettingsButton()
         this.currentPhoto = 0
         this.currentAlbum = 0
         this.state = {
@@ -113,10 +116,14 @@ class Frame extends React.Component {
             Clock: defaultClockProps,
             Photos: photosProps,
             Verse: verseProps,
+            Settings: settings,
         } 
         this.getWeather(true)
         this.getVerse()
+        this.getSettings()
+    }
 
+    getSettings() {
         fetch(server + "settings")
         .then(res => res.json()) 
         .then(

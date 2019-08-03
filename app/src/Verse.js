@@ -21,14 +21,14 @@ class Verse extends React.Component {
 
     render() {
         if (!this.props.isLoaded) {
-            return ""
+            return null
         }
 
         return (
             <div id="verse">
-                <div class="wrapper">
-                    <div class="quote">"{this.props.quote}"</div>
-                    <div class="reference">- {this.props.reference}</div>
+                <div className="wrapper">
+                    <div className="quote">"{this.props.quote}"</div>
+                    <div className="reference">- {this.props.reference}</div>
                 </div>
             </div>
         );

@@ -18,15 +18,15 @@ class Clock extends React.Component {
 
     render() {
         if (!this.props.isLoaded) {
-            return ""
+            return null
         }
 
         return (
-            <div id="clock" class="currentDetailsContent">
-                <div class="header">
+            <div id="clock" className="currentDetailsContent">
+                <div className="header">
                     {getDisplayTime(this.props.time, true)}
                 </div>
-                <div class="subtitle">{getDateString(this.props.time, true)}</div>
+                <div className="subtitle">{getDateString(this.props.time, true)}</div>
             </div>
         );
     }

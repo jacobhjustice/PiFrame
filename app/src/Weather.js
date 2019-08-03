@@ -26,29 +26,29 @@ class CurrentWeather extends React.Component {
 
     render() {
         if (!this.props.isLoaded) {
-            return ""
+            return null
         }
 
         return (
-            <div id="currentWeather" class="currentDetailsContent">
-                <div class="lineWrapper">
-                    <div class ="header">{this.props.location}</div>
+            <div id="currentWeather" className="currentDetailsContent">
+                <div className="lineWrapper">
+                    <div className="header">{this.props.location}</div>
                 </div>
-                <div class="lineWrapper">
-                    <img class="inline" src={this.props.icon} />
-                    <div class="subtitle inline">{this.props.temperature}&deg; F</div>
+                <div className="lineWrapper">
+                    <img className="inline" src={this.props.icon} />
+                    <div className="subtitle inline">{this.props.temperature}&deg; F</div>
                 </div>
-                <div class="lineWrapper">
-                    <img class ="inline weatherIcon" src={images(`./sunrise.png`)} />
-                    <div class="subtitle2 inline">{getDisplayTime(this.props.sunrise, false)}</div>
+                <div className="lineWrapper">
+                    <img className="inline weatherIcon" src={images(`./sunrise.png`)} />
+                    <div className="subtitle2 inline">{getDisplayTime(this.props.sunrise, false)}</div>
                 </div>
-                <div class="lineWrapper">
-                    <img class ="inline weatherIcon" src={images(`./sunset.png`)} />
-                    <div class="subtitle2 inline">{getDisplayTime(this.props.sunset, false)}</div>
+                <div className="lineWrapper">
+                    <img className="inline weatherIcon" src={images(`./sunset.png`)} />
+                    <div className="subtitle2 inline">{getDisplayTime(this.props.sunset, false)}</div>
                 </div>
-                <div class="lineWrapper">
-                    <img class ="inline weatherIcon" src={images(`./humidity.png`)} />
-                    <div class="subtitle2 inline">{this.props.humidity}%</div>
+                <div className="lineWrapper">
+                    <img className="inline weatherIcon" src={images(`./humidity.png`)} />
+                    <div className="subtitle2 inline">{this.props.humidity}%</div>
                 </div>
             </div>
         );
@@ -73,14 +73,14 @@ class WeatherForecastItem  extends  React.Component {
     
     render() {
         return(
-            <div class="weatherForecastItem">
-                <div class="left itemWrapper">
+            <div className="weatherForecastItem">
+                <div className="left itemWrapper">
                     <img src={this.props.icon} />
                 </div>
-                <div class="right itemWrapper">
+                <div className="right itemWrapper">
                     {getDisplayTime(this.props.time, false)}
                     {getDateString(this.props.time, false)}
-                    <div class="header"> {this.props.temperature}&deg; F</div>                    
+                    <div className="header"> {this.props.temperature}&deg; F</div>                    
                 </div> 
             </div>
         );
@@ -103,7 +103,7 @@ class WeatherForecast extends React.Component {
 
     render() {
         if (!this.props.isLoaded) {
-            return ""
+            return null
         }
 
         let forecasts = []
