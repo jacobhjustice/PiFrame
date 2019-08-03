@@ -48,7 +48,6 @@ class Frame extends React.Component {
                 </div>
                 {verse.render()}
                 {photos.render()}
-                {/* <WeatherForecast isEnabled={true}   /> */}
                 {weatherForecast.render()}
             </div>
         ); 
