@@ -19,6 +19,10 @@ class Photos extends React.Component {
     }
 
     render() {
+        if (!this.props.isLoaded) {
+            return ""
+        }
+
         return (
             <div id="photo">
                 <div class="wrapper"><img src={this.props.photo} /></div>

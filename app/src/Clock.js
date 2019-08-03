@@ -17,6 +17,10 @@ class Clock extends React.Component {
     }
 
     render() {
+        if (!this.props.isLoaded) {
+            return ""
+        }
+
         return (
             <div id="clock" class="currentDetailsContent">
                 <div class="header">

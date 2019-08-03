@@ -25,8 +25,12 @@ class CurrentWeather extends React.Component {
     }
 
     render() {
+        if (!this.props.isLoaded) {
+            return ""
+        }
+
         return (
-            <div id="currentWeather" class={(this.props.isLoaded ? "" : "hidden") + " currentDetailsContent"}>
+            <div id="currentWeather" class="currentDetailsContent">
                 <div class="lineWrapper">
                     <div class ="header">{this.props.location}</div>
                 </div>
@@ -99,21 +103,19 @@ class WeatherForecast extends React.Component {
 
     render() {
         if (!this.props.isLoaded) {
-            return
+            return ""
         }
-        
+
         let forecasts = []
         this.props.dailyForecasts.forEach((forecast) => {
             let item = new WeatherForecastItem(forecast)
             forecasts.push(item.render())
         })
-        
 
         return(
             <div id="weatherForecast">
                 {forecasts}
             </div>
         );
-
     }
 }

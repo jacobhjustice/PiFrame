@@ -20,8 +20,12 @@ class Verse extends React.Component {
     }
 
     render() {
+        if (!this.props.isLoaded) {
+            return ""
+        }
+
         return (
-            <div id="verse" class={this.props.isLoaded ? "" : "hidden"}>
+            <div id="verse">
                 <div class="wrapper">
                     <div class="quote">"{this.props.quote}"</div>
                     <div class="reference">- {this.props.reference}</div>

@@ -35,16 +35,19 @@ class Weather extends React.Component {
 // Since Frame is in charge of Settings, it can also keep each extension independent of each other by keeping secret other extension's settings.
 class Frame extends React.Component {
     render() {
+        let currentWeather = new CurrentWeather(this.state.CurrentWeather)
         let weatherForecast = new WeatherForecast(this.state.WeatherForecast)
-        
+        let photos = new Photos(this.state.Photos)
+        let verse = new Verse(this.state.Verse)
+        let clock = new Clock(this.state.Clock)
         return (
             <div id="frame">
                 <div id ="currentDetails">
-                    <Clock  isLoaded={this.state.Clock.isLoaded} time={this.state.Clock.time}/>
-                    <CurrentWeather isLoaded={this.state.CurrentWeather.isLoaded} humidity={this.state.CurrentWeather.humidity} sunrise={this.state.CurrentWeather.sunrise} sunset={this.state.CurrentWeather.sunset} location={this.state.CurrentWeather.location} temperature={this.state.CurrentWeather.temperature} icon={this.state.CurrentWeather.icon}/>
+                    {clock.render()}
+                    {currentWeather.render()}
                 </div>
-                <Verse isLoaded={this.state.Verse.isLoaded} quote={this.state.Verse.quote} reference={this.state.Verse.reference} />
-                <Photos photo={this.state.Photos.photo}/>
+                {verse.render()}
+                {photos.render()}
                 {/* <WeatherForecast isEnabled={true}   /> */}
                 {weatherForecast.render()}
             </div>
