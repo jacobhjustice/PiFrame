@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 const images = require.context('../public/img/icon', true);
 
-export { SettingsButton, SettingsProperties }
+export { SettingsButton, SettingsProperties, ClockSettings, VerseSettings, WeatherSettings, PhotosSettings }
 
 class ClockSettings {
     constructor (isEnabled) {
@@ -27,7 +27,7 @@ class WeatherSettings {
 class PhotosSettings {
     constructor (isEnabled, albumList, apiKey, apiSecret, apiUser) {
         this.isEnabled = isEnabled
-        this.albumList = albumList
+        this.albumSet = albumList
         this.apiKey = apiKey
         this.apiSecret = apiSecret
         this.apiUser = apiUser
@@ -36,10 +36,10 @@ class PhotosSettings {
 
 class SettingsProperties {
     constructor (clockSettings, photosSettings, verseSettings, weatherSettings) {
-        this.clockSettings = clockSettings
-        this.photosSettings = photosSettings
-        this.verseSettings = verseSettings
-        this.weatherSettings = weatherSettings
+        this.clock = clockSettings
+        this.photos = photosSettings
+        this.verse = verseSettings
+        this.weather = weatherSettings
         this.isOpen = false
     }
 }

@@ -5,7 +5,7 @@ import  { CurrentWeather, CurrentWeatherProperties, WeatherForecast, WeatherFore
 import  { Clock, ClockProperties } from './Clock'
 import  { Photos, PhotosProperties } from './Photos'
 import  { Verse, VerseProperties } from './Verse'
-import  { SettingsButton } from './Settings'
+import  { SettingsButton, SettingsProperties, ClockSettings, VerseSettings, WeatherSettings, PhotosSettings  } from './Settings'
 import { evaluateIfUpdateRequired } from './shared'
 
 
@@ -94,7 +94,7 @@ class Frame extends React.Component {
     }
     componentWillUnmount() {
         clearInterval(this.interval);
-    }
+    }  
 
     constructor() {
         super()
@@ -105,7 +105,7 @@ class Frame extends React.Component {
         let defaultClockProps = new ClockProperties(new Date())
         let photosProps = new PhotosProperties()
         let verseProps = new VerseProperties()
-        let settings = new SettingsButton()
+        let settings = new SettingsProperties()
         this.currentPhoto = 0
         this.currentAlbum = 0
         this.state = {
@@ -128,9 +128,41 @@ class Frame extends React.Component {
         .then(res => res.json()) 
         .then(
             (result) => {               
-               this.settings = JSON.parse(result)
+                let settings = JSON.parse(result)
+            //    console.log(this.settings)
+            // TODO maybe strong type the albumSet
+                let photoSettings = new PhotosSettings(
+                    settings.Photos.isEnabled,
+                    settings.Photos.albumSet,
+                    settings.Photos.apiKey,
+                    settings.Photos.apiSecret,
+                    settings.Photos.apiUser
+                )
+
+                let clockSettings = new ClockSettings(
+                    settings.Clock.isEnabled
+                )
+
+                let verseSettings = new VerseSettings(
+                   settings.Verse.isEnabled
+                )
+
+                let weatherSettings = new WeatherSettings(
+                    settings.Weather.isEnabled,
+                    settings.Weather.zip,
+                    settings.Weather.apiKey
+                )
+
+                let userSettings = new SettingsProperties(
+                    clockSettings,
+                    photoSettings,
+                    verseSettings,
+                    weatherSettings
+                )
+
                this.setState({
-                    isLoaded: true
+                    isLoaded: true,
+                    Settings: userSettings
                 })
             },
             (error) => {
@@ -142,10 +174,11 @@ class Frame extends React.Component {
     // TODO Add empty/loading screen
     // TODO refactor this to photos.js (how should data be sent to this? util function? Photo Manager class?)
     getPhoto() {
-        if(this.settings == undefined) {
+        let settings = this.state.Settings
+        if(settings == undefined || settings.photos == undefined) {
             return undefined
         }
-        var albums = this.settings["Photos"]["albumSet"]["albums"]
+        var albums = settings["photos"]["albumSet"]["albums"]
         var album = !!albums ? albums[this.currentAlbum] : undefined
         if(album == undefined) {
             this.currentAlbum = 0
