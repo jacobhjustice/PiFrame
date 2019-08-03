@@ -55,35 +55,33 @@ class Frame extends React.Component {
         this.interval = setInterval(() => {
             let currentTime = new Date()
 
-            // Clock
+            // Clock: Every second
             let clockProps = new ClockProperties(currentTime)
 
-            // Photos
+            // Photos: Every 6 seconds
             let photosProps = this.state.Photos
-            // TODO trigger reload at midnight(?)
             if (evaluateIfUpdateRequired(new Date(), photosProps.timeOfInstantiation, 6000)) {
                 photosProps = new PhotosProperties(this.getPhoto())
             }
-
-            // On the minute
-
-            let fullForecastForWeather = false
-
-            // Run on the hour (i.e., minutes == 0)
-            if (currentTime.getMinutes() == 0) { 
-                fullForecastForWeather = true
-                getVerse()
-            } 
             
             // Run on the minute (i.e., seconds == 0)
             if (currentTime.getSeconds() == 0) {
-                getWeather(fullForecastForWeather)
+                let fullForecastForWeather = false
+
+                // Run on the hour (i.e., minutes == 0)
+                if (currentTime.getMinutes() == 0) { 
+                    fullForecastForWeather = true
+                    this.getVerse()
+                    
+                    // Run at midnight (i.e., hours ==0)
+                    if (currentTime.getHours() == 0) {
+                        this.getImages()
+                    }
+                }
+                this.getWeather(fullForecastForWeather)
             }
 
-            // Run at midnight (i.e., hours ==0)
-            if (currentTime.getHours() == 0) {
-                getImages()
-            }
+
 
             // Update renderings
             this.setState({
