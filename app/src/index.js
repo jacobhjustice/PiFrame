@@ -14,36 +14,17 @@ const images = require.context('../public/img/', true);
 
 var server = "http://127.0.0.1:5000/"
 
-// Frame is the top level element within the application.
+// Extensions drives each extension within the application
 // It has two responsibilities: to maintain each extension's state, and to implement settings/results from the server.
-// By letting Frame maintain/update each extension individually, we can drive the entire app from one timer.
+// By letting Extensions maintain/update each extension individually, we can drive the entire app from one timer.
 // This allows us to sync up updates, and also control the flow of requests better.
-// Since Frame is in charge of Settings, it can also keep each extension independent of each other by keeping secret other extension's settings.
-class Frame extends React.Component {
-    render() {
-        let currentWeather = new CurrentWeather(this.state.CurrentWeather)
-        let weatherForecast = new WeatherForecast(this.state.WeatherForecast)
-        let photos = new Photos(this.state.Photos)
-        let verse = new Verse(this.state.Verse)
-        let clock = new Clock(this.state.Clock)
-        let settings = new SettingsButton(this.state.Settings)
-        return (
-            <div id="frame">
-                <div id ="currentDetails">
-                    {clock.render()}
-                    {currentWeather.render()}
-                </div>
-                {verse.render()}
-                {photos.render()}
-                {weatherForecast.render()}
-                {settings.render()}
-            </div>
-        ); 
-    }
-
+// Extensions doesn't need to worry about Settings; those are passed into it's props.
+class Extensions extends React.Component {
     componentDidMount() {
+        this.getWeather(true)
+        this.getVerse()
 
-        // Each second, extensions in the frame can be updated.
+        // Each second, each extension can be updated.
         // This global timer drives all events that happen, whether ever second, hour, or day.
         // There are two options that can be used to update:
         // 1) Use some "lastUpdated" value within an extension's properties.
@@ -92,89 +73,56 @@ class Frame extends React.Component {
             })
         }, 1000) 
     }
+
+    render() {
+        let currentWeather = new CurrentWeather(this.state.CurrentWeather)
+        let weatherForecast = new WeatherForecast(this.state.WeatherForecast)
+        let photos = new Photos(this.state.Photos)
+        let verse = new Verse(this.state.Verse)
+        let clock = new Clock(this.state.Clock)
+
+        return (
+            <div id="extensions">
+                <div id ="currentDetails">
+                    {clock.render()}
+                    {currentWeather.render()}
+                </div>
+                {verse.render()}
+                {photos.render()}
+                {weatherForecast.render()}
+            </div>
+        ); 
+    }
+
+
     componentWillUnmount() {
         clearInterval(this.interval);
     }  
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
 
-        this.settings = undefined
         let defaultCurrentWeatherProps = new CurrentWeatherProperties()
         let defaultForecastWeatherProps = new WeatherForecastProperties()
         let defaultClockProps = new ClockProperties(new Date())
         let photosProps = new PhotosProperties()
         let verseProps = new VerseProperties()
-        let settings = new SettingsProperties()
         this.currentPhoto = 0
         this.currentAlbum = 0
         this.state = {
-            isLoaded: false,
             photo: undefined,
             CurrentWeather: defaultCurrentWeatherProps, 
             WeatherForecast: defaultForecastWeatherProps,
             Clock: defaultClockProps,
             Photos: photosProps,
             Verse: verseProps,
-            Settings: settings,
         } 
-        this.getWeather(true)
-        this.getVerse()
-        this.getSettings()
-    }
-
-    getSettings() {
-        fetch(server + "settings")
-        .then(res => res.json()) 
-        .then(
-            (result) => {               
-                let settings = JSON.parse(result)
-            //    console.log(this.settings)
-            // TODO maybe strong type the albumSet
-                let photoSettings = new PhotosSettings(
-                    settings.Photos.isEnabled,
-                    settings.Photos.albumSet,
-                    settings.Photos.apiKey,
-                    settings.Photos.apiSecret,
-                    settings.Photos.apiUser
-                )
-
-                let clockSettings = new ClockSettings(
-                    settings.Clock.isEnabled
-                )
-
-                let verseSettings = new VerseSettings(
-                   settings.Verse.isEnabled
-                )
-
-                let weatherSettings = new WeatherSettings(
-                    settings.Weather.isEnabled,
-                    settings.Weather.zip,
-                    settings.Weather.apiKey
-                )
-
-                let userSettings = new SettingsProperties(
-                    clockSettings,
-                    photoSettings,
-                    verseSettings,
-                    weatherSettings
-                )
-
-               this.setState({
-                    isLoaded: true,
-                    Settings: userSettings
-                })
-            },
-            (error) => {
-                console.log(error)
-            }
-        )
     }
 
     // TODO Add empty/loading screen
     // TODO refactor this to photos.js (how should data be sent to this? util function? Photo Manager class?)
     getPhoto() {
-        let settings = this.state.Settings
+        let settings = this.props.settings
         if(settings == undefined || settings.photos == undefined) {
             return undefined
         }
@@ -194,7 +142,7 @@ class Frame extends React.Component {
         this.currentAlbum = (this.currentAlbum + 1) % albums.length
         this.currentPhoto = (this.currentPhoto + 1) % album["photos"].length
         var photo = album.path + "/" + photo.name + ".jpg"
-        console.log(photo)
+
         return images(`./` + photo)
     }
 
@@ -216,8 +164,8 @@ class Frame extends React.Component {
             .then(res => res.json()) 
             .then(
                 (result) => {               
-                console.log(result)
-                let currentWeather = new CurrentWeatherProperties(
+
+                    let currentWeather = new CurrentWeatherProperties(
                     result.location,
                     result.sunrise,
                     result.sunset,
@@ -264,8 +212,92 @@ class Frame extends React.Component {
     }
   }
 
+// Frame is the top level within the application.
+// It splits into two responsibilities: Settings and Extensions.
+// Extensions allows for the rendering of each feature within the page.
+// Settings is the backing of a user's options for those extensions.
+// Settings are passed as a property down to Extensions.
+// Any settings modification requires reload of all features, so modifying the settings 
+// results in a re-render of Extensions.
+class Frame extends React.Component {
+    constructor() {
+        super()
+
+        let settings = new SettingsProperties()
+        this.state = {
+            Settings: settings
+        }
+
+    }
+
+    componentDidMount() {
+        this.getSettings()
+    }
+
+
+    render() {
+        if (!this.state.isLoaded) {
+            return null
+        }
+        return(
+            <div id="frame">
+                <Extensions settings={this.state.Settings}/>
+                <SettingsButton settings={this.state.Settings} />  
+            </div>
+        );
+    }
+
+    getSettings() {
+        fetch(server + "settings")
+        .then(res => res.json()) 
+        .then(
+            (result) => {               
+                let settings = JSON.parse(result)
+
+                // TODO maybe strong type the albumSet
+                let photoSettings = new PhotosSettings(
+                    settings.Photos.isEnabled,
+                    settings.Photos.albumSet,
+                    settings.Photos.apiKey,
+                    settings.Photos.apiSecret,
+                    settings.Photos.apiUser
+                )
+
+                let clockSettings = new ClockSettings(
+                    settings.Clock.isEnabled
+                )
+
+                let verseSettings = new VerseSettings(
+                   settings.Verse.isEnabled
+                )
+
+                let weatherSettings = new WeatherSettings(
+                    settings.Weather.isEnabled,
+                    settings.Weather.zip,
+                    settings.Weather.apiKey
+                )
+
+                let userSettings = new SettingsProperties(
+                    clockSettings,
+                    photoSettings,
+                    verseSettings,
+                    weatherSettings
+                )
+
+               this.setState({
+                    isLoaded: true,
+                    Settings: userSettings
+                })
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
+    }
+}
+
 ReactDOM.render(
     <Frame />,
     document.getElementById('root')
-  );
+);
   

@@ -16,6 +16,7 @@ class Clock extends React.Component {
         super(props)
     }
 
+
     render() {
         if (!this.props.isLoaded) {
             return null

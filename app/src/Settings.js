@@ -40,19 +40,22 @@ class SettingsProperties {
         this.photos = photosSettings
         this.verse = verseSettings
         this.weather = weatherSettings
-        this.isOpen = false
     }
 }
 
 class SettingsButton extends React.Component {
     constructor(props) {
         super(props)
+
+        this.state = {
+            isOpen: props.isOpen
+        }
     }
 
     render() {
-        let modal = new SettingsModal(this.props)
+        let modal = new SettingsModal(this.props, this.state.isOpen)
         return(
-            <div id="settingsButton" onClick={this.openModal()}>
+            <div id="settingsButton"  onClick={this.openModal}>
                 <img src={images('./settings.svg') }/>
                 <div className="header">Settings</div>
                 {modal.render()}
@@ -60,20 +63,32 @@ class SettingsButton extends React.Component {
         );
     }
 
-    openModal() {
-        this.props.isOpen = true
+    openModal = () =>{
+        console.log(this)
+        this.setState({
+            isOpen: true
+        });
     }
 }
 
 class SettingsModal extends React.Component {
-    constructor(props) {
+    constructor(props, isOpen) {
         super(props)
+        console.log(isOpen)
+        this.state = {isOpen: isOpen}
     }
 
     render() {
-        if (!this.props.isOpen) {
+        if (!this.state.isOpen) {
             return null
         }
+        console.log("OPEN")
+
+        return(
+            <div id="settingsModal">
+
+            </div>
+        );
         
     }
 }

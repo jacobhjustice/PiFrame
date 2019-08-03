@@ -26,7 +26,7 @@ class CurrentWeather extends React.Component {
 
     render() {
         if (!this.props.isLoaded) {
-            return null
+            return ""
         }
 
         return (
