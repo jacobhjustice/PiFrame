@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import  { CurrentWeather, CurrentWeatherProperties } from './CurrentWeather'
+import  { CurrentWeather, CurrentWeatherProperties, WeatherForecast, WeatherForecastProperties } from './Weather'
 import  { Clock, ClockProperties } from './Clock'
 import  { Photos, PhotosProperties } from './Photos'
 import  { Verse, VerseProperties } from './Verse'
@@ -35,6 +35,8 @@ class Weather extends React.Component {
 // Since Frame is in charge of Settings, it can also keep each extension independent of each other by keeping secret other extension's settings.
 class Frame extends React.Component {
     render() {
+        let weatherForecast = new WeatherForecast(this.state.WeatherForecast)
+        
         return (
             <div id="frame">
                 <div id ="currentDetails">
@@ -43,7 +45,8 @@ class Frame extends React.Component {
                 </div>
                 <Verse isLoaded={this.state.Verse.isLoaded} quote={this.state.Verse.quote} reference={this.state.Verse.reference} />
                 <Photos photo={this.state.Photos.photo}/>
-                <Weather isEnabled={true}   />
+                {/* <WeatherForecast isEnabled={true}   /> */}
+                {weatherForecast.render()}
             </div>
         ); 
     }
@@ -89,7 +92,8 @@ class Frame extends React.Component {
         super()
 
         this.settings = undefined
-        let defaultWeatherProps = new CurrentWeatherProperties()
+        let defaultCurrentWeatherProps = new CurrentWeatherProperties()
+        let defaultForecastWeatherProps = new WeatherForecastProperties()
         let defaultClockProps = new ClockProperties(new Date())
         let photosProps = new PhotosProperties()
         let verseProps = new VerseProperties()
@@ -98,7 +102,8 @@ class Frame extends React.Component {
         this.state = {
             isLoaded: false,
             photo: undefined,
-            CurrentWeather: defaultWeatherProps, 
+            CurrentWeather: defaultCurrentWeatherProps, 
+            ForecastWeather: defaultForecastWeatherProps,
             Clock: defaultClockProps,
             Photos: photosProps,
             Verse: verseProps,
@@ -174,7 +179,14 @@ class Frame extends React.Component {
                     result.currentResponse.humidity,
                     result.currentResponse.iconURL,
                 )
-                this.setState({ CurrentWeather: currentWeather });
+                let forecastWeather = this.state.ForecastWeather
+                if (includeForecast) {
+                    forecastWeather = new WeatherForecastProperties(result.todaysForecast)
+                }
+                this.setState({ 
+                    CurrentWeather: currentWeather,
+                    ForecastWeather: forecastWeather
+                 });
                 },
                 (error) => {
                     console.log(error)

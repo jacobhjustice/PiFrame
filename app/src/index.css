@@ -33,6 +33,14 @@ body {
     display: inline-block;
 }
 
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
 #clock {
     width: 100%;
     margin-left: 30px;
@@ -66,6 +74,23 @@ body {
     /* color: #a16e83; */
 }
 
+#weatherForecast {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100vh;
+}
+
+#weatherForecast .weatherForecastItem {
+    width: 200px;
+    height: 12.5%;
+}
+
+#weatherForecast .weatherForecastItem .itemWrapper {
+    width: 100px;
+    display: inline-block;
+}
+
 #clock .header {
     font-size: 2em;
     font-weight: bold;
@@ -95,21 +120,24 @@ body {
 }
 
 #verse .wrapper {
-    width: 50%;
+    width: 450px;
     margin: 0 auto;
     position: relative;
 }
 
 #verse .wrapper .quote {
     width: 100%;
+    font-size:16px;
     text-align: center;
     font-weight: bold;
+    color: #ffffff;
 }
 
 #verse .wrapper .reference {
     max-width: 90%;
     text-align: right;
     float: right;
+    color: #ffffff;
 }
 
 #photo {
@@ -142,7 +170,7 @@ body {
     bottom: 0;
     margin: auto;
     position: absolute;
-    filter: brightness(55%);
-    max-width: 95%;
-    max-height: 95%;
+    filter: brightness(100%);
+    max-width: 97.5%;
+    max-height: 97.5%;
 }

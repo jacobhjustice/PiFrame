@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Img from 'react-image'
 
 export { Photos, PhotosProperties }
 
