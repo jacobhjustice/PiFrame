@@ -46,6 +46,10 @@ body {
     margin-left: 30px;
 }
 
+#currentWeather {
+    z-index: 89;
+}
+
 #currentWeather .header {
     font-size: 2em;
     line-height: 0px;
@@ -79,16 +83,42 @@ body {
     top: 0;
     right: 0;
     height: 100vh;
+    z-index: 89;
 }
 
 #weatherForecast .weatherForecastItem {
     width: 200px;
-    height: 12.5%;
+    height: calc(100% / 8);
+    box-sizing: border-box;
+    position: relative;
+}
+
+#weatherForecast .weatherForecastItem:not(:last-child) {
+    border-bottom: 1px solid #a16e83;
 }
 
 #weatherForecast .weatherForecastItem .itemWrapper {
     width: 100px;
     display: inline-block;
+    height: 100%;
+    box-sizing: border-box;
+    position: relative;
+    padding: 10px;
+}
+
+#weatherForecast .weatherForecastItem .itemWrapper img {
+    height: 50px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+#weatherForecast .weatherForecastItem .itemWrapper .header {
+    font-size: 1.25em;
+    margin-top: 10px;
 }
 
 #clock .header {
@@ -163,7 +193,7 @@ body {
     width: 100%;
 }
 
-#photo  img {
+#photo img {
     top: 0;
     left: 0;
     right: 0;

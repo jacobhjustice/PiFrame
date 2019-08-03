@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import  { CurrentWeather, CurrentWeatherProperties, WeatherForecast, WeatherForecastProperties } from './Weather'
+import  { CurrentWeather, CurrentWeatherProperties, WeatherForecast, WeatherForecastProperties, WeatherForecastItemProperties } from './Weather'
 import  { Clock, ClockProperties } from './Clock'
 import  { Photos, PhotosProperties } from './Photos'
 import  { Verse, VerseProperties } from './Verse'
@@ -103,7 +103,7 @@ class Frame extends React.Component {
             isLoaded: false,
             photo: undefined,
             CurrentWeather: defaultCurrentWeatherProps, 
-            ForecastWeather: defaultForecastWeatherProps,
+            WeatherForecast: defaultForecastWeatherProps,
             Clock: defaultClockProps,
             Photos: photosProps,
             Verse: verseProps,
@@ -181,11 +181,16 @@ class Frame extends React.Component {
                 )
                 let forecastWeather = this.state.ForecastWeather
                 if (includeForecast) {
-                    forecastWeather = new WeatherForecastProperties(result.todaysForecast)
+                   let  forecasts = []
+                    result.todaysForecast.forEach((data) => {
+                        forecasts.push(new WeatherForecastItemProperties(data.temperature, data.time, data.iconURL))
+                    })
+                    // TODO add daily forecast
+                    forecastWeather = new WeatherForecastProperties(forecasts)
                 }
                 this.setState({ 
                     CurrentWeather: currentWeather,
-                    ForecastWeather: forecastWeather
+                    WeatherForecast: forecastWeather
                  });
                 },
                 (error) => {

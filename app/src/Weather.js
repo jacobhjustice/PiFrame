@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { getDisplayTime } from './shared'
+import { getDisplayTime, getDateString } from './shared'
 const images = require.context('../public/img/icon', true);
 
-export { CurrentWeather, CurrentWeatherProperties, WeatherForecast, WeatherForecastProperties }
+export { CurrentWeather, CurrentWeatherProperties, WeatherForecast, WeatherForecastProperties, WeatherForecastItemProperties }
 
 class CurrentWeatherProperties {
     constructor(location, sunriseEpoch, sunsetEpoch, temperature, humidity, icon) {
@@ -52,10 +52,12 @@ class CurrentWeather extends React.Component {
 }
 
 class WeatherForecastItemProperties {
-    constructor(temperature, time, humidity, icon) {
+    constructor(temperature, time, icon) {
         this.isLoaded = temperature != undefined 
         if (this.isLoaded) {
             this.temperature = temperature
+            this.icon = icon
+            this.time = new Date(time*1000)
         }
     }
 }
@@ -69,10 +71,12 @@ class WeatherForecastItem  extends  React.Component {
         return(
             <div class="weatherForecastItem">
                 <div class="left itemWrapper">
-                    {/* <img src={this.props.icon} /> */}
+                    <img src={this.props.icon} />
                 </div>
                 <div class="right itemWrapper">
-                    {this.props.temperature}
+                    {getDisplayTime(this.props.time, false)}
+                    {getDateString(this.props.time, false)}
+                    <div class="header"> {this.props.temperature}&deg; F</div>                    
                 </div> 
             </div>
         );
@@ -83,7 +87,6 @@ class WeatherForecastProperties {
     constructor (dailyForecasts) {
         this.isLoaded = dailyForecasts != undefined && dailyForecasts.length == 8
         if (this.isLoaded) {
-            // TODO make this of type
             this.dailyForecasts = dailyForecasts
         }
     }
@@ -95,12 +98,16 @@ class WeatherForecast extends React.Component {
     }
 
     render() {
-        let forecasts = []
-        for(var i = 0; i <8; i++){
-            let props = new WeatherForecastItemProperties(123)
-            let item = new WeatherForecastItem(props)
-            forecasts.push(item.render())
+        if (!this.props.isLoaded) {
+            return
         }
+        
+        let forecasts = []
+        this.props.dailyForecasts.forEach((forecast) => {
+            let item = new WeatherForecastItem(forecast)
+            forecasts.push(item.render())
+        })
+        
 
         return(
             <div id="weatherForecast">

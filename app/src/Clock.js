@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { getDisplayTime } from './shared'
+import { getDisplayTime, getDateString } from './shared'
 
 export { Clock, ClockProperties }
 
@@ -14,7 +14,6 @@ class ClockProperties {
 class Clock extends React.Component {
     constructor(props) {
         super(props)
-        this.months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
     }
 
     render() {
@@ -23,7 +22,7 @@ class Clock extends React.Component {
                 <div class="header">
                     {getDisplayTime(this.props.time, true)}
                 </div>
-                <div class="subtitle">{this.months[this.props.time.getMonth()]} {this.props.time.getDate()}, {this.props.time.getFullYear()}</div>
+                <div class="subtitle">{getDateString(this.props.time, true)}</div>
             </div>
         );
     }

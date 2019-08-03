@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+const months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
 export function getDisplayTime(date, isBlinkingOnSecond) {
     if (date == undefined) {
         return 
@@ -14,6 +16,16 @@ export function getDisplayTime(date, isBlinkingOnSecond) {
     </div>)
 }
 
+export function getDateString(date, includeYear) {
+    let str = months[date.getMonth()]
+    str += " "
+    str += date.getDate()
+    if (includeYear) {
+        str += ", "
+        str += date.getFullYear()
+    }
+    return str
+}
 
 export function evaluateIfUpdateRequired(nowTime, currentTimeOnProp, maxTimeBeforeUpdate) {
     if (currentTimeOnProp == undefined) {
