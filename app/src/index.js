@@ -14,20 +14,6 @@ const images = require.context('../public/img/', true);
 
 var server = "http://127.0.0.1:5000/"
 
-class Weather extends React.Component {
-    render () {
-        return (
-            <div></div>
-        )
-    }
-
-    constructor() {
-        super()
-        
-        
-    }
-}
-
 // Frame is the top level element within the application.
 // It has two responsibilities: to maintain each extension's state, and to implement settings/results from the server.
 // By letting Frame maintain/update each extension individually, we can drive the entire app from one timer.
@@ -77,6 +63,26 @@ class Frame extends React.Component {
             // TODO trigger reload at midnight(?)
             if (evaluateIfUpdateRequired(new Date(), photosProps.timeOfInstantiation, 6000)) {
                 photosProps = new PhotosProperties(this.getPhoto())
+            }
+
+            // On the minute
+
+            let fullForecastForWeather = false
+
+            // Run on the hour (i.e., minutes == 0)
+            if (currentTime.getMinutes() == 0) { 
+                fullForecastForWeather = true
+                getVerse()
+            } 
+            
+            // Run on the minute (i.e., seconds == 0)
+            if (currentTime.getSeconds() == 0) {
+                getWeather(fullForecastForWeather)
+            }
+
+            // Run at midnight (i.e., hours ==0)
+            if (currentTime.getHours() == 0) {
+                getImages()
             }
 
             // Update renderings
