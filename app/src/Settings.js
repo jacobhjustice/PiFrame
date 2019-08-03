@@ -104,6 +104,11 @@ class SettingsModal extends React.Component {
         return(
             <div id="settingsModal">
 
+                <div class="modalContent">
+                    <SettingsModalPhotosContent/>
+                </div>
+
+
                 <div class="buttonWrapper">
                     <div class ="button big" onClick={this.props.closeCallback}>
                         <div className="header">Cancel</div>               
@@ -120,5 +125,40 @@ class SettingsModal extends React.Component {
 
     saveSettings = () => {
 
+    }
+}
+
+class SettingsModalGenericContent extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    render() {
+        return(
+            <div class="extensionWrapper">
+                <div class="extensionHeader">LA LA LA</div>
+                {/* this.props.extensionName */}
+                <input type="checkbox" />
+            </div> 
+        );
+    }
+}
+
+class SettingsModalPhotosContent extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    render () {
+        return(
+            <div>
+            <SettingsModalGenericContent>
+            <SettingsModalGenericContent />
+
+            </SettingsModalGenericContent>
+            </div>
+
+
+        );
     }
 }
