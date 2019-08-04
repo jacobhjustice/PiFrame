@@ -6,13 +6,11 @@ import  { Clock, ClockProperties } from './Clock'
 import  { Photos, PhotosProperties } from './Photos'
 import  { Verse, VerseProperties } from './Verse'
 import  { SettingsButton, SettingsProperties, ClockSettings, VerseSettings, WeatherSettings, PhotosSettings  } from './Settings'
-import { evaluateIfUpdateRequired } from './shared'
+import { evaluateIfUpdateRequired, server } from './shared'
 
 
 const images = require.context('../public/img/', true);
 
-
-var server = "http://127.0.0.1:5000/"
 
 // Extensions drives each extension within the application
 // It has two responsibilities: to maintain each extension's state, and to implement settings/results from the server.

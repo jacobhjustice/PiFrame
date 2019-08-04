@@ -33,5 +33,9 @@ def getWeather(includeForecast):
     json = weather.getWeather(includeForecast, userSettings.Weather.zip)
     return json
 
+@app.route('/settings/', methods=["POST"])
+def postSettings():
+    # TODO save settings and return result
+
 if __name__ == '__main__':
     app.run()

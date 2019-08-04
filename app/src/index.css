@@ -46,6 +46,7 @@ body {
     padding: 20px;
     box-sizing: border-box;
     text-align: center;
+    background-color: #19181a;
 }
 
 .button {
@@ -67,6 +68,10 @@ body {
     margin: 0 15px;
     font-size: 20px;
     line-height: 40px;
+}
+
+.button.denial {
+    background-color: #a16e83;
 }
 
 .button.approval {
@@ -287,10 +292,32 @@ body {
     bottom: 0;
     z-index: 300;
     background-color: #19181a;
+    text-align: center;
 }
 
 #settingsModal .extensionHeader{
     font-size: 32px;
     color: #cebc81;
+    display: inline-block;
+    padding: 5px 20px;
+    border-bottom: 5px solid #b19f9e;
+    border-radius: 0 0 7.5px 7.5px;
+}
 
+#settingsModal .extensionContentWrapper {
+    padding: 25px 75px;
+
+}
+
+#settingsModal .extensionContentWrapper label {
+    font-size: 20px;
+    display: block;
+}
+
+#settingsModal .extensionContentWrapper label:not(:first-child) {
+    margin-top:20px;
+}
+
+#settingsModal .extensionContentWrapper label input {
+    margin-left: 20px;
 }
