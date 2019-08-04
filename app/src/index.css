@@ -1,6 +1,7 @@
 body {
     background-color: #19181a;  
-    color: #b19f9e;
+    color: #b19f9e; 
+    font-size: 18px;
 }
 
 /* a16e83 */
@@ -106,9 +107,9 @@ body {
 }
 
 #currentWeather .header {
-    font-size: 2em;
+    font-size: 2.3em;
     line-height: 0px;
-    margin: 40px 0 5px 30px;
+    margin: 40px 0 15px 30px;
     color: #cebc81;
 
 }
@@ -120,17 +121,16 @@ body {
 }
 
 #currentWeather .subtitle {
-    font-size: 1.5em;
+    font-size: 1.8em;
     line-height: 100px;
     vertical-align: top;
     /* color: #a16e83; */
 }
 
 #currentWeather .subtitle2 {
-    font-size: 1em;
+    font-size: 1.3em;
     line-height: 40px;
     vertical-align: top;
-    /* color: #a16e83; */
 }
 
 #weatherForecast {
@@ -149,7 +149,7 @@ body {
 }
 
 #weatherForecast .weatherForecastItem:not(:last-child) {
-    border-bottom: 1px solid #a16e83;
+    border-bottom: 2px solid #a16e83;
 }
 
 #weatherForecast .weatherForecastItem .itemWrapper {
@@ -159,6 +159,7 @@ body {
     box-sizing: border-box;
     position: relative;
     padding: 10px;
+    font-size: 18px;
 }
 
 #weatherForecast .weatherForecastItem .itemWrapper img {
@@ -172,7 +173,7 @@ body {
 }
 
 #weatherForecast .weatherForecastItem .itemWrapper .header {
-    font-size: 1.25em;
+    font-size: 1.5em;
     margin-top: 10px;
 }
 
@@ -215,7 +216,7 @@ body {
 
 #verse .wrapper .quote {
     width: 100%;
-    font-size:16px;
+    font-size:19px;
     text-align: center;
     font-weight: bold;
     color: #cebc81;
@@ -225,6 +226,7 @@ body {
     max-width: 90%;
     text-align: right;
     float: right;
+    font-size: 16px;
     /* color: #ffffff; */
 }
 

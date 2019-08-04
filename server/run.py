@@ -36,6 +36,7 @@ def getWeather(includeForecast):
 @app.route('/settings/', methods=["POST"])
 def postSettings():
     # TODO save settings and return result
+    print("@@@")
 
 if __name__ == '__main__':
     app.run()
