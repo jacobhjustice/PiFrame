@@ -45,17 +45,18 @@ class SettingsProperties {
 }
 
 class ModalProperties {
-    constructor(settingsProperties, isOpen, closeCallback) {
+    constructor(settingsProperties, isOpen, closeCallback, updateCallback) {
         this.settingsProperties = settingsProperties
         this.isOpen = isOpen
         this.closeCallback = closeCallback
+        this.updateCallback = updateCallback
     }
 }
 
 // TODO rename settings" and treat contents as "SettingsButton" and "SettingsModal"
 class SettingsButton extends React.Component {
     getModalProps() {
-        return new ModalProperties(this.props.settings, this.state.isOpen, this.closeModal)
+        return new ModalProperties(this.props.settings, this.state.isOpen, this.closeModal, this.props.updateCallback)
     }
 
     constructor(props) {
@@ -211,7 +212,7 @@ class SettingsModal extends React.Component {
                 albumSet: null
             }
         }
-
+        // TODO ADD SUPPORT FOR ALBUMS
         fetch(server + 'settings/', {
             method: 'POST',
             headers: {
@@ -223,7 +224,8 @@ class SettingsModal extends React.Component {
         .then(res => res.json()) 
         .then(
             (result) => {
-                console.log(result)
+                this.props.updateCallback(result)
+                this.props.closeCallback()
              },
              (error) => {
                  console.log(error)

@@ -11,7 +11,6 @@ import { evaluateIfUpdateRequired, server } from './shared'
 
 const images = require.context('../public/img/', true);
 
-
 // Extensions drives each extension within the application
 // It has two responsibilities: to maintain each extension's state, and to implement settings/results from the server.
 // By letting Extensions maintain/update each extension individually, we can drive the entire app from one timer.
@@ -19,8 +18,7 @@ const images = require.context('../public/img/', true);
 // Extensions doesn't need to worry about Settings; those are passed into it's props.
 class Extensions extends React.Component {
     componentDidMount() {
-        this.getWeather(true)
-        this.getVerse()
+        console.log("MOUNT!")
 
         // Each second, each extension can be updated.
         // This global timer drives all events that happen, whether ever second, hour, or day.
@@ -62,7 +60,9 @@ class Extensions extends React.Component {
                 this.getWeather(fullForecastForWeather)
             }
 
-
+            // TODO fetch photos?
+            this.getWeather(true)
+            this.getVerse()
 
             // Update renderings
             this.setState({
@@ -144,6 +144,7 @@ class Extensions extends React.Component {
         return images(`./` + photo)
     }
 
+    // TODO call getImages periodically
     getImages() {
         fetch(server + "images")
         .then(res => res.json()) 
@@ -192,7 +193,6 @@ class Extensions extends React.Component {
     }
 
     getVerse() {
-        // Fetch the verse from the server and update the state once loaded
         fetch(server + "verse")
         .then(res => res.json()) 
         .then(
@@ -223,6 +223,7 @@ class Frame extends React.Component {
 
         let settings = new SettingsProperties()
         this.state = {
+            versionSinceMount: 0,
             Settings: settings
         }
 
@@ -232,6 +233,13 @@ class Frame extends React.Component {
         this.getSettings()
     }
 
+    settingsUpdateCallback = (result) => {
+        let userSettings = this.parseSettingsResponseToObject(result)
+        this.setState({
+            Settings: userSettings,
+            versionSinceMount: this.state.versionSinceMount++
+        })
+    }
 
     render() {
         if (!this.state.isLoaded) {
@@ -239,10 +247,44 @@ class Frame extends React.Component {
         }
         return(
             <div id="frame">
-                <Extensions settings={this.state.Settings}/>
-                <SettingsButton settings={this.state.Settings} />  
+                <Extensions key={this.state.versionSinceMount} settings={this.state.Settings}/>
+                <SettingsButton settings={this.state.Settings} updateCallback={this.settingsUpdateCallback} />  
             </div>
         );
+    }
+
+    parseSettingsResponseToObject(response) {
+        let settings = JSON.parse(response)
+
+        // TODO strong type the albumSet
+        let photoSettings = new PhotosSettings(
+            settings.Photos.isEnabled,
+            settings.Photos.albumSet,
+            settings.Photos.apiKey,
+            settings.Photos.apiSecret,
+            settings.Photos.apiUser
+        )
+
+        let clockSettings = new ClockSettings(
+            settings.Clock.isEnabled
+        )
+
+        let verseSettings = new VerseSettings(
+           settings.Verse.isEnabled
+        )
+
+        let weatherSettings = new WeatherSettings(
+            settings.Weather.isEnabled,
+            settings.Weather.zip,
+            settings.Weather.apiKey
+        )
+
+        return new SettingsProperties(
+            clockSettings,
+            photoSettings,
+            verseSettings,
+            weatherSettings
+        )
     }
 
     getSettings() {
@@ -250,37 +292,7 @@ class Frame extends React.Component {
         .then(res => res.json()) 
         .then(
             (result) => {               
-                let settings = JSON.parse(result)
-
-                // TODO maybe strong type the albumSet
-                let photoSettings = new PhotosSettings(
-                    settings.Photos.isEnabled,
-                    settings.Photos.albumSet,
-                    settings.Photos.apiKey,
-                    settings.Photos.apiSecret,
-                    settings.Photos.apiUser
-                )
-
-                let clockSettings = new ClockSettings(
-                    settings.Clock.isEnabled
-                )
-
-                let verseSettings = new VerseSettings(
-                   settings.Verse.isEnabled
-                )
-
-                let weatherSettings = new WeatherSettings(
-                    settings.Weather.isEnabled,
-                    settings.Weather.zip,
-                    settings.Weather.apiKey
-                )
-
-                let userSettings = new SettingsProperties(
-                    clockSettings,
-                    photoSettings,
-                    verseSettings,
-                    weatherSettings
-                )
+                let userSettings = this.parseSettingsResponseToObject(result)
 
                this.setState({
                     isLoaded: true,
