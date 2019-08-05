@@ -5,7 +5,8 @@ export { Verse, VerseProperties }
 
 
 class VerseProperties {
-    constructor(quote, reference) {
+    constructor(isEnabled, quote, reference) {
+        this.isEnabled = isEnabled
         this.isLoaded = quote != undefined
         if (this.isLoaded) {
             this.quote = quote
@@ -20,7 +21,7 @@ class Verse extends React.Component {
     }
 
     render() {
-        if (!this.props.isLoaded) {
+        if (!this.props.isLoaded || !this.props.isEnabled) {
             return null
         }
 

@@ -17,12 +17,17 @@ def getSettings():
 
 @app.route('/verse/', methods=["GET"])
 def getVerse():
+    userSettings = settings.read()
+    if userSettings.Verse.isEnabled != True:
+        return '{"isNotEnabled": "True"}'
     json = verse.get()
     return json
 
 @app.route('/images/', methods=["GET"])
 def getImages():
     userSettings = settings.read()
+    if userSettings.Photos.isEnabled != True:
+        return '{"isNotEnabled": "True"}'
     json = photos.getAlbumsForClient(userSettings.Photos)
     userSettings.write()
     return json
@@ -30,6 +35,8 @@ def getImages():
 @app.route('/weather/<int:includeForecast>/', methods=["GET"])
 def getWeather(includeForecast):
     userSettings = settings.read()
+    if userSettings.Weather.isEnabled != True:
+        return '{"isNotEnabled": "True"}'
     json = weather.getWeather(includeForecast, userSettings.Weather.zip)
     return json
 

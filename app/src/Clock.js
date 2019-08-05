@@ -5,7 +5,8 @@ import { getDisplayTime, getDateString } from './shared'
 export { Clock, ClockProperties }
 
 class ClockProperties {
-    constructor(time) {
+    constructor(isEnabled, time) {
+        this.isEnabled = isEnabled
         this.isLoaded = time != undefined
         this.time = time
     }
@@ -16,9 +17,9 @@ class Clock extends React.Component {
         super(props)
     }
 
-
+    
     render() {
-        if (!this.props.isLoaded) {
+        if (!this.props.isLoaded || !this.props.isEnabled) {
             return null
         }
 

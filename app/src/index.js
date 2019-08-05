@@ -18,8 +18,10 @@ const images = require.context('../public/img/', true);
 // Extensions doesn't need to worry about Settings; those are passed into it's props.
 class Extensions extends React.Component {
     componentDidMount() {
-        console.log("MOUNT!")
+        this.frameSetup()        
+    }
 
+    frameSetup() {
         // Each second, each extension can be updated.
         // This global timer drives all events that happen, whether ever second, hour, or day.
         // There are two options that can be used to update:
@@ -35,12 +37,12 @@ class Extensions extends React.Component {
             let currentTime = new Date()
 
             // Clock: Every second
-            let clockProps = new ClockProperties(currentTime)
+            let clockProps = new ClockProperties(this.props.settings.clock.isEnabled, currentTime)
 
             // Photos: Every 6 seconds
             let photosProps = this.state.Photos
             if (evaluateIfUpdateRequired(new Date(), photosProps.timeOfInstantiation, 6000)) {
-                photosProps = new PhotosProperties(this.getPhoto())
+                photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, this.getPhoto())
             }
             
             // Run on the minute (i.e., seconds == 0)
@@ -60,16 +62,26 @@ class Extensions extends React.Component {
                 this.getWeather(fullForecastForWeather)
             }
 
-            // TODO fetch photos?
-            this.getWeather(true)
-            this.getVerse()
-
             // Update renderings
             this.setState({
                 Clock: clockProps,
                 Photos: photosProps
             })
         }, 1000) 
+
+        // TODO fetch photos?
+        this.getWeather(true)
+        this.getVerse()
+    }
+
+
+    // If the properties get updated, we have recieved an update in settings
+    // If settings are updated, we want to do a full re-render based on our new settings.
+    componentDidUpdate(oldProps) {
+        if(oldProps.settings !== this.props.settings) {
+            clearInterval(this.interval);
+            this.frameSetup()
+        }
     }
 
     render() {
@@ -100,11 +112,11 @@ class Extensions extends React.Component {
     constructor(props) {
         super(props)
 
-        let defaultCurrentWeatherProps = new CurrentWeatherProperties()
-        let defaultForecastWeatherProps = new WeatherForecastProperties()
-        let defaultClockProps = new ClockProperties(new Date())
-        let photosProps = new PhotosProperties()
-        let verseProps = new VerseProperties()
+        let defaultCurrentWeatherProps = new CurrentWeatherProperties(this.props.settings.weather.isEnabled)
+        let defaultForecastWeatherProps = new WeatherForecastProperties(this.props.settings.weather.isEnabled)
+        let defaultClockProps = new ClockProperties(this.props.settings.clock.isEnabled, new Date())
+        let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled)
+        let verseProps = new VerseProperties(this.props.settings.verse.isEnabled)
         this.currentPhoto = 0
         this.currentAlbum = 0
         this.state = {
@@ -144,7 +156,7 @@ class Extensions extends React.Component {
         return images(`./` + photo)
     }
 
-    // TODO call getImages periodically
+    // TODO call getImages periodically?
     getImages() {
         fetch(server + "images")
         .then(res => res.json()) 
@@ -163,8 +175,17 @@ class Extensions extends React.Component {
             .then(res => res.json()) 
             .then(
                 (result) => {               
+                    // If not enabled, set state to default weather
+                    if (result.isNotEnabled) {
+                        this.setState({ 
+                            CurrentWeather: new CurrentWeatherProperties(this.props.settings.weather.isEnabled),
+                            WeatherForecast: new WeatherForecastItemProperties(this.props.settings.weather.isEnabled)
+                         });
+                         return 
+                    }
 
                     let currentWeather = new CurrentWeatherProperties(
+                    this.props.settings.weather.isEnabled,
                     result.location,
                     result.sunrise,
                     result.sunset,
@@ -179,7 +200,7 @@ class Extensions extends React.Component {
                         forecasts.push(new WeatherForecastItemProperties(data.temperature, data.time, data.iconURL))
                     })
                     // TODO add daily forecast
-                    forecastWeather = new WeatherForecastProperties(forecasts)
+                    forecastWeather = new WeatherForecastProperties(this.props.settings.weather.isEnabled, forecasts)
                 }
                 this.setState({ 
                     CurrentWeather: currentWeather,
@@ -197,7 +218,16 @@ class Extensions extends React.Component {
         .then(res => res.json()) 
         .then(
             (result) => {
+                // If not enabled, set state to default verse
+                if (result.isNotEnabled) {
+                    this.setState({ 
+                        Verse: new VerseProperties(this.props.settings.verse.isEnabled),
+                    });
+                    return
+                }
+                  
                 let verse = new VerseProperties(
+                    this.props.settings.verse.isEnabled,
                     result.quote,
                     result.reference
                 )

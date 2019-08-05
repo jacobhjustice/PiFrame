@@ -4,7 +4,8 @@ import ReactDOM from 'react-dom';
 export { Photos, PhotosProperties }
 
 class PhotosProperties {
-    constructor(photo) {
+    constructor(isEnabled, photo) {
+        this.isEnabled = isEnabled
         this.isLoaded = photo != undefined
         if (this.isLoaded) {
             this.timeOfInstantiation = new Date()
@@ -19,7 +20,7 @@ class Photos extends React.Component {
     }
 
     render() {
-        if (!this.props.isLoaded) {
+        if (!this.props.isLoaded || !this.props.isEnabled) {
             return null
         }
 

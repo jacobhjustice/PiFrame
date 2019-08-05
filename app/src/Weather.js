@@ -6,7 +6,8 @@ const images = require.context('../public/img/icon', true);
 export { CurrentWeather, CurrentWeatherProperties, WeatherForecast, WeatherForecastProperties, WeatherForecastItemProperties }
 
 class CurrentWeatherProperties {
-    constructor(location, sunriseEpoch, sunsetEpoch, temperature, humidity, icon) {
+    constructor(isEnabled, location, sunriseEpoch, sunsetEpoch, temperature, humidity, icon) {
+        this.isEnabled = isEnabled
         this.isLoaded = temperature != undefined
         if (this.isLoaded) {
             this.location = location
@@ -25,7 +26,7 @@ class CurrentWeather extends React.Component {
     }
 
     render() {
-        if (!this.props.isLoaded) {
+        if (!this.props.isLoaded || !this.props.isEnabled) {
             return ""
         }
 
@@ -88,7 +89,8 @@ class WeatherForecastItem  extends  React.Component {
 }
 
 class WeatherForecastProperties {
-    constructor (dailyForecasts) {
+    constructor (isEnabled, dailyForecasts) {
+        this.isEnabled = isEnabled
         this.isLoaded = dailyForecasts != undefined && dailyForecasts.length == 8
         if (this.isLoaded) {
             this.dailyForecasts = dailyForecasts
@@ -102,7 +104,7 @@ class WeatherForecast extends React.Component {
     }
 
     render() {
-        if (!this.props.isLoaded) {
+        if (!this.props.isLoaded || !this.props.isEnabled) {
             return null
         }
 
