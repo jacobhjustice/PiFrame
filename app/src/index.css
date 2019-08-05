@@ -42,12 +42,12 @@ body {
     position: fixed;
     height: 75px;
     bottom: 0;
-    width: 100vw;
-    left: 0;
+    width: 90vw;
+    left: 5vw;
     padding: 20px;
     box-sizing: border-box;
     text-align: center;
-    background-color: #19181a;
+    background-color: rgba(25, 24, 26, .8);
 }
 
 .button {
@@ -173,8 +173,7 @@ body {
 }
 
 #weatherForecast .weatherForecastItem .itemWrapper .header {
-    font-size: 1.5em;
-    margin-top: 10px;
+    font-size: 1.6em;
 }
 
 #clock .header {

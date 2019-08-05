@@ -18,9 +18,9 @@ class VerseSettings  {
 }
 
 class WeatherSettings {
-    constructor (isEnabled, zipcode, apiKey) {
+    constructor (isEnabled, zip, apiKey) {
         this.isEnabled = isEnabled
-        this.zipcode = zipcode
+        this.zip = zip
         this.apiKey = apiKey
     }
 }
@@ -138,7 +138,7 @@ class SettingsModal extends React.Component {
                             </label>
                             <label>
                                 Zip Code
-                                <input  type="number" defaultValue={this.props.settingsProperties.weather.zipcode}  ref={(input) => this.weatherZipcode = input}  />
+                                <input  type="number" defaultValue={this.props.settingsProperties.weather.zip}  ref={(input) => this.weatherZip = input}  />
                             </label>
                             <label>
                                 Weather Map API Key
@@ -189,9 +189,26 @@ class SettingsModal extends React.Component {
     }
 
     saveSettings = () => {
+        // Any future settings should be added to this JSON payload
+        // the JSON class properties should match that found in /server/extensions.py and the settings.json file
         let settings = {
             Clock: {
                 isEnabled: this.clockIsEnabled.checked
+            },
+            Verse: {
+                isEnabled: this.verseIsEnabled.checked
+            },
+            Weather: {
+                isEnabled: this.weatherIsEnabled.checked,
+                zip: this.weatherZip.value,
+                apiKey: this.weatherAPIKey.value
+            },
+            Photos: {
+                isEnabled: this.photosIsEnabled.checked,
+                apiKey: this.photosAPIKey.value,
+                apiSecret: this.photosAPISecret.value,
+                apiUser: this.photosAPIUser.value,
+                albumSet: null
             }
         }
 
@@ -203,6 +220,15 @@ class SettingsModal extends React.Component {
             },
             body: JSON.stringify(settings)
         })
+        .then(res => res.json()) 
+        .then(
+            (result) => {
+                console.log(result)
+             },
+             (error) => {
+                 console.log(error)
+             }
+         )
     }
 }
 

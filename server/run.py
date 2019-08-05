@@ -35,8 +35,10 @@ def getWeather(includeForecast):
 
 @app.route('/settings/', methods=["POST"])
 def postSettings():
-    # TODO save settings and return result
-    print("@@@")
+    settingPayload = request.get_json()
+    userSettings = settings.update(settingPayload)    
+    jsonString = json.dumps(userSettings.toJSON())
+    return jsonString
 
 if __name__ == '__main__':
     app.run()

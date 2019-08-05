@@ -45,9 +45,12 @@ class ExtensionSetting(ABC):
 # PhotosSettings contains all settings relevant to the Photos feature. 
 # Related code and documentation can be found within /server/photos.py.
 class PhotosSettings(ExtensionSetting):
-    def __init__(self, isEnabled, albumSet):
+    def __init__(self, isEnabled, albumSet, apiKey, apiSecret, apiUser):
         self.isEnabled = isEnabled
         self.albumSet = albumSet
+        self.apiKey = apiKey
+        self.apiSecret = apiSecret
+        self.apiUser = apiUser
 
     # isAlbumEnabled checks the current settings to check if a given albumID is enabled
     # Pertains to extensions.Extensions.picture
@@ -73,23 +76,28 @@ class PhotosSettings(ExtensionSetting):
 
     @staticmethod
     def createDefault():
-        return PhotosSettings(True, photos.AlbumSet())
+        return PhotosSettings(True, photos.AlbumSet(), "", "", "")
 
     @staticmethod  
     def createFromDict(data):
         albums = photos.AlbumSet() # Load in base information about albums... will load photos in seperately only when needed
-        for a in data["albumSet"]["albums"]:
-            album = photos.Album(a["name"], a["id"], a["isEnabled"], a["path"])
-            for p in a["photos"]:
-                    album.addPhoto(photos.Photo(p["name"]))
-            albums.addAlbum(album)
+        if data["albumSet"] != None and len(data["albumSet"]["albums"]) > 0:
+            for a in data["albumSet"]["albums"]:
+                album = photos.Album(a["name"], a["id"], a["isEnabled"], a["path"])
+                for p in a["photos"]:
+                        album.addPhoto(photos.Photo(p["name"]))
+                albums.addAlbum(album)
         isEnabled = data["isEnabled"]
-        return PhotosSettings(isEnabled, albums)
+        apiKey = data["apiKey"]
+        apiSecret = data["apiSecret"]
+        apiUser = data["apiUser"]
+        return PhotosSettings(isEnabled, albums, apiKey, apiSecret, apiUser)
 
 class WeatherSettings(ExtensionSetting):
-    def __init__(self, isEnabled, zipcode):
+    def __init__(self, isEnabled, zipcode, apiKey):
         self.isEnabled = isEnabled
         self.zip = zipcode
+        self.apiKey = apiKey
     
     @staticmethod
     def type():
@@ -97,13 +105,14 @@ class WeatherSettings(ExtensionSetting):
 
     @staticmethod
     def createDefault():
-        return WeatherSettings(True, "")
+        return WeatherSettings(True, "", "")
     
     @staticmethod  
     def createFromDict(data):
         isEnabled = data["isEnabled"]
         zip = data["zip"]
-        return WeatherSettings(isEnabled, zip)
+        apiKey = data["apiKey"]
+        return WeatherSettings(isEnabled, zip, apiKey)
 
 class VerseSettings(ExtensionSetting):
     def __init__(self, isEnabled):

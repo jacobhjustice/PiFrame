@@ -47,20 +47,34 @@ def read():
     try:
         with open(FILE_NAME, 'r') as f:
             jsonValue = json.load(f)
-            exts = {}
-            for item in ALL_EXTENSIONS:
+            return parseSettingsJSON(jsonValue)
+    except IOError:
+        return __initialSetup()
+
+# update takes a user's settings and applies them to the .json file for local use
+# :jsonObject: the json of the user's selected options
+# return :Settings: after setting the user's options so that the client has a copy of the latest settings.
+def update(jsonObject):
+        userSettings = parseSettingsJSON(jsonObject)
+        userSettings.write()
+        return userSettings
+
+# parseSettingsFromJSON transforms a JSON dictionary into a full Settings object
+# :jsonObject: is the parsed JSON of the .json file
+# return :Settings: object parsed from data
+def parseSettingsJSON(jsonObject):
+        exts = {}
+        for item in ALL_EXTENSIONS:
                 prop = None
                 key = item.type()
                 try:
-                        data = jsonValue[key]
+                        data = jsonObject[key]
                         prop = item.createFromDict(data)
                 except:
                         prop = item.createDefault()
                 finally:
                         exts[key] = prop
-            return Settings(exts)
-    except IOError:
-        return __initialSetup()
+        return Settings(exts)
 
 # __initialSetup is called if the .json file does not exist.
 # It sets up the .json file with default values for all expected data.
