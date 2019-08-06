@@ -142,6 +142,12 @@ class Extensions extends React.Component {
             this.currentAlbum = 0
             return undefined 
         }
+
+        if(!album.isEnabled) {
+            this.currentAlbum = (this.currentAlbum + 1) % albums.length
+            return undefined
+        }
+
         var photo = !!album["photos"] ? album["photos"][this.currentPhoto] : undefined
         if(photo == undefined) {
             this.currentAlbum  = (this.currentAlbum + 1) % albums.length
