@@ -84,6 +84,15 @@ body {
     display: inline-block;
 }
 
+.right-align { 
+    text-align: right;
+    width: 50%;
+}
+
+.left-align { 
+    text-align: left;
+    width: 50%;
+}
 
 .inline { 
     display: inline-block;
@@ -305,6 +314,11 @@ body {
     border-radius: 0 0 7.5px 7.5px;
 }
 
+#settingsModal .extensionSubheader {
+    font-size: 24px;
+    margin-top: 20px;
+}
+
 #settingsModal .extensionContentWrapper {
     padding: 25px 75px;
 
@@ -313,6 +327,10 @@ body {
 #settingsModal .extensionContentWrapper label {
     font-size: 20px;
     display: block;
+}
+
+#settingsModal .extensionContentWrapper label div { 
+    display: inline-block;
 }
 
 #settingsModal .extensionContentWrapper label:not(:first-child) {

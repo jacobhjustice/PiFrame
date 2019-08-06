@@ -26,12 +26,13 @@ class WeatherSettings {
 }
 
 class PhotosSettings {
-    constructor (isEnabled, albumList, apiKey, apiSecret, apiUser) {
+    constructor (isEnabled, albumList, apiKey, apiSecret, apiUser, albumSet) {
         this.isEnabled = isEnabled
         this.albumSet = albumList
         this.apiKey = apiKey
         this.apiSecret = apiSecret
         this.apiUser = apiUser
+        this.albumSet = albumSet
     }
 }
 
@@ -114,8 +115,8 @@ class SettingsModal extends React.Component {
                         <div class="extensionHeader">Clock Settings</div>
                         <div class="extensionContentWrapper">
                             <label>
-                                Feature Enabled
-                                <input type="checkbox"  defaultChecked={this.props.settingsProperties.clock.isEnabled} ref={(input) => this.clockIsEnabled = input} />
+                                <div class="right-align">Feature Enabled</div>
+                                <div class="left-align"><input type="checkbox"  defaultChecked={this.props.settingsProperties.clock.isEnabled} ref={(input) => this.clockIsEnabled = input} /></div>
                             </label>
                         </div>
                     </div> 
@@ -124,8 +125,8 @@ class SettingsModal extends React.Component {
                         <div class="extensionHeader">Verse Settings</div>
                         <div class="extensionContentWrapper">
                             <label>
-                                Feature Enabled
-                                <input type="checkbox"  defaultChecked={this.props.settingsProperties.verse.isEnabled} ref={(input) => this.verseIsEnabled = input} />
+                                <div class="right-align">Feature Enabled</div>
+                                <div class="left-align"><input type="checkbox"  defaultChecked={this.props.settingsProperties.verse.isEnabled} ref={(input) => this.verseIsEnabled = input} /></div>
                             </label>
                         </div>
                     </div> 
@@ -134,16 +135,16 @@ class SettingsModal extends React.Component {
                         <div class="extensionHeader">Weather Settings</div>
                         <div class="extensionContentWrapper">
                             <label>
-                                Feature Enabled
-                                <input type="checkbox" defaultChecked={this.props.settingsProperties.weather.isEnabled} ref={(input) => this.weatherIsEnabled = input} />
+                                <div class="right-align">Feature Enabled</div>
+                                <div class="left-align"><input type="checkbox" defaultChecked={this.props.settingsProperties.weather.isEnabled} ref={(input) => this.weatherIsEnabled = input} /></div>
                             </label>
                             <label>
-                                Zip Code
-                                <input  type="number" defaultValue={this.props.settingsProperties.weather.zip}  ref={(input) => this.weatherZip = input}  />
+                                <div class="right-align">Zip Code</div>
+                                <div class="left-align"><input  type="number" defaultValue={this.props.settingsProperties.weather.zip}  ref={(input) => this.weatherZip = input}  /></div>
                             </label>
                             <label>
-                                Weather Map API Key
-                                <input defaultValue={this.props.settingsProperties.weather.apiKey}  ref={(input) => this.weatherAPIKey = input}  />
+                                <div class="right-align">Weather Map API Key</div>
+                                <div class="left-align"><input defaultValue={this.props.settingsProperties.weather.apiKey}  ref={(input) => this.weatherAPIKey = input}  /></div>
                             </label>
                         </div>
                     </div> 
@@ -151,27 +152,29 @@ class SettingsModal extends React.Component {
                         <div class="extensionHeader">Photos Settings</div>
                         <div class="extensionContentWrapper">
                             <label>
-                                Feature Enabled
-                                <input type="checkbox" defaultChecked={this.props.settingsProperties.photos.isEnabled} ref={(input) => this.photosIsEnabled = input} />
+                                <div class="right-align">Feature Enabled</div>
+                                <div class="left-align"><input type="checkbox" defaultChecked={this.props.settingsProperties.photos.isEnabled} ref={(input) => this.photosIsEnabled = input} /></div>
                             </label>
                             <label>
-                                Flicker API Key
-                                <input defaultValue={this.props.settingsProperties.photos.apiKey}  ref={(input) => this.photosAPIKey = input}  />
+                                <div class="right-align">Flickr API Key</div>
+                                <div class="left-align"><input defaultValue={this.props.settingsProperties.photos.apiKey}  ref={(input) => this.photosAPIKey = input}  /></div>
                             </label>
                             <label>
-                                Flicker Secret API Key
-                                <input defaultValue={this.props.settingsProperties.photos.apiSecret}  ref={(input) => this.photosAPISecret = input}  />
+                                <div class="right-align">Flickr Secret API Key</div>
+                                <div class="left-align"><input defaultValue={this.props.settingsProperties.photos.apiSecret}  ref={(input) => this.photosAPISecret = input}  /></div>
                             </label>
                             <label>
-                                Flicker Account ID
-                                <input defaultValue={this.props.settingsProperties.photos.apiUser}  ref={(input) => this.photosAPIUser = input}  />
+                                <div class="right-align">Flickr Account ID</div>
+                                <div class="left-align"><input defaultValue={this.props.settingsProperties.photos.apiUser}  ref={(input) => this.photosAPIUser = input}  /></div>
                             </label>
-                            <label>
+                            <div class="extensionSubheader">
                                 Displayed Albums
-                                {/* TODO display albums with option to enable/disable */}
-                            </label>
+                            </div>
+                            {this.getAlbumSettingsComponents()}
+
                         </div>
                     </div> 
+                    {/* Any future extension should be added here, mimicking the format from above */}
                 </div>
 
 
@@ -186,12 +189,35 @@ class SettingsModal extends React.Component {
 
             </div>
         );
-        
+    }
+
+    getAlbumSettingsComponents() {
+        let components = []
+        this.props.settingsProperties.photos.albumSet.albums.forEach(album => {
+            components.push(
+                <label>
+                    <div class="right-align">{album.name}</div>
+                    <div class="left-align"><input type="checkbox" defaultChecked={album.isEnabled}  ref={(input) => this["album_" + album.id] = input}  /></div>
+                </label>
+            )
+        });
+        return components
     }
 
     saveSettings = () => {
         // Any future settings should be added to this JSON payload
         // the JSON class properties should match that found in /server/extensions.py and the settings.json file
+
+        // Albums can be set to enabled or disabled, but are not added
+        // So iterate over what we have currently, and set according to the user-inputted settings
+        let newAlbumSet = this.props.settingsProperties.photos.albumSet
+        newAlbumSet.albums.forEach(album => {
+            let albumEnabledElement = this["album_" + album.id]
+            if (albumEnabledElement != undefined) {
+                album.isEnabled = albumEnabledElement.checked
+            }
+        });
+
         let settings = {
             Clock: {
                 isEnabled: this.clockIsEnabled.checked
@@ -209,7 +235,7 @@ class SettingsModal extends React.Component {
                 apiKey: this.photosAPIKey.value,
                 apiSecret: this.photosAPISecret.value,
                 apiUser: this.photosAPIUser.value,
-                albumSet: null
+                albumSet: newAlbumSet
             }
         }
         // TODO ADD SUPPORT FOR ALBUMS

@@ -55,9 +55,6 @@ def getAlbums(userSettings):
     flickr = flickrapi.FlickrAPI(userSettings.apiKey, userSettings.apiSecret)
     userIDRequest = "%s@N05" % (userSettings.apiUser)
     result = flickr.photosets.getList(user_id=userIDRequest, format='parsed-json')
-    print(result)
-    print(result['photosets'])
-    print(result['photosets']['photoset'])
     jsonAlbums = result['photosets']['photoset']
     albums =  AlbumSet()
     for a in jsonAlbums:

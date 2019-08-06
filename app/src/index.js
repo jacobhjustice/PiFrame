@@ -292,7 +292,8 @@ class Frame extends React.Component {
             settings.Photos.albumSet,
             settings.Photos.apiKey,
             settings.Photos.apiSecret,
-            settings.Photos.apiUser
+            settings.Photos.apiUser,
+            settings.Photos.albumSet
         )
 
         let clockSettings = new ClockSettings(
