@@ -12,7 +12,6 @@ CORS(app)
 def getSettings():
     userSettings = settings.read()
     jsonString = json.dumps(userSettings.toJSON())
-    # session['SETTINGS'] = jsonString
     return jsonString
 
 @app.route('/verse/', methods=["GET"])
@@ -37,7 +36,7 @@ def getWeather(includeForecast):
     userSettings = settings.read()
     if userSettings.Weather.isEnabled != True:
         return '{"isNotEnabled": "True"}'
-    json = weather.getWeather(includeForecast, userSettings.Weather.zip)
+    json = weather.getWeather(includeForecast, userSettings.Weather)
     return json
 
 @app.route('/settings/', methods=["POST"])

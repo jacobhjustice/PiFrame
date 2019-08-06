@@ -3,7 +3,7 @@
 # PiFrame weather.py
 # Manages weather data as well as forecast for the "Weather" Extension
 # Uses Open Weather API https://openweathermap.org/api
-import requests, secret, settings, json, datetime
+import requests, settings, json, datetime
 
 # Request URLS for weather
 currentWeatherRequestURL = lambda zip, apiKey : ("http://api.openweathermap.org/data/2.5/weather?zip=%s&appid=%s&units=imperial" % (zip, apiKey))
@@ -49,8 +49,11 @@ def getWeatherResponseItemFromData(data, timeStamp):
 # getWeather queries the weather API for the client. By default, the current data is retrieved.
 # param :includeForecast: a boolean value that indicates if forecast data should be included in the request
 # return :WeatherResponse: the results of the weather query/parse
-def getWeather(includeForecast, zip):
-    url = currentWeatherRequestURL(zip, secret.weather_api_key)
+def getWeather(includeForecast, settings):
+    zip = settings.zip
+    apiKey = settings.apiKey
+    print(apiKey)
+    url = currentWeatherRequestURL(zip, apiKey)
     response = requests.get(url)
 
     # Make sure request was completed
@@ -69,7 +72,7 @@ def getWeather(includeForecast, zip):
     todayForecast = []
     upcomingForecast = []
     if includeForecast:
-        url = forecastWeatherRequestURL(zip, secret.weather_api_key)
+        url = forecastWeatherRequestURL(zip, apiKey)
         response = requests.get(url)
 
         # If request wasn't completed, skip to end and return what we have

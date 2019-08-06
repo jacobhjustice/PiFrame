@@ -1,7 +1,7 @@
 # PiFrame photos.py
 # Downloads photos from flickr and packages them for use on the client
 
-import settings, secret, flickrapi, requests, os, json
+import settings, flickrapi, requests, os, json
 
 flickr_key = 'ea3934a32400cfc52bb32b32ba355dfc'
 
@@ -52,8 +52,9 @@ def getAlbumsForClient(userSettings):
 
 # getAlbums retrieves all albums from flickr and packages them inside of an AlbumSet
 def getAlbums(userSettings):
-    flickr = flickrapi.FlickrAPI(flickr_key, secret.flickr_key_secret)
-    result = flickr.photosets.getList(user_id='182761952@N05', format='parsed-json')
+    flickr = flickrapi.FlickrAPI(userSettings.apiKey, userSettings.apiSecret)
+    userIDRequest = "%s@N05" % (userSettings.apiUser)
+    result = flickr.photosets.getList(user_id=userIDRequest, format='parsed-json')
     print(result)
     print(result['photosets'])
     print(result['photosets']['photoset'])
