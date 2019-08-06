@@ -98,7 +98,9 @@ class SettingsModal extends React.Component {
     constructor(props) {
         super(props)
         
-        this.state = props.settingsProperties
+        this.state = {
+            isProcessing: false
+        }
     }
 
     render() {
@@ -179,11 +181,17 @@ class SettingsModal extends React.Component {
 
 
                 <div class="buttonWrapper">
-                    <div class ="button denial big" onClick={this.props.closeCallback}>
-                        <div className="header">Cancel</div>               
+                    <div class={!this.state.isProcessing ? "" : "no-display"}>
+
+                        <div class ="button denial big" onClick={this.props.closeCallback}>
+                            <div className="header">Cancel</div>               
+                        </div>
+                        <div class ="button approval big" onClick={this.saveSettings}>
+                            <div className="header">Save</div>               
+                        </div>
                     </div>
-                    <div class ="button approval big" onClick={this.saveSettings}>
-                        <div className="header">Save</div>               
+                    <div class={this.state.isProcessing ? "" : "no-display"}>
+                        <div class="processing">Processing...</div>
                     </div>
                 </div>
 
@@ -205,8 +213,10 @@ class SettingsModal extends React.Component {
     }
 
     saveSettings = () => {
-        // Any future settings should be added to this JSON payload
-        // the JSON class properties should match that found in /server/extensions.py and the settings.json file
+
+        this.setState({
+            isProcessing: true
+        })
 
         // Albums can be set to enabled or disabled, but are not added
         // So iterate over what we have currently, and set according to the user-inputted settings
@@ -218,6 +228,8 @@ class SettingsModal extends React.Component {
             }
         });
 
+        // Any future settings should be added to this JSON payload
+        // the JSON class properties should match that found in /server/extensions.py and the settings.json file
         let settings = {
             Clock: {
                 isEnabled: this.clockIsEnabled.checked
@@ -238,7 +250,7 @@ class SettingsModal extends React.Component {
                 albumSet: newAlbumSet
             }
         }
-        // TODO ADD SUPPORT FOR ALBUMS
+
         fetch(server + 'settings/', {
             method: 'POST',
             headers: {
@@ -250,11 +262,17 @@ class SettingsModal extends React.Component {
         .then(res => res.json()) 
         .then(
             (result) => {
+                this.setState({
+                    isProcessing: false
+                })
                 this.props.updateCallback(result)
                 this.props.closeCallback()
              },
              (error) => {
                  console.log(error)
+                 this.setState({
+                    isProcessing: false
+                })
              }
          )
     }

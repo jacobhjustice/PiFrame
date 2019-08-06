@@ -4,8 +4,11 @@ body {
     font-size: 18px;
 }
 
-/* a16e83 */
-/* cebc81 */
+@media (max-height: 685px) {
+    body {
+        font-size: 16px;
+    }
+}
 
 .lineWrapper {
     width: 100%;
@@ -16,7 +19,6 @@ body {
     top: 25px;
     left: 0px;
     z-index: 89;
-    /* width: 300px; */
     height: 60px;
 }
 
@@ -48,6 +50,13 @@ body {
     box-sizing: border-box;
     text-align: center;
     background-color: rgba(25, 24, 26, .8);
+}
+
+.buttonWrapper .processing {
+    color: #cebc81;
+    font-size: 32px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .button {
@@ -168,7 +177,6 @@ body {
     box-sizing: border-box;
     position: relative;
     padding: 10px;
-    font-size: 18px;
 }
 
 #weatherForecast .weatherForecastItem .itemWrapper img {
@@ -195,6 +203,10 @@ body {
 
 .hidden {
     visibility: hidden;
+}
+
+.no-display {
+    display: none;
 }
 
 #clock .header div {

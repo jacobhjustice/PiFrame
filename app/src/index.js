@@ -69,9 +69,9 @@ class Extensions extends React.Component {
             })
         }, 1000) 
 
-        // TODO fetch photos?
         this.getWeather(true)
         this.getVerse()
+        this.getImages()
     }
 
 
