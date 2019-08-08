@@ -183,10 +183,10 @@ class SettingsModal extends React.Component {
                 <div className="buttonWrapper">
                     <div className={!this.state.isProcessing ? "" : "no-display"}>
 
-                        <div class ="button denial big" onClick={this.props.closeCallback}>
+                        <div className="button denial big" onClick={this.props.closeCallback}>
                             <div className="header">Cancel</div>               
                         </div>
-                        <div class ="button approval big" onClick={this.saveSettings}>
+                        <div className="button approval big" onClick={this.saveSettings}>
                             <div className="header">Save</div>               
                         </div>
                     </div>
