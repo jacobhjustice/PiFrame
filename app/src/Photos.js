@@ -7,7 +7,7 @@ const images = require.context('../public/img/', true);
 
 class ImageManager {
     constructor(albumSet) {
-        if(albumSet != undefined) {
+        if(albumSet !== undefined) {
             let albums = [] 
             albumSet.albums.forEach(album => {
                 if (album.isEnabled && album.photos.length > 0) {
@@ -24,7 +24,7 @@ class ImageManager {
 
     getPhoto() {
         var album =  this.albums[this.currentAlbum]
-        if(album == undefined) {
+        if(album === undefined) {
             this.currentAlbum = 0
             return undefined 
         }
@@ -34,7 +34,7 @@ class ImageManager {
         }
 
         var photo = album.photos[this.currentPhoto]
-        if(photo == undefined) {
+        if(photo === undefined) {
             this.currentAlbum  = (this.currentAlbum + 1) % this.albums.length
             this.currentPhoto = 0
             return undefined
@@ -52,7 +52,7 @@ class PhotosProperties {
     constructor(isEnabled, albumSet, tick) {
         this.isEnabled = isEnabled
         this.tick = tick
-        this.isLoaded = albumSet != undefined
+        this.isLoaded = albumSet !== undefined
         if (this.isLoaded) {
             this.imageManager = new ImageManager(albumSet)
         } else {
@@ -71,7 +71,7 @@ class Photos extends React.Component {
             return null
         }
 
-        if (this.props.tick == 0 || this.props.imageManager.current == undefined) {
+        if (this.props.tick === 0 || this.props.imageManager.current === undefined) {
             this.props.imageManager.getPhoto()
         }
         return (

@@ -8,7 +8,7 @@ export { CurrentWeather, CurrentWeatherProperties, WeatherForecast, WeatherForec
 class CurrentWeatherProperties {
     constructor(isEnabled, location, sunriseEpoch, sunsetEpoch, temperature, humidity, icon) {
         this.isEnabled = isEnabled
-        this.isLoaded = temperature != undefined
+        this.isLoaded = temperature !== undefined
         if (this.isLoaded) {
             this.location = location
             this.sunrise = new Date(sunriseEpoch*1000)
@@ -58,7 +58,7 @@ class CurrentWeather extends React.Component {
 
 class WeatherForecastItemProperties {
     constructor(temperature, time, icon) {
-        this.isLoaded = temperature != undefined 
+        this.isLoaded = temperature !== undefined 
         if (this.isLoaded) {
             this.temperature = temperature
             this.icon = icon
@@ -91,7 +91,7 @@ class WeatherForecastItem  extends  React.Component {
 class WeatherForecastProperties {
     constructor (isEnabled, dailyForecasts, key) {
         this.isEnabled = isEnabled
-        this.isLoaded = dailyForecasts != undefined && dailyForecasts.length == 8
+        this.isLoaded = dailyForecasts !== undefined && dailyForecasts.length === 8
         if (this.isLoaded) {
             this.dailyForecasts = dailyForecasts
         }

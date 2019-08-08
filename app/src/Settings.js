@@ -222,7 +222,7 @@ class SettingsModal extends React.Component {
         let newAlbumSet = this.props.settingsProperties.photos.albumSet
         newAlbumSet.albums.forEach(album => {
             let albumEnabledElement = this["album_" + album.id]
-            if (albumEnabledElement != undefined) {
+            if (albumEnabledElement !== undefined) {
                 album.isEnabled = albumEnabledElement.checked
             }
         });

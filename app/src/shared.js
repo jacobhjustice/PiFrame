@@ -6,13 +6,13 @@ const months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "S
 export const server = "http://127.0.0.1:5000/"
 
 export function getDisplayTime(date, isBlinkingOnSecond) {
-    if (date == undefined) {
+    if (date === undefined) {
         return 
     }
     return (
     <div>
         {((date.getHours() + 11) % 12 + 1 < 10 ? "0" : "") + ((date.getHours() + 11) % 12 + 1)}
-        <div className={(isBlinkingOnSecond && date.getSeconds() % 2 == 0 ? "hidden" : "") + " inline"}>:</div>
+        <div className={(isBlinkingOnSecond && date.getSeconds() % 2 === 0 ? "hidden" : "") + " inline"}>:</div>
         {(date.getMinutes() < 10 ? "0" : "") + date.getMinutes()}
         {date.getHours() >= 12 ? " PM" : " AM"}
     </div>)
@@ -30,7 +30,7 @@ export function getDateString(date, includeYear) {
 }
 
 export function evaluateIfUpdateRequired(nowTime, currentTimeOnProp, maxTimeBeforeUpdate) {
-    if (currentTimeOnProp == undefined) {
+    if (currentTimeOnProp === undefined) {
         return true
     }
     return nowTime - currentTimeOnProp > maxTimeBeforeUpdate

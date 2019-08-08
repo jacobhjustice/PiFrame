@@ -7,7 +7,7 @@ export { Verse, VerseProperties }
 class VerseProperties {
     constructor(isEnabled, quote, reference) {
         this.isEnabled = isEnabled
-        this.isLoaded = quote != undefined
+        this.isLoaded = quote !== undefined
         if (this.isLoaded) {
             this.quote = quote
             this.reference = reference

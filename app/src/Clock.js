@@ -7,7 +7,7 @@ export { Clock, ClockProperties }
 class ClockProperties {
     constructor(isEnabled, time) {
         this.isEnabled = isEnabled
-        this.isLoaded = time != undefined
+        this.isLoaded = time !== undefined
         this.time = time
     }
 }

@@ -40,17 +40,17 @@ class Extensions extends React.Component {
             let photosProps = this.state.Photos
             photosProps.tick = ++this.state.Photos.tick % 6
             
-            // Run on the minute (i.e., seconds == 0)
-            if (currentTime.getSeconds() == 0) {
+            // Run on the minute (i.e., seconds === 0)
+            if (currentTime.getSeconds() === 0) {
                 let fullForecastForWeather = false
 
-                // Run on the hour (i.e., minutes == 0)
-                if (currentTime.getMinutes() == 0) { 
+                // Run on the hour (i.e., minutes === 0)
+                if (currentTime.getMinutes() === 0) { 
                     fullForecastForWeather = true
                     this.getVerse()
                     
-                    // Run at midnight (i.e., hours ==0)
-                    if (currentTime.getHours() == 0) {
+                    // Run at midnight (i.e., hours ===0)
+                    if (currentTime.getHours() === 0) {
                         this.getImages()
                     }
                 }
@@ -73,7 +73,7 @@ class Extensions extends React.Component {
     // If the properties get updated, we have recieved an update in settings
     // If settings are updated, we want to do a full re-render based on our new settings.
     componentDidUpdate(oldProps) {
-        if(oldProps.settings !== this.props.settings) {
+        if(oldProps.settings !==== this.props.settings) {
             clearInterval(this.interval);
             this.setDefaults()
             this.frameSetup()
