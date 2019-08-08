@@ -5,8 +5,8 @@ import  { CurrentWeather, CurrentWeatherProperties, WeatherForecast, WeatherFore
 import  { Clock, ClockProperties } from './Clock'
 import  { Photos, PhotosProperties } from './Photos'
 import  { Verse, VerseProperties } from './Verse'
-import  { SettingsButton, SettingsProperties, ClockSettings, VerseSettings, WeatherSettings, PhotosSettings  } from './Settings'
-import { evaluateIfUpdateRequired, server } from './shared'
+import  { Settings, SettingsProperties, ClockSettings, VerseSettings, WeatherSettings, PhotosSettings  } from './Settings'
+import { server } from './shared'
 
 // Extensions drives each extension within the application
 // It has two responsibilities: to maintain each extension's state, and to implement settings/results from the server.
@@ -275,7 +275,7 @@ class Frame extends React.Component {
         return(
             <div id="frame">
                 <Extensions key={this.state.versionSinceMount} settings={this.state.Settings}/>
-                <SettingsButton settings={this.state.Settings} updateCallback={this.settingsUpdateCallback} />  
+                <Settings settings={this.state.Settings} updateCallback={this.settingsUpdateCallback} />  
             </div>
         );
     }

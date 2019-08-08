@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {server} from './shared'
 const images = require.context('../public/img/icon', true);
 
-export { SettingsButton, SettingsProperties, ClockSettings, VerseSettings, WeatherSettings, PhotosSettings }
+export { Settings, SettingsProperties, ClockSettings, VerseSettings, WeatherSettings, PhotosSettings }
 
 class ClockSettings {
     constructor (isEnabled) {
@@ -54,8 +54,7 @@ class ModalProperties {
     }
 }
 
-// TODO rename settings" and treat contents as "SettingsButton" and "SettingsModal"
-class SettingsButton extends React.Component {
+class Settings extends React.Component {
     getModalProps() {
         return new ModalProperties(this.props.settings, this.state.isOpen, this.closeModal, this.props.updateCallback)
     }
@@ -71,8 +70,8 @@ class SettingsButton extends React.Component {
     render() {
         let modal = new SettingsModal(this.getModalProps())
         return(
-            <div id="settingsButton"  >
-                <div id="buttonElement" className="button" onClick={this.openModal}>
+            <div id="settings"  >
+                <div id="settingsButton" className="button" onClick={this.openModal}>
                     <img src={images('./settings.svg') }/>
                     <div className="header">Settings</div>                
                 </div>
@@ -123,6 +122,7 @@ class SettingsModal extends React.Component {
                         </div>
                     </div> 
 
+                    {/* Verse Settings */}
                     <div className="extensionWrapper">
                         <div className="extensionHeader">Verse Settings</div>
                         <div className="extensionContentWrapper">
@@ -133,6 +133,7 @@ class SettingsModal extends React.Component {
                         </div>
                     </div> 
 
+                    {/* Weather Settings */}
                     <div className="extensionWrapper">
                         <div className="extensionHeader">Weather Settings</div>
                         <div className="extensionContentWrapper">
@@ -150,6 +151,8 @@ class SettingsModal extends React.Component {
                             </label>
                         </div>
                     </div> 
+
+                    {/* Photos Settings */}
                     <div className="extensionWrapper">
                         <div className="extensionHeader">Photos Settings</div>
                         <div className="extensionContentWrapper">
@@ -203,7 +206,7 @@ class SettingsModal extends React.Component {
         let components = []
         this.props.settingsProperties.photos.albumSet.albums.forEach(album => {
             components.push(
-                <label>
+                <label key={album.id}>
                     <div className="right-align">{album.name}</div>
                     <div className="left-align"><input type="checkbox" defaultChecked={album.isEnabled}  ref={(input) => this["album_" + album.id] = input}  /></div>
                 </label>

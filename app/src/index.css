@@ -287,16 +287,15 @@ body {
 }
 
 
-#settingsButton #buttonElement {
+#settings #settingsButton {
     position: absolute;
     bottom: 20px;
     left: 20px;
     /* width: 100px; */
-
     z-index: 200;
 }
 
-#settingsButton #buttonElement img {
+#settings #settingsButton img {
     width: 16px;
     height: 20px;
     margin-top: 5px;
