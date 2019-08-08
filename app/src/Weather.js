@@ -74,7 +74,7 @@ class WeatherForecastItem  extends  React.Component {
     
     render() {
         return(
-            <div className="weatherForecastItem">
+            <div className="weatherForecastItem" key={this.props.time}>
                 <div className="left itemWrapper">
                     <img src={this.props.icon} />
                 </div>
@@ -89,7 +89,7 @@ class WeatherForecastItem  extends  React.Component {
 }
 
 class WeatherForecastProperties {
-    constructor (isEnabled, dailyForecasts) {
+    constructor (isEnabled, dailyForecasts, key) {
         this.isEnabled = isEnabled
         this.isLoaded = dailyForecasts != undefined && dailyForecasts.length == 8
         if (this.isLoaded) {

@@ -225,7 +225,8 @@ body {
     background-color: rgba(25, 24, 26, .7 );
     padding: 10px 0;
     box-sizing: border-box;
-    left: calc(50vw - 225px);
+    left: calc(50vw - 300px);
+    width: 600px;
 }
 
 #verse .wrapper {

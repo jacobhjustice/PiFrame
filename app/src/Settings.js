@@ -72,7 +72,7 @@ class SettingsButton extends React.Component {
         let modal = new SettingsModal(this.getModalProps())
         return(
             <div id="settingsButton"  >
-                <div id="buttonElement" class="button" onClick={this.openModal}>
+                <div id="buttonElement" className="button" onClick={this.openModal}>
                     <img src={images('./settings.svg') }/>
                     <div className="header">Settings</div>                
                 </div>
@@ -111,65 +111,65 @@ class SettingsModal extends React.Component {
         return(
             <div id="settingsModal">
 
-                <div class="modalContent">
+                <div className="modalContent">
                     {/* Clock Settings */}
-                    <div class="extensionWrapper">
-                        <div class="extensionHeader">Clock Settings</div>
-                        <div class="extensionContentWrapper">
+                    <div className="extensionWrapper">
+                        <div className="extensionHeader">Clock Settings</div>
+                        <div className="extensionContentWrapper">
                             <label>
-                                <div class="right-align">Feature Enabled</div>
-                                <div class="left-align"><input type="checkbox"  defaultChecked={this.props.settingsProperties.clock.isEnabled} ref={(input) => this.clockIsEnabled = input} /></div>
+                                <div className="right-align">Feature Enabled</div>
+                                <div className="left-align"><input type="checkbox"  defaultChecked={this.props.settingsProperties.clock.isEnabled} ref={(input) => this.clockIsEnabled = input} /></div>
                             </label>
                         </div>
                     </div> 
 
-                    <div class="extensionWrapper">
-                        <div class="extensionHeader">Verse Settings</div>
-                        <div class="extensionContentWrapper">
+                    <div className="extensionWrapper">
+                        <div className="extensionHeader">Verse Settings</div>
+                        <div className="extensionContentWrapper">
                             <label>
-                                <div class="right-align">Feature Enabled</div>
-                                <div class="left-align"><input type="checkbox"  defaultChecked={this.props.settingsProperties.verse.isEnabled} ref={(input) => this.verseIsEnabled = input} /></div>
+                                <div className="right-align">Feature Enabled</div>
+                                <div className="left-align"><input type="checkbox"  defaultChecked={this.props.settingsProperties.verse.isEnabled} ref={(input) => this.verseIsEnabled = input} /></div>
                             </label>
                         </div>
                     </div> 
 
-                    <div class="extensionWrapper">
-                        <div class="extensionHeader">Weather Settings</div>
-                        <div class="extensionContentWrapper">
+                    <div className="extensionWrapper">
+                        <div className="extensionHeader">Weather Settings</div>
+                        <div className="extensionContentWrapper">
                             <label>
-                                <div class="right-align">Feature Enabled</div>
-                                <div class="left-align"><input type="checkbox" defaultChecked={this.props.settingsProperties.weather.isEnabled} ref={(input) => this.weatherIsEnabled = input} /></div>
+                                <div className="right-align">Feature Enabled</div>
+                                <div className="left-align"><input type="checkbox" defaultChecked={this.props.settingsProperties.weather.isEnabled} ref={(input) => this.weatherIsEnabled = input} /></div>
                             </label>
                             <label>
-                                <div class="right-align">Zip Code</div>
-                                <div class="left-align"><input  type="number" defaultValue={this.props.settingsProperties.weather.zip}  ref={(input) => this.weatherZip = input}  /></div>
+                                <div className="right-align">Zip Code</div>
+                                <div className="left-align"><input  type="number" defaultValue={this.props.settingsProperties.weather.zip}  ref={(input) => this.weatherZip = input}  /></div>
                             </label>
                             <label>
-                                <div class="right-align">Weather Map API Key</div>
-                                <div class="left-align"><input defaultValue={this.props.settingsProperties.weather.apiKey}  ref={(input) => this.weatherAPIKey = input}  /></div>
+                                <div className="right-align">Weather Map API Key</div>
+                                <div className="left-align"><input defaultValue={this.props.settingsProperties.weather.apiKey}  ref={(input) => this.weatherAPIKey = input}  /></div>
                             </label>
                         </div>
                     </div> 
-                    <div class="extensionWrapper">
-                        <div class="extensionHeader">Photos Settings</div>
-                        <div class="extensionContentWrapper">
+                    <div className="extensionWrapper">
+                        <div className="extensionHeader">Photos Settings</div>
+                        <div className="extensionContentWrapper">
                             <label>
-                                <div class="right-align">Feature Enabled</div>
-                                <div class="left-align"><input type="checkbox" defaultChecked={this.props.settingsProperties.photos.isEnabled} ref={(input) => this.photosIsEnabled = input} /></div>
+                                <div className="right-align">Feature Enabled</div>
+                                <div className="left-align"><input type="checkbox" defaultChecked={this.props.settingsProperties.photos.isEnabled} ref={(input) => this.photosIsEnabled = input} /></div>
                             </label>
                             <label>
-                                <div class="right-align">Flickr API Key</div>
-                                <div class="left-align"><input defaultValue={this.props.settingsProperties.photos.apiKey}  ref={(input) => this.photosAPIKey = input}  /></div>
+                                <div className="right-align">Flickr API Key</div>
+                                <div className="left-align"><input defaultValue={this.props.settingsProperties.photos.apiKey}  ref={(input) => this.photosAPIKey = input}  /></div>
                             </label>
                             <label>
-                                <div class="right-align">Flickr Secret API Key</div>
-                                <div class="left-align"><input defaultValue={this.props.settingsProperties.photos.apiSecret}  ref={(input) => this.photosAPISecret = input}  /></div>
+                                <div className="right-align">Flickr Secret API Key</div>
+                                <div className="left-align"><input defaultValue={this.props.settingsProperties.photos.apiSecret}  ref={(input) => this.photosAPISecret = input}  /></div>
                             </label>
                             <label>
-                                <div class="right-align">Flickr Account ID</div>
-                                <div class="left-align"><input defaultValue={this.props.settingsProperties.photos.apiUser}  ref={(input) => this.photosAPIUser = input}  /></div>
+                                <div className="right-align">Flickr Account ID</div>
+                                <div className="left-align"><input defaultValue={this.props.settingsProperties.photos.apiUser}  ref={(input) => this.photosAPIUser = input}  /></div>
                             </label>
-                            <div class="extensionSubheader">
+                            <div className="extensionSubheader">
                                 Displayed Albums
                             </div>
                             {this.getAlbumSettingsComponents()}
@@ -180,8 +180,8 @@ class SettingsModal extends React.Component {
                 </div>
 
 
-                <div class="buttonWrapper">
-                    <div class={!this.state.isProcessing ? "" : "no-display"}>
+                <div className="buttonWrapper">
+                    <div className={!this.state.isProcessing ? "" : "no-display"}>
 
                         <div class ="button denial big" onClick={this.props.closeCallback}>
                             <div className="header">Cancel</div>               
@@ -190,8 +190,8 @@ class SettingsModal extends React.Component {
                             <div className="header">Save</div>               
                         </div>
                     </div>
-                    <div class={this.state.isProcessing ? "" : "no-display"}>
-                        <div class="processing">Processing...</div>
+                    <div className={this.state.isProcessing ? "" : "no-display"}>
+                        <div className="processing">Processing...</div>
                     </div>
                 </div>
 
@@ -204,8 +204,8 @@ class SettingsModal extends React.Component {
         this.props.settingsProperties.photos.albumSet.albums.forEach(album => {
             components.push(
                 <label>
-                    <div class="right-align">{album.name}</div>
-                    <div class="left-align"><input type="checkbox" defaultChecked={album.isEnabled}  ref={(input) => this["album_" + album.id] = input}  /></div>
+                    <div className="right-align">{album.name}</div>
+                    <div className="left-align"><input type="checkbox" defaultChecked={album.isEnabled}  ref={(input) => this["album_" + album.id] = input}  /></div>
                 </label>
             )
         });
