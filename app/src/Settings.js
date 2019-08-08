@@ -214,10 +214,6 @@ class SettingsModal extends React.Component {
 
     saveSettings = () => {
 
-        this.setState({
-            isProcessing: true
-        })
-
         // Albums can be set to enabled or disabled, but are not added
         // So iterate over what we have currently, and set according to the user-inputted settings
         let newAlbumSet = this.props.settingsProperties.photos.albumSet
