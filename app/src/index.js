@@ -75,6 +75,7 @@ class Extensions extends React.Component {
     componentDidUpdate(oldProps) {
         if(oldProps.settings !== this.props.settings) {
             clearInterval(this.interval);
+            this.setDefaults()
             this.frameSetup()
         }
     }
@@ -104,23 +105,41 @@ class Extensions extends React.Component {
         clearInterval(this.interval);
     }  
 
-    constructor(props) {
-        super(props)
-
+    setDefaults() {
         let defaultCurrentWeatherProps = new CurrentWeatherProperties(this.props.settings.weather.isEnabled)
         let defaultForecastWeatherProps = new WeatherForecastProperties(this.props.settings.weather.isEnabled)
         let defaultClockProps = new ClockProperties(this.props.settings.clock.isEnabled, new Date())
-        let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled)
+        let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, this.props.settings.photos.albumSet, 1)
         let verseProps = new VerseProperties(this.props.settings.verse.isEnabled)
         this.currentPhoto = 0
         this.currentAlbum = 0
+        this.setState({
+            CurrentWeather: defaultCurrentWeatherProps, 
+            WeatherForecast: defaultForecastWeatherProps,
+            Clock: defaultClockProps,
+            Photos: photosProps,
+            Verse: verseProps,
+        })
+    }
+
+    constructor(props) {
+        super(props)
+ 
+        let defaultCurrentWeatherProps = new CurrentWeatherProperties(this.props.settings.weather.isEnabled)
+        let defaultForecastWeatherProps = new WeatherForecastProperties(this.props.settings.weather.isEnabled)
+        let defaultClockProps = new ClockProperties(this.props.settings.clock.isEnabled, new Date())
+        let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, this.props.settings.photos.albumSet, 1)
+        let verseProps = new VerseProperties(this.props.settings.verse.isEnabled)
+        this.currentPhoto = 0
+        this.currentAlbum = 0
+
         this.state = {
             CurrentWeather: defaultCurrentWeatherProps, 
             WeatherForecast: defaultForecastWeatherProps,
             Clock: defaultClockProps,
             Photos: photosProps,
             Verse: verseProps,
-        } 
+        }
     }
 
     // TODO call getImages periodically?
@@ -129,8 +148,15 @@ class Extensions extends React.Component {
         .then(res => res.json()) 
         .then(
             (result) => {
+                if (result.isNotEnabled) {
+                    let photosProps = new PhotosProperties()
+                    this.setState({
+                        Photos: photosProps
+                    })
+                    return
+                }
                 let images = JSON.parse(result)
-                let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, images, 0)
+                let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, images, 1)
                 this.setState({
                     Photos: photosProps
                 })

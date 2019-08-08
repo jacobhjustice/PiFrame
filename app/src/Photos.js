@@ -29,6 +29,10 @@ class ImageManager {
             return undefined 
         }
 
+        if(!album.isEnabled) {
+            this.currentAlbum = (this.currentAlbum + 1) % this.albums.length
+        }
+
         var photo = album.photos[this.currentPhoto]
         if(photo == undefined) {
             this.currentAlbum  = (this.currentAlbum + 1) % this.albums.length

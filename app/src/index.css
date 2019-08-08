@@ -221,11 +221,11 @@ body {
 #verse {
     position: absolute;
     bottom: 0px;
-    width: 99.5%;
     z-index: 89;
     background-color: rgba(25, 24, 26, .7 );
     padding: 10px 0;
     box-sizing: border-box;
+    left: calc(50vw - 225px);
 }
 
 #verse .wrapper {
