@@ -8,9 +8,6 @@ import  { Verse, VerseProperties } from './Verse'
 import  { SettingsButton, SettingsProperties, ClockSettings, VerseSettings, WeatherSettings, PhotosSettings  } from './Settings'
 import { evaluateIfUpdateRequired, server } from './shared'
 
-
-const images = require.context('../public/img/', true);
-
 // Extensions drives each extension within the application
 // It has two responsibilities: to maintain each extension's state, and to implement settings/results from the server.
 // By letting Extensions maintain/update each extension individually, we can drive the entire app from one timer.
@@ -39,11 +36,9 @@ class Extensions extends React.Component {
             // Clock: Every second
             let clockProps = new ClockProperties(this.props.settings.clock.isEnabled, currentTime)
 
-            // Photos: Every 6 seconds
+            // Photos: Should use existing properties, but increment the timer. Every 6th second, the manager get a new photo.
             let photosProps = this.state.Photos
-            if (evaluateIfUpdateRequired(new Date(), photosProps.timeOfInstantiation, 6000)) {
-                photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, this.getPhoto())
-            }
+            photosProps.tick = ++this.state.Photos.tick % 6
             
             // Run on the minute (i.e., seconds == 0)
             if (currentTime.getSeconds() == 0) {
@@ -120,7 +115,6 @@ class Extensions extends React.Component {
         this.currentPhoto = 0
         this.currentAlbum = 0
         this.state = {
-            photo: undefined,
             CurrentWeather: defaultCurrentWeatherProps, 
             WeatherForecast: defaultForecastWeatherProps,
             Clock: defaultClockProps,
@@ -129,46 +123,17 @@ class Extensions extends React.Component {
         } 
     }
 
-    // TODO Add empty/loading screen
-    // TODO refactor this to photos.js (how should data be sent to this? util function? Photo Manager class?)
-    getPhoto() {
-        let settings = this.props.settings
-        if(settings == undefined || settings.photos == undefined) {
-            return undefined
-        }
-        var albums = settings["photos"]["albumSet"]["albums"]
-        var album = !!albums ? albums[this.currentAlbum] : undefined
-        if(album == undefined) {
-            this.currentAlbum = 0
-            return undefined 
-        }
-
-        if(!album.isEnabled) {
-            this.currentAlbum = (this.currentAlbum + 1) % albums.length
-            return undefined
-        }
-
-        var photo = !!album["photos"] ? album["photos"][this.currentPhoto] : undefined
-        if(photo == undefined) {
-            this.currentAlbum  = (this.currentAlbum + 1) % albums.length
-            this.currentPhoto = 0
-            return undefined
-        }
-
-        this.currentAlbum = (this.currentAlbum + 1) % albums.length
-        this.currentPhoto = (this.currentPhoto + 1) % album["photos"].length
-        var photo = album.path + "/" + photo.name + ".jpg"
-
-        return images(`./` + photo)
-    }
-
     // TODO call getImages periodically?
     getImages() {
         fetch(server + "images")
         .then(res => res.json()) 
         .then(
             (result) => {
-               console.log(result)
+                let images = JSON.parse(result)
+                let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, images, 0)
+                this.setState({
+                    Photos: photosProps
+                })
             },
             (error) => {
                 console.log(error)
@@ -324,6 +289,7 @@ class Frame extends React.Component {
         )
     }
 
+    // TODO call getSettings periodically... if difference, then force reload
     getSettings() {
         fetch(server + "settings")
         .then(res => res.json()) 
@@ -341,6 +307,8 @@ class Frame extends React.Component {
             }
         )
     }
+
+    
 }
 
 ReactDOM.render(
