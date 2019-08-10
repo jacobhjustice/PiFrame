@@ -1,10 +1,10 @@
+# PiFrame verse.py
+# Scrape's BibleGateway for its verse of the day for the "Verse" extension.
+
 import requests, json
 from bs4 import BeautifulSoup
 
 def get():
-    return scrapeBibleGateway()
-
-def scrapeBibleGateway():
     doc = requests.get("https://www.biblegateway.com/")
     soup = BeautifulSoup(doc.text)
     votd = soup.findAll("div", {"class": "votd-box"})[0]

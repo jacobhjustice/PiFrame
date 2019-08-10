@@ -1,5 +1,3 @@
-# TODO handle nil zip
-
 # PiFrame weather.py
 # Manages weather data as well as forecast for the "Weather" Extension
 # Uses Open Weather API https://openweathermap.org/api

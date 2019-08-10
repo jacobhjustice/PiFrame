@@ -67,7 +67,7 @@ class WeatherForecastItemProperties {
     }
 }
 
-class WeatherForecastItem  extends  React.Component {
+class WeatherForecastItem extends React.Component {
     constructor(props) {
         super(props)
     }

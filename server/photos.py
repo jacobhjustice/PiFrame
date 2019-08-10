@@ -1,9 +1,7 @@
 # PiFrame photos.py
-# Downloads photos from flickr and packages them for use on the client
+# Downloads photos from flickr and packages them for use on the client for the "Photos" extension.
 
 import settings, flickrapi, requests, os, json
-
-flickr_key = 'ea3934a32400cfc52bb32b32ba355dfc'
 
 # AlbumSet is the top level container for the photo collection. 
 class AlbumSet:
