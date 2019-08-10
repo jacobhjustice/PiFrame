@@ -142,7 +142,6 @@ class Extensions extends React.Component {
         }
     }
 
-    // TODO call getImages periodically?
     getImages() {
         fetch(server + "images")
         .then(res => res.json()) 
@@ -283,7 +282,6 @@ class Frame extends React.Component {
     parseSettingsResponseToObject(response) {
         let settings = JSON.parse(response)
 
-        // TODO strong type the albumSet
         let photoSettings = new PhotosSettings(
             settings.Photos.isEnabled,
             settings.Photos.albumSet,
@@ -315,7 +313,6 @@ class Frame extends React.Component {
         )
     }
 
-    // TODO call getSettings periodically... if difference, then force reload
     getSettings() {
         fetch(server + "settings")
         .then(res => res.json()) 

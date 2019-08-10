@@ -1,6 +1,3 @@
-# TODO include secret/api keys from Photos/Weather in their respective settings
-
-
 # PiFrame extensions.py
 # Manages active extension information for the PiFrame application.
 # Any feature within the app is an extension, as it can be turned on/off, or even removed from the code base.
