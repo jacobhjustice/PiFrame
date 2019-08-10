@@ -1,8 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { getDisplayTime, getDateString } from './shared'
-
-export { Clock, ClockProperties }
 
 class ClockProperties {
     constructor(isEnabled, time) {
@@ -13,11 +10,6 @@ class ClockProperties {
 }
 
 class Clock extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-
-    
     render() {
         if (!this.props.isLoaded || !this.props.isEnabled) {
             return null
@@ -33,3 +25,5 @@ class Clock extends React.Component {
         );
     }
 }
+
+export { Clock, ClockProperties }

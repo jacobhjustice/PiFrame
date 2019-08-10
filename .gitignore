@@ -26,6 +26,7 @@ yarn-error.log*
 
 __pycache__
 secret.py
-app/public/img/flickr
+/app/public/img/flickr
 
+/vim.exe.stackdump
 settings.json

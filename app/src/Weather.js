@@ -1,9 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { getDisplayTime, getDateString } from './shared'
 const images = require.context('../public/img/icon', true);
-
-export { CurrentWeather, CurrentWeatherProperties, WeatherForecast, WeatherForecastProperties, WeatherForecastItemProperties }
 
 class CurrentWeatherProperties {
     constructor(isEnabled, location, sunriseEpoch, sunsetEpoch, temperature, humidity, icon) {
@@ -21,10 +18,6 @@ class CurrentWeatherProperties {
 }
 
 class CurrentWeather extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-
     render() {
         if (!this.props.isLoaded || !this.props.isEnabled) {
             return ""
@@ -36,19 +29,19 @@ class CurrentWeather extends React.Component {
                     <div className="header">{this.props.location}</div>
                 </div>
                 <div className="lineWrapper">
-                    <img className="inline" src={this.props.icon} />
+                    <img className="inline" src={this.props.icon} alt="" />
                     <div className="subtitle inline">{this.props.temperature}&deg; F</div>
                 </div>
                 <div className="lineWrapper">
-                    <img className="inline weatherIcon" src={images(`./sunrise.png`)} />
+                    <img className="inline weatherIcon" src={images(`./sunrise.png`)} alt="Sunrise" />
                     <div className="subtitle2 inline">{getDisplayTime(this.props.sunrise, false)}</div>
                 </div>
                 <div className="lineWrapper">
-                    <img className="inline weatherIcon" src={images(`./sunset.png`)} />
+                    <img className="inline weatherIcon" src={images(`./sunset.png`)} alt="Sunset" />
                     <div className="subtitle2 inline">{getDisplayTime(this.props.sunset, false)}</div>
                 </div>
                 <div className="lineWrapper">
-                    <img className="inline weatherIcon" src={images(`./humidity.png`)} />
+                    <img className="inline weatherIcon" src={images(`./humidity.png`)} alt="Humidity" />
                     <div className="subtitle2 inline">{this.props.humidity}%</div>
                 </div>
             </div>
@@ -68,15 +61,11 @@ class WeatherForecastItemProperties {
 }
 
 class WeatherForecastItem extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-    
     render() {
         return(
             <div className="weatherForecastItem" key={this.props.time}>
                 <div className="left itemWrapper">
-                    <img src={this.props.icon} />
+                    <img src={this.props.icon} alt="" />
                 </div>
                 <div className="right itemWrapper">
                     {getDisplayTime(this.props.time, false)}
@@ -99,10 +88,6 @@ class WeatherForecastProperties {
 }
 
 class WeatherForecast extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-
     render() {
         if (!this.props.isLoaded || !this.props.isEnabled) {
             return null
@@ -121,3 +106,5 @@ class WeatherForecast extends React.Component {
         );
     }
 }
+
+export { CurrentWeather, CurrentWeatherProperties, WeatherForecast, WeatherForecastProperties, WeatherForecastItemProperties }

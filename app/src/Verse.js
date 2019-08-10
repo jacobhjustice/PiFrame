@@ -1,8 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-
-export { Verse, VerseProperties }
-
 
 class VerseProperties {
     constructor(isEnabled, quote, reference) {
@@ -16,10 +12,6 @@ class VerseProperties {
 }
 
 class Verse extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-
     render() {
         if (!this.props.isLoaded || !this.props.isEnabled) {
             return null
@@ -35,3 +27,5 @@ class Verse extends React.Component {
         );
     }
 }
+
+export { Verse, VerseProperties }

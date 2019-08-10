@@ -13,4 +13,5 @@ cd app
 npm install
 
 # Set browser on load/run on load
+cd ..
 echo "Finished running set up. To start PiFrame, run ./run.sh"

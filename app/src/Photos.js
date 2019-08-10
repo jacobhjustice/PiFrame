@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
-export { Photos, PhotosProperties }
 
 const images = require.context('../public/img/', true);
 
@@ -42,9 +40,9 @@ class ImageManager {
 
         this.currentPhoto = (this.currentPhoto + 1) % this.albums[this.currentAlbum].photos.length
         this.currentAlbum = (this.currentAlbum + 1) % this.albums.length
-        var photo = album.path + "/" + photo.name + ".jpg"
+        var image = album.path + "/" + photo.name + ".jpg"
 
-        this.current = images(`./` + photo)
+        this.current = images(`./` + image)
     }
 }
 
@@ -62,10 +60,6 @@ class PhotosProperties {
 }
 
 class Photos extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-
     render() {
         if (!this.props.isLoaded || !this.props.isEnabled) {
             return null
@@ -76,8 +70,10 @@ class Photos extends React.Component {
         }
         return (
             <div id="photo" >
-                <div className="wrapper"><img src={this.props.imageManager.current} /></div>
+                <div className="wrapper"><img src={this.props.imageManager.current} alt="Loading..." /></div>
             </div>
         ); 
     }
 }
+
+export { Photos, PhotosProperties }

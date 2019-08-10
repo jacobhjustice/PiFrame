@@ -17,7 +17,8 @@ Step 1) Download Raspbian following instructions here: https://thepi.io/how-to-i
 Step 2) Move the SD card into your Pi, plug it up to the screen, and power on!
 Step 3) Open up the terminal and download this git repository: `git clone https://github.com/jacobhjustice/PiFrame`
 Step 4) Navigate into the PiFrame directory and give yourself file execute permissions for `setup.sh` and `run.sh` (i.e., chmod -X `chmod +x setup.sd && chmod +x && run.sh`)
-
+Step 5) Setup all dependencies by running `./setup.sh`
+Step 6) 
 
 ### Developer Manual
 PiFrame was meant to be built upon!

@@ -1,9 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {server} from './shared'
 const images = require.context('../public/img/icon', true);
-
-export { Settings, SettingsProperties, ClockSettings, VerseSettings, WeatherSettings, PhotosSettings }
 
 class ClockSettings {
     constructor (isEnabled) {
@@ -72,7 +69,7 @@ class Settings extends React.Component {
         return(
             <div id="settings"  >
                 <div id="settingsButton" className="button" onClick={this.openModal}>
-                    <img src={images('./settings.svg') }/>
+                    <img src={images('./settings.svg') } alt=""/>
                     <div className="header">Settings</div>                
                 </div>
                 {modal.render()}
@@ -276,3 +273,5 @@ class SettingsModal extends React.Component {
          )
     }
 }
+
+export { Settings, SettingsProperties, ClockSettings, VerseSettings, WeatherSettings, PhotosSettings }
