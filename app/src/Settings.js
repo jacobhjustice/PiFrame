@@ -2,19 +2,19 @@ import React from 'react';
 import {server} from './shared'
 const images = require.context('../public/img/icon', true);
 
-class ClockSettings {
+export class ClockSettings {
     constructor (isEnabled) {
         this.isEnabled = isEnabled
     }
 }
 
-class VerseSettings  {
+export class VerseSettings  {
     constructor (isEnabled) {
         this.isEnabled = isEnabled
     }
 }
 
-class WeatherSettings {
+export class WeatherSettings {
     constructor (isEnabled, zip, apiKey) {
         this.isEnabled = isEnabled
         this.zip = zip
@@ -22,7 +22,7 @@ class WeatherSettings {
     }
 }
 
-class PhotosSettings {
+export class PhotosSettings {
     constructor (isEnabled, albumList, apiKey, apiSecret, apiUser, albumSet) {
         this.isEnabled = isEnabled
         this.albumSet = albumList
@@ -33,7 +33,7 @@ class PhotosSettings {
     }
 }
 
-class SettingsProperties {
+export class SettingsProperties {
     constructor (clockSettings, photosSettings, verseSettings, weatherSettings) {
         this.clock = clockSettings
         this.photos = photosSettings
@@ -51,7 +51,7 @@ class ModalProperties {
     }
 }
 
-class Settings extends React.Component {
+export class Settings extends React.Component {
     getModalProps() {
         return new ModalProperties(this.props.settings, this.state.isOpen, this.closeModal, this.props.updateCallback)
     }
@@ -273,5 +273,3 @@ class SettingsModal extends React.Component {
          )
     }
 }
-
-export { Settings, SettingsProperties, ClockSettings, VerseSettings, WeatherSettings, PhotosSettings }

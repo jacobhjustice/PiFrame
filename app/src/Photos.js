@@ -51,7 +51,7 @@ class ImageManager {
 
 // PhotosProperties contain backing information for the Photos component.
 // Should be instantiated from the Extensions level and passed into any instance of Photos.
-class PhotosProperties {
+export class PhotosProperties {
     // @param isEnabled {bool} the current enabled status of this extension in settings
     // @param albumSet {AlbumSet}  the current collection of pictures to be passed to the ImageManager
     // @param tick {number} the seconds since the image has been rendered (from 0 - 5)
@@ -69,7 +69,7 @@ class PhotosProperties {
 
 // Photos displays information for the Photos extension.
 // Technically, the component is rendered every second, but in practicality it is only updated every 6 seconds
-class Photos extends React.Component {
+export class Photos extends React.Component {
     render() {
         if (!this.props.isLoaded || !this.props.isEnabled) {
             return null
@@ -85,5 +85,3 @@ class Photos extends React.Component {
         ); 
     }
 }
-
-export { Photos, PhotosProperties }

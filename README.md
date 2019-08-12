@@ -40,4 +40,8 @@ To add an extension...
 
 When in doubt, follow an existing example! `Photos` and `Weather` are more complex models that make for a good base for future use-cases.
 
+Below, depicts the relationship behtween Settings and Extensions in the app
+
+![](piframe_client.png)
+
 ### 

@@ -3,7 +3,7 @@ import { getDisplayTime, getDateString } from './shared'
 
 // ClockProperties contain backing information for the Clock component.
 // Should be instantiated from the Extensions level and passed into any instance of Clock.
-class ClockProperties {
+export class ClockProperties {
     // @param isEnabled {bool} the current enabled status of this extension in settings
     // @param time {DateTime} the current time on render
     constructor(isEnabled, time) {
@@ -15,7 +15,7 @@ class ClockProperties {
 
 // Clock displays information for the Clock extension.
 // It should render each second within extensions with the current formatted time.
-class Clock extends React.Component {
+export class Clock extends React.Component {
     render() {
         if (!this.props.isLoaded || !this.props.isEnabled) {
             return null
@@ -31,5 +31,3 @@ class Clock extends React.Component {
         );
     }
 }
-
-export { Clock, ClockProperties }
