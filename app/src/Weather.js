@@ -2,7 +2,16 @@ import React from 'react';
 import { getDisplayTime, getDateString } from './shared'
 const images = require.context('../public/img/icon', true);
 
+// CurrentWeatherProperties contain backing information for the CurrentWeather component.
+// Should be instantiated from the Extensions level and passed into any instance of CurrentWeather.
 class CurrentWeatherProperties {
+    // @param isEnabled {bool} the current enabled status of this extension in settings
+    // @param location {string} the location (city) corresponding to the zip-code stored in settings for weather
+    // @param sunriseEpoch {number} estimated value of the current day's sunrise in seconds with 0 being the epoch value
+    // @param sunriseEpoch {number} estimated value of the current day's sunset in seconds with 0 being the epoch value
+    // @param temperature {number} current temperature value in farenheit
+    // @param humidity {number} current percentage of humidity in the air
+    // @param icon {string} URL of the icon that represents the current weather
     constructor(isEnabled, location, sunriseEpoch, sunsetEpoch, temperature, humidity, icon) {
         this.isEnabled = isEnabled
         this.isLoaded = temperature !== undefined
@@ -17,6 +26,8 @@ class CurrentWeatherProperties {
     }
 }
 
+// CurrentWeather displays information for the current section of the Weather extension.
+// It should render each minute within extensions with data for the current weather.
 class CurrentWeather extends React.Component {
     render() {
         if (!this.props.isLoaded || !this.props.isEnabled) {
@@ -49,17 +60,24 @@ class CurrentWeather extends React.Component {
     }
 }
 
+// WeatherForecastItemProperties contain information for each individual WeatherForecastItem
+// Should be instantiated from the Extensions level and used to create WetherForecastItems for the WeatherForecastProperties
 class WeatherForecastItemProperties {
-    constructor(temperature, time, icon) {
+    // @param temperature {number} estimated target temperature value in farenheit
+    // @param timeEpoch {number} The gien time of this forecast in seconds with 0 being the epoch value
+    // @param icon {string} URL of the icon that represents the target weather
+    constructor(temperature, timeEpoch, icon) {
         this.isLoaded = temperature !== undefined 
         if (this.isLoaded) {
             this.temperature = temperature
             this.icon = icon
-            this.time = new Date(time*1000)
+            this.time = new Date(timeEpoch*1000)
         }
     }
 }
 
+// WeatherForecastItem displays information for an individual forecast within the upcoming section of the Weather extension.
+// It should render within the rendering of WeatherForecast
 class WeatherForecastItem extends React.Component {
     render() {
         return(
@@ -77,8 +95,12 @@ class WeatherForecastItem extends React.Component {
     }
 }
 
+// WeatherForecastProperties contain backing information for the WeatherForecast component.
+// Should be instantiated from the Extensions level and passed into any instance of WeatherForecast.
 class WeatherForecastProperties {
-    constructor (isEnabled, dailyForecasts, key) {
+    // @param isEnabled {bool} the current enabled status of this extension in settings
+    // @param dailyForecasts {array[WeatherForecastItemProperties]} list of all properties used to render each WeatherForecastItem
+    constructor (isEnabled, dailyForecasts) {
         this.isEnabled = isEnabled
         this.isLoaded = dailyForecasts !== undefined && dailyForecasts.length === 8
         if (this.isLoaded) {
@@ -87,6 +109,8 @@ class WeatherForecastProperties {
     }
 }
 
+// WeatherForecast displays information for the upcoming section of the Weather extension.
+// It should render each hour within extensions with expected data for the upcoming weather.
 class WeatherForecast extends React.Component {
     render() {
         if (!this.props.isLoaded || !this.props.isEnabled) {
