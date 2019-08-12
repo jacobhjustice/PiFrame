@@ -58,7 +58,6 @@ export class Frame extends React.Component {
 
         let photoSettings = new PhotosSettings(
             settings.Photos.isEnabled,
-            settings.Photos.albumSet,
             settings.Photos.apiKey,
             settings.Photos.apiSecret,
             settings.Photos.apiUser,
@@ -90,6 +89,7 @@ export class Frame extends React.Component {
     // getSettings retrieves the settings data for the user
     // This is done by calling the settings REST endpoint in /server/run.py
     getSettings() {
+        // TODO add empty screen for default settings
         fetch(server + "settings")
         .then(res => res.json()) 
         .then(

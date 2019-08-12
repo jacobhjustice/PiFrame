@@ -2,19 +2,30 @@ import React from 'react';
 import {server} from './shared'
 const images = require.context('../public/img/icon', true);
 
+// ClockSettings contains all settings for the Clock extension
+// It exists as a member of the SettingsProperties class
 export class ClockSettings {
+    // @param isEnabled {bool} enabled status of the extension
     constructor (isEnabled) {
         this.isEnabled = isEnabled
     }
 }
 
+// VerseSettings contains all settings for the Verse extension
+// It exists as a member of the SettingsProperties class
 export class VerseSettings  {
+    // @param isEnabled {bool} enabled status of the extension
     constructor (isEnabled) {
         this.isEnabled = isEnabled
     }
 }
 
+// WeatherSettings contains all settings for the Weather extension
+// It exists as a member of the SettingsProperties class
 export class WeatherSettings {
+    // @param isEnabled {bool} enabled status of the extension
+    // @param zip {string} the zipcode to pull weather for
+    // @param apiKey {string} the key to access weather map API for the user
     constructor (isEnabled, zip, apiKey) {
         this.isEnabled = isEnabled
         this.zip = zip
@@ -22,10 +33,17 @@ export class WeatherSettings {
     }
 }
 
+// PhotosSettings contains all settings for the Photos extension
+// It exists as a member of the SettingsProperties class
 export class PhotosSettings {
-    constructor (isEnabled, albumList, apiKey, apiSecret, apiUser, albumSet) {
+    // @param isEnabled {bool} enabled status of the extension
+    // @param albumList {Object} the current AlbumSet as far as settings knows (used for enabled statuses)
+    // @param apiKey {string} the key to access flickr API for the user
+    // @param apiSecret {string} the secret key to access flickr API for the user
+    // @param apiUser {string} the account id of the user matching th egiven API key
+    // @param albumSet {Object} the current list of albums as far as settings knows (used for enabled statuses)
+    constructor (isEnabled, apiKey, apiSecret, apiUser, albumSet) {
         this.isEnabled = isEnabled
-        this.albumSet = albumList
         this.apiKey = apiKey
         this.apiSecret = apiSecret
         this.apiUser = apiUser
@@ -33,7 +51,13 @@ export class PhotosSettings {
     }
 }
 
+// SettingsProperties is a wrapper that contains settings for all extensions
+// Any extension should exist as a property within SettingsProperties
 export class SettingsProperties {
+    // @param clockSettings {ClockSettings} active settings for Clock extension
+    // @param photosSettings {PhotosSettings} active settings for Photos extension
+    // @param verseSettings {VerseSettings} active settings for Verse extension
+    // @param weatherSettings {WeatherSettings} active settings for Weather extension
     constructor (clockSettings, photosSettings, verseSettings, weatherSettings) {
         this.clock = clockSettings
         this.photos = photosSettings
@@ -42,6 +66,8 @@ export class SettingsProperties {
     }
 }
 
+// ModalProperties serves to transfer properties to be used in populating the SettingsModal
+// Should be instantiated from the Settings level and passed into any instance of SettingsModal.
 class ModalProperties {
     constructor(settingsProperties, isOpen, closeCallback, updateCallback) {
         this.settingsProperties = settingsProperties
@@ -51,7 +77,11 @@ class ModalProperties {
     }
 }
 
+// Settings serves as a wrapper for the SettingsModal with a button to toggle display
 export class Settings extends React.Component {
+
+    // getModalProps uses the current properties/state on the object in order to create properties for an instance of SettingsModal
+    // @return {ModalProperties} the properties to be used on any active SettingsModal
     getModalProps() {
         return new ModalProperties(this.props.settings, this.state.isOpen, this.closeModal, this.props.updateCallback)
     }
@@ -77,12 +107,14 @@ export class Settings extends React.Component {
         );
     }
 
+    // openModal changes renders the SettingsModal by updating state
     openModal = () => {
         this.setState({
             isOpen: true
         });
     }
 
+    // closeModal is passed into the SettingsModal to update the Settings state to close
     closeModal = () => {
         this.setState({
             isOpen: false
@@ -90,6 +122,7 @@ export class Settings extends React.Component {
     }
 }
 
+// SettingsModal contains all UI for the user to interact with their current settings
 class SettingsModal extends React.Component {
     constructor(props) {
         super(props)
@@ -199,6 +232,8 @@ class SettingsModal extends React.Component {
         );
     }
 
+    // getAlbumSettingsComponents is called to create components for each album 
+    // @return {Component} a toggleable setting reflecting the enabled status of an album
     getAlbumSettingsComponents() {
         let components = []
         this.props.settingsProperties.photos.albumSet.albums.forEach(album => {
@@ -212,8 +247,11 @@ class SettingsModal extends React.Component {
         return components
     }
 
+    // saveSettings is the function called when the save button is pressed.
+    // It is responsible for converting the status of each component into a JSON payload for the server to process.
+    // Once the server processes the new settings, this settings object is passed back to the Frame component via callback function
+    // The save event ultimately leads to a reload of each extension. 
     saveSettings = () => {
-
         // Albums can be set to enabled or disabled, but are not added
         // So iterate over what we have currently, and set according to the user-inputted settings
         let newAlbumSet = this.props.settingsProperties.photos.albumSet
