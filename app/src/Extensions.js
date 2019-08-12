@@ -15,6 +15,9 @@ export class Extensions extends React.Component {
         this.frameSetup()        
     }
 
+    // frameSetup is called if either...
+    // 1) the component is mounted for the initial time
+    // 2) settings were updated
     frameSetup() {
         // Each second, each extension can be updated.
         // This global timer drives all events that happen, whether ever second, hour, or day.
@@ -66,10 +69,9 @@ export class Extensions extends React.Component {
         this.getImages()
     }
 
-
-    // If the properties get updated, we have recieved an update in settings
-    // If settings are updated, we want to do a full re-render based on our new settings.
     componentDidUpdate(oldProps) {
+        // If the properties get updated, we have recieved an update in settings
+        // If settings are updated, we want to do a full re-render based on our new settings.
         if(oldProps.settings !== this.props.settings) {
             clearInterval(this.interval);
             this.setDefaults()
@@ -102,6 +104,8 @@ export class Extensions extends React.Component {
         clearInterval(this.interval);
     }  
 
+    // setDefaults sets each expected property in the state to default (empty) values
+    // It is intended that these values are changed after fetching data from the server
     setDefaults() {
         let defaultCurrentWeatherProps = new CurrentWeatherProperties(this.props.settings.weather.isEnabled)
         let defaultForecastWeatherProps = new WeatherForecastProperties(this.props.settings.weather.isEnabled)
@@ -139,6 +143,8 @@ export class Extensions extends React.Component {
         }
     }
 
+    // getImages adds photos from flickr to local storage, and returns the albumSet 
+    // This is done by calling the images REST endpoint in /server/run.py
     getImages() {
         fetch(server + "images")
         .then(res => res.json()) 
@@ -163,6 +169,9 @@ export class Extensions extends React.Component {
         )
     }
 
+    // getWeather retrieves the weather data for current weather, and optionally, forecast
+    // This is done by calling the weather REST endpoint in /server/run.py
+    // @param includeForecast {bool} retrieve forecast in returned data (if false, should ignore any potential data in forecast fields)
     getWeather(includeForecast) {
         fetch(server + "weather/" + (includeForecast ? "1" : "0"))
             .then(res => res.json()) 
@@ -206,6 +215,8 @@ export class Extensions extends React.Component {
             )
     }
 
+    // getVerse retrieves the Bible verse of the day
+    // This is done by calling the verse REST endpoint in /server/run.py
     getVerse() {
         fetch(server + "verse")
         .then(res => res.json()) 

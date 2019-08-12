@@ -19,13 +19,15 @@ export class Frame extends React.Component {
             versionSinceMount: 0,
             Settings: settings
         }
-
     }
 
     componentDidMount() {
         this.getSettings()
     }
 
+    // settingsUpdateCallback is passed into settings and is called whenever a user saves out of the modal
+    // It's important this function exists at this level so that we can update state and apply updates to extensions downstream
+    // @param result {JSON} the response from the server when saving an update to settings
     settingsUpdateCallback = (result) => {
         let userSettings = this.parseSettingsResponseToObject(result)
         this.setState({
@@ -46,6 +48,11 @@ export class Frame extends React.Component {
         );
     }
 
+    // parseSettingsResponseToObject takes a JSON object from the server and makes it into an expected SettingsProperties object
+    // This is technically not needed due to the lack of type checking in JavaScript, but is useful as a saftey check
+    // as it helps encourage explicit additions to the client when adding information to the server.
+    // @param response {JSON} the settings object from the server
+    // @return {SettingsProperties} the JavaScript object of the responses
     parseSettingsResponseToObject(response) {
         let settings = JSON.parse(response)
 
@@ -80,6 +87,8 @@ export class Frame extends React.Component {
         )
     }
 
+    // getSettings retrieves the settings data for the user
+    // This is done by calling the settings REST endpoint in /server/run.py
     getSettings() {
         fetch(server + "settings")
         .then(res => res.json()) 
