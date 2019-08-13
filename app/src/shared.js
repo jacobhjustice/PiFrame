@@ -1,8 +1,13 @@
 import React from 'react';
 const months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
+// server is the root of the backing flask server
 export const server = "http://127.0.0.1:5000/"
 
+// getDisplayTime converts a DateTime object into a readable 12 hour time string
+// @param date {DateTime} the time to display
+// @param isBlinkingOnSecond {bool} true indicates that the time should hide the ":" on even seconds
+// @return {string} the time formatted in "hh:mm AM/PM" format
 export function getDisplayTime(date, isBlinkingOnSecond) {
     if (date === undefined) {
         return 
@@ -16,6 +21,10 @@ export function getDisplayTime(date, isBlinkingOnSecond) {
     </div>)
 }
 
+// getDateString converts a DateTime object into a readable date string 
+// @param date {DateTime} the date to parse
+// @param includeYear {bool} true indicates the year should be included
+// @return {string} the date in "month day{, year}" format
 export function getDateString(date, includeYear) {
     let str = months[date.getMonth()]
     str += " "
@@ -25,11 +34,4 @@ export function getDateString(date, includeYear) {
         str += date.getFullYear()
     }
     return str
-}
-
-export function evaluateIfUpdateRequired(nowTime, currentTimeOnProp, maxTimeBeforeUpdate) {
-    if (currentTimeOnProp === undefined) {
-        return true
-    }
-    return nowTime - currentTimeOnProp > maxTimeBeforeUpdate
 }
