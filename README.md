@@ -2,7 +2,8 @@
 ## What is PiFrame?
 PiFrame is a photo frame application, designed to run on the Rasberry Pi. I have wanted to build something with a Pi for a while, so decided I'd make something sentimental for my fiancee's 21st birthday.
 
-### Shopping List
+## User Manual
+#### Shopping List
 You will need a few supplies. You can look around for better deals on different products, or go for a bigger screen, but here is what I used:
 - Rasberry Pi 3B
 - 8 GB micro SD card 
@@ -12,7 +13,7 @@ You will need a few supplies. You can look around for better deals on different 
 - 1 USB keyboard (for setup)
 - 1 USB mouse (for setup)
 
-## Setup
+#### Setup
 Step 1) Download Raspbian following instructions here: https://thepi.io/how-to-install-raspbian-on-the-raspberry-pi/
 
 Step 2) Move the SD card into your Pi, plug it up to the screen, and power on!
