@@ -20,7 +20,7 @@ Step 2) Move the SD card into your Pi, plug it up to the screen, and power on!
 
 Step 3) Open up the terminal and download this git repository: `git clone https://github.com/jacobhjustice/PiFrame`
 
-Step 4) Navigate into the PiFrame directory and give yourself file execute permissions for `setup.sh` and `run.sh` (i.e., chmod -X `chmod +x setup.sd && chmod +x && run.sh`)
+Step 4) Navigate into the PiFrame directory and give yourself file execute permissions for `setup.sh` and `run.sh` (i.e., `chmod +x setup.sd && chmod +x && run.sh`)
 
 Step 5) Setup all dependencies by running `./setup.sh`
 
@@ -32,7 +32,7 @@ The source code is split into two major parts: The client (`/app`) and the backe
 
 The backend holds a Flask server that is setup in `/server/run.py` (which is a good place to start if you want to look at how the backend logic works), which exposes endpoints for individual features (these are called extensions, but that's for later). The client is a React.js app that uses information from the server to display information for each feature. The base of the client is mounted in `/app/index.js`.
 
-####PiFrame was meant to be built upon!
+#### PiFrame was meant to be built upon!
 Every feature within the application is called an `extension`. These extensions are made to be able to be turned on/off, and to function independantly of each other! This is great because that means any features you don't want to use can be disabled, ignored, or even removed. Even better, this methodology allows for more extensions to easilly be added! As such, each extension should exist in its own file (both in client and backend).
 
 Every extension has three things in common: they are organized, persistent, and *always* on time! 
@@ -40,7 +40,7 @@ Every extension has three things in common: they are organized, persistent, and 
 - *Persistent*: Every extension exists within `Settings`, which means that it's data is stored locally and reloaded. Either via the settings interface (which calls an endpoint to update the settings), or within the server code.
 - *On time*: On the client, extensions exist within the `Extensions` element (clever name, right?). Once the component is mounted (or updated.. but more on that later), all client updates are driven by a single central timer with an intereval of 1 second. This means that renders happen up to once per second (in the case of the `Clock` extension). Extensions can either choose to update after a set amount of time (`Photos` updates every 6 seconds), or at a given time (`Weather` updates on the minute).
 
-####To add an extension...
+#### To add an extension...
 - Implement the {*extension_name*}Settings class within /server/extensions.py
 - Add the new {*extension_name*}Settings class to the ALL_EXTENSIONS array and the `Settings` constructor in /server/settings.py 
 - Add a new file for any utility functions if needed in /server/{*extension_name*}.py
