@@ -6,15 +6,17 @@ const images = require.context('../public/img/icon', true);
 // Should be instantiated from the Extensions level and passed into any instance of CurrentWeather.
 export class CurrentWeatherProperties {
     // @param isEnabled {bool} the current enabled status of this extension in settings
+    // @param error {string} if error is not null, then an error occurred during data retrieval
     // @param location {string} the location (city) corresponding to the zip-code stored in settings for weather
     // @param sunriseEpoch {number} estimated value of the current day's sunrise in seconds with 0 being the epoch value
     // @param sunriseEpoch {number} estimated value of the current day's sunset in seconds with 0 being the epoch value
     // @param temperature {number} current temperature value in farenheit
     // @param humidity {number} current percentage of humidity in the air
     // @param icon {string} URL of the icon that represents the current weather
-    constructor(isEnabled, location, sunriseEpoch, sunsetEpoch, temperature, humidity, icon) {
+    constructor(isEnabled, error, location, sunriseEpoch, sunsetEpoch, temperature, humidity, icon) {
         this.isEnabled = isEnabled
-        this.isLoaded = temperature !== undefined
+        this.error = error
+        this.isLoaded = this.error != null || temperature !== undefined
         if (this.isLoaded) {
             this.location = location
             this.sunrise = new Date(sunriseEpoch*1000)
@@ -30,8 +32,8 @@ export class CurrentWeatherProperties {
 // It should render each minute within extensions with data for the current weather.
 export class CurrentWeather extends React.Component {
     render() {
-        if (!this.props.isLoaded || !this.props.isEnabled) {
-            return ""
+        if (!this.props.isLoaded || !this.props.isEnabled  || this.props.error != null) {
+            return null
         }
 
         return (
@@ -99,10 +101,12 @@ class WeatherForecastItem extends React.Component {
 // Should be instantiated from the Extensions level and passed into any instance of WeatherForecast.
 export class WeatherForecastProperties {
     // @param isEnabled {bool} the current enabled status of this extension in settings
+    // @param error {string} if error is not null, then an error occurred during data retrieval    
     // @param dailyForecasts {array[WeatherForecastItemProperties]} list of all properties used to render each WeatherForecastItem
-    constructor (isEnabled, dailyForecasts) {
+    constructor (isEnabled, error, dailyForecasts) {
         this.isEnabled = isEnabled
-        this.isLoaded = dailyForecasts !== undefined && dailyForecasts.length === 8
+        this.error = error
+        this.isLoaded = this.error != null || (dailyForecasts !== undefined && dailyForecasts.length === 8)
         if (this.isLoaded) {
             this.dailyForecasts = dailyForecasts
         }
@@ -117,6 +121,13 @@ export class WeatherForecast extends React.Component {
             return null
         }
 
+        if (this.props.error != null) {
+            return (
+                <div id="weatherForecast">
+                    <div class="center error">{this.props.error === "UNKNOWN" ? <div>An error has occured and could not fetch weather. Please make sure you are connected to the internet.</div> : <div>An error has occurred and could not fetch weather. Please be sure that your API key is correct from <a href='https://openweathermap.org'>the weather service</a>.</div>}</div>
+                </div>
+            )
+        }
         let forecasts = []
         this.props.dailyForecasts.forEach((forecast) => {
             let item = new WeatherForecastItem(forecast)

@@ -103,8 +103,18 @@ body {
     width: 50%;
 }
 
+.error {
+    padding: 20px;
+    color: #a16e83;
+}
+
 .inline { 
     display: inline-block;
+}
+
+.center {
+    text-align: center;
+    margin: 0 auto;
 }
 
 .left {
@@ -157,6 +167,7 @@ body {
     right: 0;
     height: 100vh;
     z-index: 89;
+    max-width: 220px;
 }
 
 #weatherForecast .weatherForecastItem {
@@ -258,6 +269,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
+    text-align: center;
 }
 
 #photo .dimmer {

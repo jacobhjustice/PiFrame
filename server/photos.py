@@ -50,9 +50,16 @@ def getAlbumsForClient(userSettings):
 
 # getAlbums retrieves all albums from flickr and packages them inside of an AlbumSet
 def getAlbums(userSettings):
+    apiKey = userSettings.apiKey
+    apiSecret = userSettings.apiSecret
+    apiUser = userSettings.apiUser
 
-    flickr = flickrapi.FlickrAPI(userSettings.apiKey, userSettings.apiSecret)
-    userIDRequest = "%s@N05" % (userSettings.apiUser)
+    # If API key, secret key, or user is not set, let the user know
+    if apiKey == None or apiKey == "" or apiSecret == None or apiSecret == "" or apiUser == None or apiUser == "":
+        return '{"error": "API"}'
+
+    flickr = flickrapi.FlickrAPI(apiKey, apiSecret)
+    userIDRequest = "%s@N05" % (apiUser)
     result = flickr.photosets.getList(user_id=userIDRequest, format='parsed-json')
     jsonAlbums = result['photosets']['photoset']
     albums =  AlbumSet()

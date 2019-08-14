@@ -53,10 +53,12 @@ class ImageManager {
 // Should be instantiated from the Extensions level and passed into any instance of Photos.
 export class PhotosProperties {
     // @param isEnabled {bool} the current enabled status of this extension in settings
+    // @param error {string} if error is not null, then an error occurred during data retrieval    
     // @param albumSet {AlbumSet}  the current collection of pictures to be passed to the ImageManager
     // @param tick {number} the seconds since the image has been rendered (from 0 - 5)
-    constructor(isEnabled, albumSet, tick) {
+    constructor(isEnabled, error, albumSet, tick) {
         this.isEnabled = isEnabled
+        this.error = error
         this.tick = tick
         this.isLoaded = albumSet !== undefined
         if (this.isLoaded) {
@@ -71,6 +73,14 @@ export class PhotosProperties {
 // Technically, the component is rendered every second, but in practicality it is only updated every 6 seconds
 export class Photos extends React.Component {
     render() {
+        if(this.props.error != null) {
+            return (
+                <div id="photo" >
+                    <div className="wrapper"><div class="center error">{this.props.error === "UNKNOWN" ? <div>An error has occured and could not fetch images. Please make sure you are connected to the internet.</div> : <div>An error has occurred and could not fetch images. Please be sure that your API key is correct from <a href='https://www.flickr.com/services/api/'>Flickr</a>.</div>}</div></div>
+                </div>
+            )
+        }
+
         if (!this.props.isLoaded || !this.props.isEnabled) {
             return null
         }

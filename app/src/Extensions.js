@@ -107,10 +107,10 @@ export class Extensions extends React.Component {
     // setDefaults sets each expected property in the state to default (empty) values
     // It is intended that these values are changed after fetching data from the server
     setDefaults() {
-        let defaultCurrentWeatherProps = new CurrentWeatherProperties(this.props.settings.weather.isEnabled)
-        let defaultForecastWeatherProps = new WeatherForecastProperties(this.props.settings.weather.isEnabled)
+        let defaultCurrentWeatherProps = new CurrentWeatherProperties(this.props.settings.weather.isEnabled, null)
+        let defaultForecastWeatherProps = new WeatherForecastProperties(this.props.settings.weather.isEnabled, null)
         let defaultClockProps = new ClockProperties(this.props.settings.clock.isEnabled, new Date())
-        let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, this.props.settings.photos.albumSet, 1)
+        let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, null, this.props.settings.photos.albumSet, 1)
         let verseProps = new VerseProperties(this.props.settings.verse.isEnabled)
         this.currentPhoto = 0
         this.currentAlbum = 0
@@ -126,10 +126,10 @@ export class Extensions extends React.Component {
     constructor(props) {
         super(props)
  
-        let defaultCurrentWeatherProps = new CurrentWeatherProperties(this.props.settings.weather.isEnabled)
-        let defaultForecastWeatherProps = new WeatherForecastProperties(this.props.settings.weather.isEnabled)
+        let defaultCurrentWeatherProps = new CurrentWeatherProperties(this.props.settings.weather.isEnabled, null)
+        let defaultForecastWeatherProps = new WeatherForecastProperties(this.props.settings.weather.isEnabled, null)
         let defaultClockProps = new ClockProperties(this.props.settings.clock.isEnabled, new Date())
-        let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, this.props.settings.photos.albumSet, 1)
+        let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, null, this.props.settings.photos.albumSet, 1)
         let verseProps = new VerseProperties(this.props.settings.verse.isEnabled)
         this.currentPhoto = 0
         this.currentAlbum = 0
@@ -151,20 +151,32 @@ export class Extensions extends React.Component {
         .then(
             (result) => {
                 if (result.isNotEnabled) {
-                    let photosProps = new PhotosProperties()
+                    let photosProps = new PhotosProperties(false)
                     this.setState({
                         Photos: photosProps
                     })
                     return
                 }
+
+                if (result.error != null) {
+                    this.setState({
+                        Photos: new PhotosProperties(true, result.error)
+                    })
+                    return
+                }
+
                 let images = JSON.parse(result)
-                let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, images, 1)
+                let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, null, images, 1)
                 this.setState({
                     Photos: photosProps
                 })
             },
             (error) => {
                 console.log(error)
+                this.setState({
+                    Photos: new PhotosProperties(true, "UNKNOWN")
+                })
+                return
             }
         )
     }
@@ -174,20 +186,29 @@ export class Extensions extends React.Component {
     // @param includeForecast {bool} retrieve forecast in returned data (if false, should ignore any potential data in forecast fields)
     getWeather(includeForecast) {
         fetch(server + "weather/" + (includeForecast ? "1" : "0"))
-            .then(res => res.json()) 
+            .then(res =>  res.json()) 
             .then(
                 (result) => {               
                     // If not enabled, set state to default weather
                     if (result.isNotEnabled) {
                         this.setState({ 
                             CurrentWeather: new CurrentWeatherProperties(this.props.settings.weather.isEnabled),
-                            WeatherForecast: new WeatherForecastItemProperties(this.props.settings.weather.isEnabled)
+                            WeatherForecast: new WeatherForecastProperties(this.props.settings.weather.isEnabled)
+                         });
+                         return 
+                    }
+
+                    if (result.error) {
+                        this.setState({ 
+                            CurrentWeather: new CurrentWeatherProperties(true, result.error),
+                            WeatherForecast: new WeatherForecastProperties(true, result.error)
                          });
                          return 
                     }
 
                     let currentWeather = new CurrentWeatherProperties(
                     this.props.settings.weather.isEnabled,
+                    null,
                     result.location,
                     result.sunrise,
                     result.sunset,
@@ -202,7 +223,7 @@ export class Extensions extends React.Component {
                         forecasts.push(new WeatherForecastItemProperties(data.temperature, data.time, data.iconURL))
                     })
                     // TODO add daily forecast
-                    forecastWeather = new WeatherForecastProperties(this.props.settings.weather.isEnabled, forecasts)
+                    forecastWeather = new WeatherForecastProperties(this.props.settings.weather.isEnabled, null, forecasts)
                 }
                 this.setState({ 
                     CurrentWeather: currentWeather,
@@ -211,6 +232,11 @@ export class Extensions extends React.Component {
                 },
                 (error) => {
                     console.log(error)
+                    this.setState({ 
+                        CurrentWeather: new CurrentWeatherProperties(true, "UNKNOWN"),
+                        WeatherForecast: new WeatherForecastProperties(true, "UNKNOWN")
+                     });
+                     return 
                 }
             )
     }

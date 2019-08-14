@@ -10,10 +10,8 @@ ReactDOM.render(
 );
 
 // TODO
-// Document shared
-// Document Settings
 // Finish readme instructions (dev, user)
 // default settings view
-// Finish setup/run.sh (add script to run on startup or ad dthis to user manual)
+// Finish setup/run.sh (add script to run on startup or add this to user manual)
 // Revise server docs
   

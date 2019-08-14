@@ -51,12 +51,18 @@ def getWeather(includeForecast, settings):
     zip = settings.zip
     apiKey = settings.apiKey
     print(apiKey)
+
+
+    # If API key is not set, let the user know
+    if apiKey == None or apiKey == "":
+        return '{"error": "API"}'
+
     url = currentWeatherRequestURL(zip, apiKey)
     response = requests.get(url)
 
     # Make sure request was completed
     if response.status_code != 200:
-        return "ERROR"
+        return '{"error": "REQUEST"}'
     
     data = response.json()
 

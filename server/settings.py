@@ -21,12 +21,14 @@ ALL_EXTENSIONS = [
 class Settings:
         # New settings should have their ExtensionSetting class added to the parameter and instantiated within __init__
         # Note that each property should have the same name as the map key (i.e., self.Photos = exts["Photos"])
-        # :exts: is a map of ExtensionSetting.type() to ExtensionSetting 
-        def __init__(self, exts):
+        # :exts: is a map of ExtensionSetting.type() to ExtensionSetting
+        # :isInitial: is a boolean value to represent if the Settings are created from a default (initial) creation
+        def __init__(self, exts, isInitial):
                 self.Photos = exts["Photos"]
                 self.Weather = exts["Weather"]
                 self.Verse = exts["Verse"]
                 self.Clock = exts["Clock"]
+                self.isInitial = isInitial
 
         # toJSON returns the JSON output to write to the .json file
         def toJSON(self):
@@ -74,7 +76,7 @@ def parseSettingsJSON(jsonObject):
                         prop = item.createDefault()
                 finally:
                         exts[key] = prop
-        return Settings(exts)
+        return Settings(exts, False)
 
 # __initialSetup is called if the .json file does not exist.
 # It sets up the .json file with default values for all expected data.
@@ -87,6 +89,6 @@ def __initialSetup():
                 exts[key] = prop
 
         # Write to the .json file, and return our json object
-        data = Settings(exts)
+        data = Settings(exts, True)
         data.write()
         return data
