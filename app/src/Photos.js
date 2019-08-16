@@ -1,5 +1,4 @@
 import React from 'react';
-const images = require.context('../public/img/', true);
 
 // ImageManager is used to manage the active picture being displayed in the Photos compontnet.
 // It exists as a member of the PhotosProperties class and should retrieve an image every 6 seconds.
@@ -18,6 +17,7 @@ class ImageManager {
             this.currentAlbum = 0
             this.currentPhoto = 0
             this.current = undefined
+            this.images = require.context('../public/img/', true);
         }
     }
 
@@ -41,11 +41,20 @@ class ImageManager {
             return undefined
         }
 
+        if (this.currentPhoto + 1 == this.albums[this.currentAlbum].photos.length) {
+            this.currentPhoto = 0
+            this.currentAlbum = (this.currentAlbum + 1) % this.albums.length
+        }
+        
         this.currentPhoto = (this.currentPhoto + 1) % this.albums[this.currentAlbum].photos.length
-        this.currentAlbum = (this.currentAlbum + 1) % this.albums.length
         var image = album.path + "/" + photo.name + ".jpg"
 
-        this.current = images(`./` + image)
+        try {
+            this.current = this.images(`./` + image)
+        }
+          catch(error) {
+            console.error(error);
+          }
     }
 }
 

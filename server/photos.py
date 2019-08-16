@@ -82,7 +82,6 @@ def getAlbums(userSettings):
             localURL = localAlbumURL + photoID + ".jpg"
 
             r = requests.get(downloadURL)      
-            print(localURL)
             image_file = open(localURL, 'wb')
             image_file.write(r.content)
             image_file.close()

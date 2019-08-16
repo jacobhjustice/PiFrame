@@ -50,8 +50,6 @@ def getWeatherResponseItemFromData(data, timeStamp):
 def getWeather(includeForecast, settings):
     zip = settings.zip
     apiKey = settings.apiKey
-    print(apiKey)
-
 
     # If API key is not set, let the user know
     if apiKey == None or apiKey == "":

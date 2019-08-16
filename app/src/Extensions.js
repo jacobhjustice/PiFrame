@@ -38,7 +38,7 @@ export class Extensions extends React.Component {
 
             // Photos: Should use existing properties, but increment the timer. Every 6th second, the manager get a new photo.
             let photosProps = this.state.Photos
-            photosProps.tick = (this.state.Photos.tick + 1) % 6
+            photosProps.tick = (this.state.Photos.tick + 1) % 1
             
             // Run on the minute (i.e., seconds === 0)
             if (currentTime.getSeconds() === 0) {
@@ -129,7 +129,7 @@ export class Extensions extends React.Component {
         let defaultCurrentWeatherProps = new CurrentWeatherProperties(this.props.settings.weather.isEnabled, null)
         let defaultForecastWeatherProps = new WeatherForecastProperties(this.props.settings.weather.isEnabled, null)
         let defaultClockProps = new ClockProperties(this.props.settings.clock.isEnabled, new Date())
-        let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, null, this.props.settings.photos.albumSet, 1)
+        let photosProps = new PhotosProperties(this.props.settings.photos.isEnable)
         let verseProps = new VerseProperties(this.props.settings.verse.isEnabled)
         this.currentPhoto = 0
         this.currentAlbum = 0
