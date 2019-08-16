@@ -38,7 +38,7 @@ export class Extensions extends React.Component {
 
             // Photos: Should use existing properties, but increment the timer. Every 6th second, the manager get a new photo.
             let photosProps = this.state.Photos
-            photosProps.tick = (this.state.Photos.tick + 1) % 1
+            photosProps.tick = (this.state.Photos.tick + 1) % 6
             
             // Run on the minute (i.e., seconds === 0)
             if (currentTime.getSeconds() === 0) {
