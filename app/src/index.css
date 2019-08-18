@@ -1,13 +1,8 @@
 body {
     background-color: #19181a;  
     color: #b19f9e; 
-    font-size: 18px;
-}
-
-@media (max-height: 685px) {
-    body {
-        font-size: 16px;
-    }
+    font-size: 2.5vh;
+    font-weight: bold;
 }
 
 .lineWrapper {
@@ -134,28 +129,31 @@ body {
     z-index: 89;
 }
 
+#currentWeather .lineWrapper {
+    height: 2.5em;
+}
+
+#currentWeather #locationsDetails .lineWrapper {
+    height: 4em;
+    max-height: 50px;
+    margin-bottom: 1.5em;
+}
+
 #currentWeather .header {
     font-size: 2.3em;
     line-height: 0px;
-    margin: 40px 0 15px 30px;
+    margin: 1em 0 .5em 30px;
     color: #cebc81;
 
 }
 
 #currentWeather .weatherIcon {
-    margin: 0 30px 20px 30px; 
-    height: 40px;
-    width: 40px; 
+    margin: 0 1em 0 30px; 
+    height: 100%;
+
 }
 
 #currentWeather .subtitle {
-    font-size: 1.8em;
-    line-height: 100px;
-    vertical-align: top;
-    /* color: #a16e83; */
-}
-
-#currentWeather .subtitle2 {
     font-size: 1.3em;
     line-height: 40px;
     vertical-align: top;

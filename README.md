@@ -24,7 +24,7 @@ Step 4) Navigate into the PiFrame directory and give yourself file execute permi
 
 Step 5) Setup all dependencies by running `./setup.sh`
 
-Step 6) 
+Step 6) NO SLEEP AND DEFAULT RUN
 
 ## Developer Manual
 #### Organization

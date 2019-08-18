@@ -41,21 +41,23 @@ export class CurrentWeather extends React.Component {
                 <div className="lineWrapper">
                     <div className="header">{this.props.location}</div>
                 </div>
-                <div className="lineWrapper">
-                    <img className="inline" src={this.props.icon} alt="" />
-                    <div className="subtitle inline">{this.props.temperature}&deg; F</div>
-                </div>
-                <div className="lineWrapper">
-                    <img className="inline weatherIcon" src={images(`./sunrise.png`)} alt="Sunrise" />
-                    <div className="subtitle2 inline">{getDisplayTime(this.props.sunrise, false)}</div>
-                </div>
-                <div className="lineWrapper">
-                    <img className="inline weatherIcon" src={images(`./sunset.png`)} alt="Sunset" />
-                    <div className="subtitle2 inline">{getDisplayTime(this.props.sunset, false)}</div>
-                </div>
-                <div className="lineWrapper">
-                    <img className="inline weatherIcon" src={images(`./humidity.png`)} alt="Humidity" />
-                    <div className="subtitle2 inline">{this.props.humidity}%</div>
+                <div id="locationsDetails">
+                    <div className="lineWrapper">
+                        <img className="inline weatherIcon" src={this.props.icon} alt="" />
+                        <div className="subtitle inline">{this.props.temperature}&deg; F</div>
+                    </div>
+                    <div className="lineWrapper">
+                        <img className="inline weatherIcon" src={images(`./sunrise.png`)} alt="Sunrise" />
+                        <div className="subtitle inline">{getDisplayTime(this.props.sunrise, false)}</div>
+                    </div>
+                    <div className="lineWrapper">
+                        <img className="inline weatherIcon" src={images(`./sunset.png`)} alt="Sunset" />
+                        <div className="subtitle inline">{getDisplayTime(this.props.sunset, false)}</div>
+                    </div>
+                    <div className="lineWrapper">
+                        <img className="inline weatherIcon" src={images(`./humidity.png`)} alt="Humidity" />
+                        <div className="subtitle inline">{this.props.humidity}%</div>
+                    </div>
                 </div>
             </div>
         );

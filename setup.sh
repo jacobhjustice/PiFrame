@@ -1,7 +1,7 @@
 # Python is pre-installed
 echo "Squaring away all python dependencies..."
 python3 -m pip install --upgrade pip
-pip3 install -r requirements.txt 
+sudo pip3 install -r requirements.txt 
 
 # Need to install npm to run our client
 echo "Getting node.js ready to use..."
