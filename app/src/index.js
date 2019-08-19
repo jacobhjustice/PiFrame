@@ -12,5 +12,4 @@ ReactDOM.render(
 // TODO
 // Finish readme instructions (dev, user)
 // Finish setup/run.sh (add script to run on startup or add this to user manual)
-// internet handling
   

@@ -18,16 +18,23 @@ class ImageManager {
             this.currentPhoto = 0
             this.current = undefined
             this.images = require.context('../public/img/', true);
+
+            this.isLocked = false
         }
     }
 
     // Retrieve the next photo in line. Look for the next photo in the current album, but if all photos have been traversed, move to the next album (or restart with the first album)
     // Set the next photo's url to be used in the Photos component
     getPhoto() {
+        if(this.isLocked) {
+            return
+        }
+
         var album =  this.albums[this.currentAlbum]
+
         if(album === undefined) {
             this.currentAlbum = 0
-            return undefined 
+            return 
         }
 
         if(!album.isEnabled) {
@@ -38,7 +45,7 @@ class ImageManager {
         if(photo === undefined) {
             this.currentAlbum  = (this.currentAlbum + 1) % this.albums.length
             this.currentPhoto = 0
-            return undefined
+            return
         }
 
         if (this.currentPhoto + 1 === this.albums[this.currentAlbum].photos.length) {
@@ -50,11 +57,18 @@ class ImageManager {
         var image = album.path + "/" + photo.name + ".jpg"
 
         try {
+            // Set the next image and close the gate until an update from timer
             this.current = this.images(`./` + image)
+            this.isLocked = true
         }
           catch(error) {
             console.error(error);
           }
+    }
+
+    // openGate is called to let the image manager know that it can update the image
+    openGate() {
+        this.isLocked = false
     }
 }
 
@@ -96,6 +110,8 @@ export class Photos extends React.Component {
 
         if (this.props.tick === 0 || this.props.imageManager.current === undefined) {
             this.props.imageManager.getPhoto()
+        } else if (this.props.tick > 0) {
+            this.props.imageManager.openGate()
         }
         return (
             <div id="photo" >
