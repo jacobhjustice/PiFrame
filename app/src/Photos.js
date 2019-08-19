@@ -41,7 +41,7 @@ class ImageManager {
             return undefined
         }
 
-        if (this.currentPhoto + 1 == this.albums[this.currentAlbum].photos.length) {
+        if (this.currentPhoto + 1 === this.albums[this.currentAlbum].photos.length) {
             this.currentPhoto = 0
             this.currentAlbum = (this.currentAlbum + 1) % this.albums.length
         }
