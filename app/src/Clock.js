@@ -22,7 +22,7 @@ export class Clock extends React.Component {
         }
 
         return (
-            <div id="clock" className="currentDetailsContent">
+            <div id="clock" className="currentDetailsContent extension">
                 <div className="header">
                     {getDisplayTime(this.props.time, true)}
                 </div>

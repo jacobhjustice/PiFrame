@@ -1,7 +1,10 @@
 body {
     background-color: #19181a;  
     color: #b19f9e; 
-    font-size: 2.5vh;
+
+    /* Use vh instead of vw since a screen's height will be more valuable real estate. */
+    /* 40 em is total screen height. */
+    font-size: 2.5vh; 
     font-weight: bold;
 }
 
@@ -17,14 +20,8 @@ body {
     height: 60px;
 }
 
-.currentDetailsContent {
-    position: relative;
-    display: inline-block;
-    vertical-align: top;
-}
-
 #currentWeather {
-    width: 100%;
+    display: block;
 }
 
 .modalContent {
@@ -44,7 +41,7 @@ body {
     padding: 20px;
     box-sizing: border-box;
     text-align: center;
-    background-color: rgba(25, 24, 26, .8);
+    background-color: rgba(25, 24, 26, .5);
 }
 
 .buttonWrapper .processing {
@@ -65,6 +62,12 @@ body {
     font-weight: bold;
     display: inline-block;
     margin: 0 20px;
+}
+
+.extension {
+    background-color: rgba(25, 24, 26, .5);
+    padding: 5px;
+    box-sizing: border-box; 
 }
 
 .button.big {
@@ -121,8 +124,8 @@ body {
 }
 
 #clock {
-    width: 100%;
     margin-left: 30px;
+    z-index: 100;
 }
 
 #currentWeather {
@@ -155,7 +158,7 @@ body {
 
 #currentWeather .subtitle {
     font-size: 1.3em;
-    line-height: 40px;
+    line-height: 50px;
     vertical-align: top;
 }
 
@@ -165,14 +168,17 @@ body {
     right: 0;
     height: 100vh;
     z-index: 89;
-    max-width: 220px;
+    overflow: hidden;
+
+    /* Padding is handled in each item */
+    padding: 0;
 }
 
 #weatherForecast .weatherForecastItem {
-    width: 200px;
-    height: calc(100% / 8);
+    height: 5em;
     box-sizing: border-box;
     position: relative;
+    display: block;
 }
 
 #weatherForecast .weatherForecastItem:not(:last-child) {
@@ -180,16 +186,17 @@ body {
 }
 
 #weatherForecast .weatherForecastItem .itemWrapper {
-    width: 100px;
     display: inline-block;
     height: 100%;
     box-sizing: border-box;
     position: relative;
-    padding: 10px;
+    padding: .9em 1em;
+    min-width: 75px;
+    
 }
 
 #weatherForecast .weatherForecastItem .itemWrapper img {
-    height: 50px;
+    height: 70px;
     position: absolute;
     top: 0;
     left: 0;
@@ -199,15 +206,17 @@ body {
 }
 
 #weatherForecast .weatherForecastItem .itemWrapper .header {
-    font-size: 1.6em;
+    font-size: 1.75em;
+}
+
+#weatherForecast .weatherForecastItem .itemWrapper .subtitle {
+    font-size: 1em;
 }
 
 #clock .header {
-    font-size: 2em;
+    font-size: 2.5em;
     font-weight: bold;
     color: #479761;
-    /* 61892f */
-
 }
 
 .hidden {
@@ -231,15 +240,15 @@ body {
     position: absolute;
     bottom: 0px;
     z-index: 89;
-    background-color: rgba(25, 24, 26, .7 );
     padding: 10px 0;
-    box-sizing: border-box;
-    left: calc(50vw - 300px);
-    width: 600px;
+    left: calc(50vw - 20em);
+    width: 40em;
 }
 
 #verse .wrapper {
-    width: 450px;
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
     margin: 0 auto;
     position: relative;
 }
@@ -268,6 +277,7 @@ body {
     width: 100vw;
     height: 100vh;
     text-align: center;
+
 }
 
 #photo .dimmer {
@@ -292,8 +302,8 @@ body {
     margin: auto;
     position: absolute;
     filter: brightness(100%);
-    max-width: 72.5%;
-    max-height: 97.5%;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 

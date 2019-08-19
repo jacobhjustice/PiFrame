@@ -25,7 +25,7 @@ export class Verse extends React.Component {
         }
 
         return (
-            <div id="verse">
+            <div id="verse" className="extension">
                 <div className="wrapper">
                     <div className="quote">"{this.props.quote}"</div>
                     <div className="reference">- {this.props.reference}</div>

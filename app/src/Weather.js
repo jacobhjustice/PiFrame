@@ -37,7 +37,7 @@ export class CurrentWeather extends React.Component {
         }
 
         return (
-            <div id="currentWeather" className="currentDetailsContent">
+            <div id="currentWeather" className="currentDetailsContent extension">
                 <div className="lineWrapper">
                     <div className="header">{this.props.location}</div>
                 </div>
@@ -90,8 +90,7 @@ class WeatherForecastItem extends React.Component {
                     <img src={this.props.icon} alt="" />
                 </div>
                 <div className="right itemWrapper">
-                    {getDisplayTime(this.props.time, false)}
-                    {getDateString(this.props.time, false)}
+                    <div className="subtitle">{getDisplayTime(this.props.time, false, true)}  -  {getDateString(this.props.time, false)}</div>
                     <div className="header"> {this.props.temperature}&deg; F</div>                    
                 </div> 
             </div>
@@ -137,7 +136,7 @@ export class WeatherForecast extends React.Component {
         })
 
         return(
-            <div id="weatherForecast">
+            <div id="weatherForecast"  className="extension">
                 {forecasts}
             </div>
         );
