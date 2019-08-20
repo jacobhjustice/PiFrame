@@ -104,8 +104,14 @@ export class Photos extends React.Component {
             )
         }
 
-        if (!this.props.isLoaded || !this.props.isEnabled) {
+        if (!this.props.isEnabled) {
             return null
+        }
+
+        if(!this.props.isLoaded) {
+            return(<div id="photo">
+                <div className="header">Fetching Images...</div>
+            </div>) 
         }
 
         if (this.props.tick === 0 || this.props.imageManager.current === undefined) {

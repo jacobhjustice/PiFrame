@@ -284,6 +284,10 @@ body {
 
 }
 
+#photo .header {
+    margin-top: 50px;
+}
+
 #photo .dimmer {
     /* position: absolute; */
     height: 100%;

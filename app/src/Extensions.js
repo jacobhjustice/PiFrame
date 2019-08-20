@@ -110,7 +110,7 @@ export class Extensions extends React.Component {
         let defaultCurrentWeatherProps = new CurrentWeatherProperties(this.props.settings.weather.isEnabled, null)
         let defaultForecastWeatherProps = new WeatherForecastProperties(this.props.settings.weather.isEnabled, null)
         let defaultClockProps = new ClockProperties(this.props.settings.clock.isEnabled, new Date())
-        let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, null, this.props.settings.photos.albumSet, 1)
+        let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled)
         let verseProps = new VerseProperties(this.props.settings.verse.isEnabled)
         this.currentPhoto = 0
         this.currentAlbum = 0
@@ -129,7 +129,7 @@ export class Extensions extends React.Component {
         let defaultCurrentWeatherProps = new CurrentWeatherProperties(this.props.settings.weather.isEnabled, null)
         let defaultForecastWeatherProps = new WeatherForecastProperties(this.props.settings.weather.isEnabled, null)
         let defaultClockProps = new ClockProperties(this.props.settings.clock.isEnabled, new Date())
-        let photosProps = new PhotosProperties(this.props.settings.photos.isEnable)
+        let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled)
         let verseProps = new VerseProperties(this.props.settings.verse.isEnabled)
         this.currentPhoto = 0
         this.currentAlbum = 0
