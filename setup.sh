@@ -12,7 +12,7 @@ sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get install nodejs npm
 npm update
-npm install -g serve
+sudo npm install -g serve
 
 echo "Building react app"
 cd /home/pi/PiFrame/app
