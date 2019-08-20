@@ -125,7 +125,7 @@ export class WeatherForecast extends React.Component {
         if (this.props.error != null) {
             return (
                 <div id="weatherForecast">
-                    <div class="center error">{this.props.error === "UNKNOWN" ? <div>An error has occured and could not fetch weather. Please make sure you are connected to the internet.</div> : <div>An error has occurred and could not fetch weather. Please be sure that your API key is correct from <a href='https://openweathermap.org'>the weather service</a>.</div>}</div>
+                    <div className="center error errorWrapper">{this.props.error === "UNKNOWN" ? <div>An error has occured and could not fetch weather. Please make sure you are connected to the internet.</div> : <div>An error has occurred and could not fetch weather. Please be sure that your API key is correct from <a href='https://openweathermap.org'>the weather service</a>.</div>}</div>
                 </div>
             )
         }

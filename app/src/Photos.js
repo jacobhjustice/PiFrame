@@ -99,7 +99,7 @@ export class Photos extends React.Component {
         if(this.props.error != null) {
             return (
                 <div id="photo" className="extension" >
-                    <div className="wrapper"><div class="center error">{this.props.error === "UNKNOWN" ? <div>An error has occured and could not fetch images. Please make sure you are connected to the internet.</div> : <div>An error has occurred and could not fetch images. Please be sure that your API key is correct from <a href='https://www.flickr.com/services/apps/create/apply/'>Flickr</a>.</div>}</div></div>
+                    <div className="wrapper"><div className="center error errorWrapper">{this.props.error === "UNKNOWN" ? <div>An error has occured and could not fetch images. Please make sure you are connected to the internet.</div> : <div>An error has occurred and could not fetch images. Please be sure that your API key is correct from <a href='https://www.flickr.com/services/apps/create/apply/'>Flickr</a>.</div>}</div></div>
                 </div>
             )
         }

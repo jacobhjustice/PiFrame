@@ -1,5 +1,7 @@
 echo "Pulling latest changes..."
 git pull origin master
+chmod +x /home/pi/PiFrame/setup.sh
+chmod +x /home/pi/PiFrame/run.sh
 
 # Python is pre-installed
 echo "Squaring away all python dependencies..."
