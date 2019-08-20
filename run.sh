@@ -1,5 +1,3 @@
 echo "Starting PiFrame..."
-python3 server/run.py &
-cd app 
-npm start & 
-echo ""
+python3 /home/pi/PiFrame/server/run.py &
+serve -s /home/pi/PiFrame/app/build & 
