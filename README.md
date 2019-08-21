@@ -20,13 +20,11 @@ Step 2) Move the SD card into your Pi, plug it up to the screen, and power on!
 
 Step 3) Open up the terminal and download this git repository (in the `/pi/home` directory): `git clone https://github.com/jacobhjustice/PiFrame`
 
-Step 4) Navigate into the PiFrame directory and give yourself file execute permissions for `setup.sh` and `run.sh` (i.e., `chmod +x setup.sd && chmod +x && run.sh`)
+Step 4) Setup all app dependencies by running `./setup.sh`
 
-Step 5) Setup all app dependencies by running `./setup.sh`
+Step 5) Run the app on startup by running `crontab -e` in the terminal, and add `@reboot /home/pi/PiFrame/run.sh`
 
-Step 6) Run the app on startup by running `sudo crontab -e` in the terminal, and add `@reboot /home/pi/PiFrame/run.sh`
-
-Step 7) Open app on startup by running  `sudo nano /etc/xdg/lxsession/LXDE-pi/autostart` and appending the following to the end of file:
+Step 6) Open app on startup by running  `sudo nano /etc/xdg/lxsession/LXDE-pi/autostart` and appending the following to the end of file:
 ```
 @xset s off
 @xset -dpms
@@ -44,7 +42,7 @@ Then select the menu at the top left corner -> preference -> screensaver and sel
 
 Afterwards, run `sudo nano /etc/xdg/lxsession/LXDE-pi/autostart` and append `unclutter -idle 0` to the file
 
-Step 8) Reboot the pi by runing `reboot` in the terminal. Should launch the app and open the kiosk browser to it. From this point, you'll need to enter in your User Settings by selecting the button in the bottom left to add any API keys.
+Step 7) Reboot the pi by runing `reboot` in the terminal. Should launch the app and open the kiosk browser to it. From this point, you'll need to enter in your User Settings by selecting the button in the bottom left to add any API keys.
 
 ## Developer Manual
 #### Organization
