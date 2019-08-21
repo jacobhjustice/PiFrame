@@ -222,7 +222,6 @@ export class Extensions extends React.Component {
                     result.todaysForecast.forEach((data) => {
                         forecasts.push(new WeatherForecastItemProperties(data.temperature, data.time, data.iconURL))
                     })
-                    // TODO add daily forecast
                     forecastWeather = new WeatherForecastProperties(this.props.settings.weather.isEnabled, null, forecasts)
                 }
                 this.setState({ 
