@@ -75,3 +75,5 @@ Below, depicts the relationship behtween Settings and Extensions in the app
 
 ## That's It!
 This is everything you need to know to either dive into the code or install the application.
+
+![](frame.jpg)
