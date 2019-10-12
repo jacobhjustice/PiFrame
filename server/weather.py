@@ -56,7 +56,7 @@ def getWeather(includeForecast, settings):
         return '{"error": "API"}'
 
     url = currentWeatherRequestURL(zip, apiKey)
-    response = requests.get(url)
+    response = requests.get(url, timeout=10)
 
     # Make sure request was completed
     if response.status_code != 200:
@@ -75,7 +75,7 @@ def getWeather(includeForecast, settings):
     upcomingForecast = []
     if includeForecast:
         url = forecastWeatherRequestURL(zip, apiKey)
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
 
         # If request wasn't completed, skip to end and return what we have
         if response.status_code == 200:

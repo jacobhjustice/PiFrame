@@ -5,7 +5,7 @@ import requests, json
 from bs4 import BeautifulSoup
 
 def get():
-    doc = requests.get("https://www.biblegateway.com/")
+    doc = requests.get("https://www.biblegateway.com/", timeout=10)
     soup = BeautifulSoup(doc.text)
     votd = soup.findAll("div", {"class": "votd-box"})[0]
     quote = votd.findAll("p")[0].text
