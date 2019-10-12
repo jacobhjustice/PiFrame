@@ -14,7 +14,7 @@ export class Frame extends React.Component {
     constructor() {
         super()
 
-        let settings = new SettingsProperties()
+        let settings = new SettingsProperties() 
         this.state = {
             versionSinceMount: 0,
             Settings: settings
@@ -32,7 +32,7 @@ export class Frame extends React.Component {
         let userSettings = this.parseSettingsResponseToObject(result)
         this.setState({
             Settings: userSettings,
-            versionSinceMount: this.state.versionSinceMount + 1
+            versionSinceMount: this.state.versionSinceMount + 1,
         })
     }
 

@@ -4,6 +4,7 @@ import  { Clock, ClockProperties } from './Clock'
 import  { Photos, PhotosProperties } from './Photos'
 import  { Verse, VerseProperties } from './Verse'
 import { server } from './shared'
+import { Sync } from './Sync'
 
 // Extensions drives each extension within the application
 // It has two responsibilities: to maintain each extension's state, and to implement settings/results from the server.
@@ -66,7 +67,8 @@ export class Extensions extends React.Component {
 
         this.getWeather(true)
         this.getVerse()
-        this.getImages()
+
+        // Images are not retrieved on startup since they are cached
     }
 
     componentDidUpdate(oldProps) {
@@ -95,6 +97,7 @@ export class Extensions extends React.Component {
                 {verse.render()}
                 {photos.render()}
                 {weatherForecast.render()}
+                <Sync updateCallback={this.syncCallback} isHidden={this.state.syncHidden} />
             </div>
         ); 
     }
@@ -123,13 +126,30 @@ export class Extensions extends React.Component {
         })
     }
 
+    // syncCallback is passed into sync and is called when a user presses the button.
+    // When called, all extensions will recieve a "Hard Reload". Some may be programmed to only update under this circumstance, such as Photos
+    syncCallback = () => {
+        this.setState({
+            syncHidden: true
+        })
+        this.setDefaults()
+        this.getWeather(true)
+        this.getVerse()
+        this.getImages()
+        setTimeout(() => {
+            this.setState({
+                syncHidden: false
+            })
+        }, 5000);
+    }
+
     constructor(props) {
         super(props)
  
         let defaultCurrentWeatherProps = new CurrentWeatherProperties(this.props.settings.weather.isEnabled, null)
         let defaultForecastWeatherProps = new WeatherForecastProperties(this.props.settings.weather.isEnabled, null)
         let defaultClockProps = new ClockProperties(this.props.settings.clock.isEnabled, new Date())
-        let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled)
+        let photosProps = new PhotosProperties(this.props.settings.photos.isEnabled, null, this.props.settings.photos.albumSet, 1)
         let verseProps = new VerseProperties(this.props.settings.verse.isEnabled)
         this.currentPhoto = 0
         this.currentAlbum = 0

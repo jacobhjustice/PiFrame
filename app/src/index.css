@@ -314,6 +314,12 @@ body {
     max-height: 100%;
 }
 
+#sync {
+    position: absolute;
+    bottom: 20px;
+    left: 130px;
+    z-index: 20;
+}
 
 #settings #settingsButton {
     position: absolute;
@@ -322,7 +328,7 @@ body {
     z-index: 20;
 }
 
-#settings #settingsButton img {
+#settings #settingsButton img, #sync img {
     width: 16px;
     height: 20px;
     margin-top: 5px;

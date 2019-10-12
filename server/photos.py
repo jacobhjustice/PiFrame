@@ -81,7 +81,7 @@ def getAlbums(userSettings):
             downloadURL = "http://farm%s.staticflickr.com/%s/%s_%s_b.jpg" % (photo.get('farm'), photo.get('server'), photoID, photo.get('secret'))
             localURL = localAlbumURL + photoID + ".jpg"
 
-            r = requests.get(downloadURL)      
+            r = requests.get(downloadURL, timeout=60)      
             image_file = open(localURL, 'wb')
             image_file.write(r.content)
             image_file.close()
